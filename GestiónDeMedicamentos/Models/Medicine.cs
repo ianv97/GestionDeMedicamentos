@@ -13,8 +13,9 @@ namespace GestiónDeMedicamentos.Models
         public string Laboratory { get; set; }
         public enum Presentation { Inyectable, Jarabe, Pildora, Comprimido }
         public int Stock { get; set; }
-        public Drug Drug {get; set;}
-         
-        
+        public Drug Drug { get; set; }
+        public ICollection<MedicinePrescription> MedicinePrescriptions {get; set; }
+        public ICollection<MedicinePurchaseOrder> MedicinePurchaseOrders { get; set; }
+        public ICollection<MedicineStockOrder> MedicineStockOrders { get; set; }
     }
 }
