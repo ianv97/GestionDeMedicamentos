@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace GestiónDeMedicamentos.Models
 {
-    public class MedicinePrescription
+    public class MedicinePurchaseOrder
     {
         public int Id { get; set; }
         public int Quantity { get; set; }
+        public DateTime ExpirationDate { get; set; }
         public Medicine Medicine { get; set; }
-        public Prescription Prescription { get; set; }
+        public PurchaseOrder PurchaseOrder { get; set; }
     }
 }
