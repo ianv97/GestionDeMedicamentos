@@ -31,4 +31,8 @@ C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedic
 C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\GestiónDeMedicamentos.pdb
 C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\GestiónDeMedicamentos.csproj.CopyComplete
 C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
-C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\Razor\Pages\Drugs.g.cshtml.cs
+C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\Razor\Pages\Drugs\List.g.cshtml.cs
+C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\Razor\Pages\Medicines\List.g.cshtml.cs
+C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\Razor\Pages\Prescriptions\List.g.cshtml.cs
+C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\Razor\Pages\PurchaseOrders\List.g.cshtml.cs
+C:\Users\Cristian\Desktop\Juegos, Música, Documentos\tp2019-g01\GestiónDeMedicamentos\obj\Debug\netcoreapp2.1\Razor\Pages\StockOrders\List.g.cshtml.cs
