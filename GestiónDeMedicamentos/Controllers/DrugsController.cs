@@ -25,7 +25,7 @@ namespace GestiónDeMedicamentos.Controllers
         [HttpGet]
         public IEnumerable<Drug> GetDrug()
         {
-            return _context.Drug;
+            return _context.Drugs;
         }
 
         // GET: api/Drugs/5
@@ -37,7 +37,7 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drug.FindAsync(id);
+            var drug = await _context.Drugs.FindAsync(id);
 
             if (drug == null)
             {
@@ -91,7 +91,7 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Drug.Add(drug);
+            _context.Drugs.Add(drug);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDrug", new { id = drug.Id }, drug);
@@ -106,13 +106,13 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drug.FindAsync(id);
+            var drug = await _context.Drugs.FindAsync(id);
             if (drug == null)
             {
                 return NotFound();
             }
 
-            _context.Drug.Remove(drug);
+            _context.Drugs.Remove(drug);
             await _context.SaveChangesAsync();
 
             return Ok(drug);
@@ -120,7 +120,7 @@ namespace GestiónDeMedicamentos.Controllers
 
         private bool DrugExists(int id)
         {
-            return _context.Drug.Any(e => e.Id == id);
+            return _context.Drugs.Any(e => e.Id == id);
         }
     }
 }

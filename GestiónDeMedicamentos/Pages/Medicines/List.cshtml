@@ -1,26 +1,26 @@
 ﻿@page
 @{
-    ViewData["Title"] = "Drugs";
+    ViewData["Title"] = "Medicamentos";
 }
 
-<h2>Drugs</h2>
+<h2>Medicamentos</h2>
 
 <div class="table-responsive">
-    <table class="table table-hover" id="drugs_table"></table>
+    <table class="table table-hover" id="medicines_table"></table>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $("#drugs_table").dataTable({
+            $("#medicines_table").dataTable({
                 //serverSide: true,
                 ajax: {
-                    url: '/api/Drugs',
+                    url: '/api/Medicines',
                     type: 'GET',
                     dataSrc: ''
                 },
                 columns: [
-                    { "title": "Droga", "data": "name" },
+                    { "title": "Medicamento", "data": "name" },
                     {
                         "title": "Detalles", "data": "id", "render": function (data, type, row) {
                             return '<a class="btn btn-lg" href="./Details/' + data + '"><i class="glyphicon glyphicon-zoom-in"></i></a>';
