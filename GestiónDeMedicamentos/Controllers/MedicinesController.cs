@@ -12,56 +12,56 @@ namespace GestiónDeMedicamentos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DrugsController : ControllerBase
+    public class MedicinesController : ControllerBase
     {
         private readonly PostgreContext _context;
 
-        public DrugsController(PostgreContext context)
+        public MedicinesController(PostgreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Drugs
+        // GET: api/Medicines
         [HttpGet]
-        public IEnumerable<Drug> GetDrugs()
+        public IEnumerable<Medicine> GetMedicines()
         {
-            return _context.Drugs;
+            return _context.Medicines;
         }
 
-        // GET: api/Drugs/5
+        // GET: api/Medicines/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDrug([FromRoute] int id)
+        public async Task<IActionResult> GetMedicine([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drugs.FindAsync(id);
+            var medicine = await _context.Medicines.FindAsync(id);
 
-            if (drug == null)
+            if (medicine == null)
             {
                 return NotFound();
             }
 
-            return Ok(drug);
+            return Ok(medicine);
         }
 
-        // PUT: api/Drugs/5
+        // PUT: api/Medicines/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDrug([FromRoute] int id, [FromBody] Drug drug)
+        public async Task<IActionResult> PutMedicine([FromRoute] int id, [FromBody] Medicine medicine)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != drug.Id)
+            if (id != medicine.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(drug).State = EntityState.Modified;
+            _context.Entry(medicine).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +69,7 @@ namespace GestiónDeMedicamentos.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DrugExists(id))
+                if (!MedicineExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +82,45 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/Drugs
+        // POST: api/Medicines
         [HttpPost]
-        public async Task<IActionResult> PostDrug([FromBody] Drug drug)
+        public async Task<IActionResult> PostMedicine([FromBody] Medicine medicine)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Drugs.Add(drug);
+            _context.Medicines.Add(medicine);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDrug", new { id = drug.Id }, drug);
+            return CreatedAtAction("GetMedicine", new { id = medicine.Id }, medicine);
         }
 
-        // DELETE: api/Drugs/5
+        // DELETE: api/Medicines/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDrug([FromRoute] int id)
+        public async Task<IActionResult> DeleteMedicine([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drugs.FindAsync(id);
-            if (drug == null)
+            var medicine = await _context.Medicines.FindAsync(id);
+            if (medicine == null)
             {
                 return NotFound();
             }
 
-            _context.Drugs.Remove(drug);
+            _context.Medicines.Remove(medicine);
             await _context.SaveChangesAsync();
 
-            return Ok(drug);
+            return Ok(medicine);
         }
 
-        private bool DrugExists(int id)
+        private bool MedicineExists(int id)
         {
-            return _context.Drugs.Any(e => e.Id == id);
+            return _context.Medicines.Any(e => e.Id == id);
         }
     }
 }

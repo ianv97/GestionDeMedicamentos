@@ -1,5 +1,4 @@
-﻿@page "{medicineId:int}"
-@model Models.Drug
+﻿@page "{drugId:int}"
 @{
     ViewData["Title"] = "Detalles";
 }
@@ -17,23 +16,29 @@
 
 <hr />
 <div>
-    Id:
+    <label id="id"></label>
 </div>
 <hr />
 <div>
-    Nombre:
+    <label id="name"></label>
 </div>
 <hr />
 
 <a class="btn btn-default" asp-page="./Edit" style="margin-bottom: 2rem;">Editar</a>
 
 
-@section Scripts {
-<script>
-    $(document).ready(function () {
-        $.ajax({
-            url: '/api/Drugs',
-            type: 'GET',
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var id = "@RouteData.Values["drugId"]";
+            $.ajax({
+                url: '/api/Drugs/' + id,
+                type: 'GET',
+                success: function (response) {
+                    $("#id").text("ID: " + response.id);
+                    $("#name").text("Nombre: " + response.name);
+                }
+                });
         });
-    });
-</script>
+    </script>
+}

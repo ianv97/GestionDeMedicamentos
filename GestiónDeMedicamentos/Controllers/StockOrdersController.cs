@@ -12,56 +12,56 @@ namespace GestiónDeMedicamentos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DrugsController : ControllerBase
+    public class StockOrdersController : ControllerBase
     {
         private readonly PostgreContext _context;
 
-        public DrugsController(PostgreContext context)
+        public StockOrdersController(PostgreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Drugs
+        // GET: api/StockOrders
         [HttpGet]
-        public IEnumerable<Drug> GetDrugs()
+        public IEnumerable<StockOrder> GetStockOrders()
         {
-            return _context.Drugs;
+            return _context.StockOrders;
         }
 
-        // GET: api/Drugs/5
+        // GET: api/StockOrders/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDrug([FromRoute] int id)
+        public async Task<IActionResult> GetStockOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drugs.FindAsync(id);
+            var stockOrder = await _context.StockOrders.FindAsync(id);
 
-            if (drug == null)
+            if (stockOrder == null)
             {
                 return NotFound();
             }
 
-            return Ok(drug);
+            return Ok(stockOrder);
         }
 
-        // PUT: api/Drugs/5
+        // PUT: api/StockOrders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDrug([FromRoute] int id, [FromBody] Drug drug)
+        public async Task<IActionResult> PutStockOrder([FromRoute] int id, [FromBody] StockOrder stockOrder)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != drug.Id)
+            if (id != stockOrder.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(drug).State = EntityState.Modified;
+            _context.Entry(stockOrder).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +69,7 @@ namespace GestiónDeMedicamentos.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DrugExists(id))
+                if (!StockOrderExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +82,45 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/Drugs
+        // POST: api/StockOrders
         [HttpPost]
-        public async Task<IActionResult> PostDrug([FromBody] Drug drug)
+        public async Task<IActionResult> PostStockOrder([FromBody] StockOrder stockOrder)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Drugs.Add(drug);
+            _context.StockOrders.Add(stockOrder);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDrug", new { id = drug.Id }, drug);
+            return CreatedAtAction("GetStockOrder", new { id = stockOrder.Id }, stockOrder);
         }
 
-        // DELETE: api/Drugs/5
+        // DELETE: api/StockOrders/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDrug([FromRoute] int id)
+        public async Task<IActionResult> DeleteStockOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drugs.FindAsync(id);
-            if (drug == null)
+            var stockOrder = await _context.StockOrders.FindAsync(id);
+            if (stockOrder == null)
             {
                 return NotFound();
             }
 
-            _context.Drugs.Remove(drug);
+            _context.StockOrders.Remove(stockOrder);
             await _context.SaveChangesAsync();
 
-            return Ok(drug);
+            return Ok(stockOrder);
         }
 
-        private bool DrugExists(int id)
+        private bool StockOrderExists(int id)
         {
-            return _context.Drugs.Any(e => e.Id == id);
+            return _context.StockOrders.Any(e => e.Id == id);
         }
     }
 }

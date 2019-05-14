@@ -12,56 +12,56 @@ namespace GestiónDeMedicamentos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DrugsController : ControllerBase
+    public class PurchaseOrdersController : ControllerBase
     {
         private readonly PostgreContext _context;
 
-        public DrugsController(PostgreContext context)
+        public PurchaseOrdersController(PostgreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Drugs
+        // GET: api/PurchaseOrders
         [HttpGet]
-        public IEnumerable<Drug> GetDrugs()
+        public IEnumerable<PurchaseOrder> GetPurchaseOrders()
         {
-            return _context.Drugs;
+            return _context.PurchaseOrders;
         }
 
-        // GET: api/Drugs/5
+        // GET: api/PurchaseOrders/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDrug([FromRoute] int id)
+        public async Task<IActionResult> GetPurchaseOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drugs.FindAsync(id);
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
 
-            if (drug == null)
+            if (purchaseOrder == null)
             {
                 return NotFound();
             }
 
-            return Ok(drug);
+            return Ok(purchaseOrder);
         }
 
-        // PUT: api/Drugs/5
+        // PUT: api/PurchaseOrders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDrug([FromRoute] int id, [FromBody] Drug drug)
+        public async Task<IActionResult> PutPurchaseOrder([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrder)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != drug.Id)
+            if (id != purchaseOrder.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(drug).State = EntityState.Modified;
+            _context.Entry(purchaseOrder).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +69,7 @@ namespace GestiónDeMedicamentos.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DrugExists(id))
+                if (!PurchaseOrderExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +82,45 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/Drugs
+        // POST: api/PurchaseOrders
         [HttpPost]
-        public async Task<IActionResult> PostDrug([FromBody] Drug drug)
+        public async Task<IActionResult> PostPurchaseOrder([FromBody] PurchaseOrder purchaseOrder)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Drugs.Add(drug);
+            _context.PurchaseOrders.Add(purchaseOrder);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDrug", new { id = drug.Id }, drug);
+            return CreatedAtAction("GetPurchaseOrder", new { id = purchaseOrder.Id }, purchaseOrder);
         }
 
-        // DELETE: api/Drugs/5
+        // DELETE: api/PurchaseOrders/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDrug([FromRoute] int id)
+        public async Task<IActionResult> DeletePurchaseOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var drug = await _context.Drugs.FindAsync(id);
-            if (drug == null)
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+            if (purchaseOrder == null)
             {
                 return NotFound();
             }
 
-            _context.Drugs.Remove(drug);
+            _context.PurchaseOrders.Remove(purchaseOrder);
             await _context.SaveChangesAsync();
 
-            return Ok(drug);
+            return Ok(purchaseOrder);
         }
 
-        private bool DrugExists(int id)
+        private bool PurchaseOrderExists(int id)
         {
-            return _context.Drugs.Any(e => e.Id == id);
+            return _context.PurchaseOrders.Any(e => e.Id == id);
         }
     }
 }
