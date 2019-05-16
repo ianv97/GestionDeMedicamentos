@@ -29,7 +29,7 @@ namespace GestiónDeMedicamentos.Controllers
         }
 
         // GET: api/Drugs/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDrug([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -45,6 +45,20 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             return Ok(drug);
+        }
+
+        // GET: api/Drugs/Ibuprofeno
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetDrugByName([FromRoute] string name)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<Drug> drugs = await _context.Drugs.Where(d => d.Name.StartsWith(name)).ToListAsync();
+
+            return Ok(drugs);
         }
 
         // PUT: api/Drugs/5

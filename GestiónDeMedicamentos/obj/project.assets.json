@@ -12751,23 +12751,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Cristian\\.nuget\\packages\\": {},
+    "C:\\Users\\Ian\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Cristian\\Desktop\\Juegos, Música, Documentos\\tp2019-g01\\GestiónDeMedicamentos\\GestiónDeMedicamentos.csproj",
+      "projectUniqueName": "C:\\Users\\Ian\\Desktop\\Juegos, Música, Documentos\\DACS\\tp2019-g01\\GestiónDeMedicamentos\\GestiónDeMedicamentos.csproj",
       "projectName": "GestiónDeMedicamentos",
-      "projectPath": "C:\\Users\\Cristian\\Desktop\\Juegos, Música, Documentos\\tp2019-g01\\GestiónDeMedicamentos\\GestiónDeMedicamentos.csproj",
-      "packagesPath": "C:\\Users\\Cristian\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Cristian\\Desktop\\Juegos, Música, Documentos\\tp2019-g01\\GestiónDeMedicamentos\\obj\\",
+      "projectPath": "C:\\Users\\Ian\\Desktop\\Juegos, Música, Documentos\\DACS\\tp2019-g01\\GestiónDeMedicamentos\\GestiónDeMedicamentos.csproj",
+      "packagesPath": "C:\\Users\\Ian\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ian\\Desktop\\Juegos, Música, Documentos\\DACS\\tp2019-g01\\GestiónDeMedicamentos\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Cristian\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ian\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
