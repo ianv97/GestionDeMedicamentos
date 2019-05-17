@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Models;
+using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
@@ -14,30 +15,30 @@ namespace GestiónDeMedicamentos.Controllers
     [ApiController]
     public class StockOrdersController : ControllerBase
     {
-        private readonly PostgreContext _context;
+        private readonly IStockOrderRepository _stockOrderRepository;
 
-        public StockOrdersController(PostgreContext context)
+        public StockOrdersController(IStockOrderRepository stockOrderRepository)
         {
-            _context = context;
+            _stockOrderRepository = stockOrderRepository;
         }
 
-        // GET: api/StockOrders
+        // GET: api/StockOrder
         [HttpGet]
-        public IEnumerable<StockOrder> GetStockOrders()
+        public async Task<IEnumerable<StockOrder>> GetStockOrders()
         {
-            return _context.StockOrders;
+            return await _stockOrderRepository.ListAsync();
         }
 
-        // GET: api/StockOrders/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetStockOrder([FromRoute] int id)
+        // GET: api/StockOrder/5
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetStockOrders([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stockOrder = await _context.StockOrders.FindAsync(id);
+            var stockOrder = await _stockOrderRepository.FindAsync(id);
 
             if (stockOrder == null)
             {
@@ -47,7 +48,8 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(stockOrder);
         }
 
-        // PUT: api/StockOrders/5
+
+        // PUT: api/StockOrder/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStockOrder([FromRoute] int id, [FromBody] StockOrder stockOrder)
         {
@@ -61,15 +63,15 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(stockOrder).State = EntityState.Modified;
+            _stockOrderRepository.Update(stockOrder);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _stockOrderRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StockOrderExists(id))
+                if (!_stockOrderRepository.StockOrderExists(id))
                 {
                     return NotFound();
                 }
@@ -82,7 +84,7 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/StockOrders
+        // POST: api/StockOrder
         [HttpPost]
         public async Task<IActionResult> PostStockOrder([FromBody] StockOrder stockOrder)
         {
@@ -91,13 +93,13 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.StockOrders.Add(stockOrder);
-            await _context.SaveChangesAsync();
+            await _stockOrderRepository.CreateAsync(stockOrder);
+            await _stockOrderRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetStockOrder", new { id = stockOrder.Id }, stockOrder);
         }
 
-        // DELETE: api/StockOrders/5
+        // DELETE: api/StockOrder/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStockOrder([FromRoute] int id)
         {
@@ -106,21 +108,18 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stockOrder = await _context.StockOrders.FindAsync(id);
+            var stockOrder = await _stockOrderRepository.FindAsync(id);
             if (stockOrder == null)
             {
                 return NotFound();
             }
 
-            _context.StockOrders.Remove(stockOrder);
-            await _context.SaveChangesAsync();
+            _stockOrderRepository.Delete(stockOrder);
+            await _stockOrderRepository.SaveChangesAsync();
 
             return Ok(stockOrder);
         }
 
-        private bool StockOrderExists(int id)
-        {
-            return _context.StockOrders.Any(e => e.Id == id);
-        }
+
     }
 }

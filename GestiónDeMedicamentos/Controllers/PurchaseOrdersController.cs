@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Models;
+using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
@@ -14,62 +15,63 @@ namespace GestiónDeMedicamentos.Controllers
     [ApiController]
     public class PurchaseOrdersController : ControllerBase
     {
-        private readonly PostgreContext _context;
+        private readonly IPurchaseOrderRepository _purchaseOrderRepository;
 
-        public PurchaseOrdersController(PostgreContext context)
+        public PurchaseOrdersController(IPurchaseOrderRepository purchaseOrderRepository)
         {
-            _context = context;
+            _purchaseOrderRepository = purchaseOrderRepository;
         }
 
         // GET: api/PurchaseOrders
         [HttpGet]
-        public IEnumerable<PurchaseOrder> GetPurchaseOrders()
+        public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrders()
         {
-            return _context.PurchaseOrders;
+            return await _purchaseOrderRepository.ListAsync();
         }
 
         // GET: api/PurchaseOrders/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPurchaseOrder([FromRoute] int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetPurchaseOrders([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+            var purchaseOrders = await _purchaseOrderRepository.FindAsync(id);
 
-            if (purchaseOrder == null)
+            if (purchaseOrders == null)
             {
                 return NotFound();
             }
 
-            return Ok(purchaseOrder);
+            return Ok(purchaseOrders);
         }
+
 
         // PUT: api/PurchaseOrders/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPurchaseOrder([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrder)
+        public async Task<IActionResult> PutPurchaseOrders([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrders)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != purchaseOrder.Id)
+            if (id != purchaseOrders.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(purchaseOrder).State = EntityState.Modified;
+            _purchaseOrderRepository.Update(purchaseOrders);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _purchaseOrderRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PurchaseOrderExists(id))
+                if (!_purchaseOrderRepository.PurchaseOrderExists(id))
                 {
                     return NotFound();
                 }
@@ -84,43 +86,40 @@ namespace GestiónDeMedicamentos.Controllers
 
         // POST: api/PurchaseOrders
         [HttpPost]
-        public async Task<IActionResult> PostPurchaseOrder([FromBody] PurchaseOrder purchaseOrder)
+        public async Task<IActionResult> PostDrug([FromBody] PurchaseOrder purchaseOrder)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.PurchaseOrders.Add(purchaseOrder);
-            await _context.SaveChangesAsync();
+            await _purchaseOrderRepository.CreateAsync(purchaseOrder);
+            await _purchaseOrderRepository.SaveChangesAsync();
 
-            return CreatedAtAction("GetPurchaseOrder", new { id = purchaseOrder.Id }, purchaseOrder);
+            return CreatedAtAction("GetPurchaseOrders", new { id = purchaseOrder.Id }, purchaseOrder);
         }
 
         // DELETE: api/PurchaseOrders/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePurchaseOrder([FromRoute] int id)
+        public async Task<IActionResult> DeletePurchaseOrders([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
-            if (purchaseOrder == null)
+            var purchaseOrders = await _purchaseOrderRepository.FindAsync(id);
+            if (purchaseOrders == null)
             {
                 return NotFound();
             }
 
-            _context.PurchaseOrders.Remove(purchaseOrder);
-            await _context.SaveChangesAsync();
+            _purchaseOrderRepository.Delete(purchaseOrders);
+            await _purchaseOrderRepository.SaveChangesAsync();
 
-            return Ok(purchaseOrder);
+            return Ok(purchaseOrders);
         }
 
-        private bool PurchaseOrderExists(int id)
-        {
-            return _context.PurchaseOrders.Any(e => e.Id == id);
-        }
+
     }
 }
