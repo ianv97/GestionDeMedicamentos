@@ -1,0 +1,69 @@
+﻿@page "{medicineId:int}"
+@{
+    ViewData["Title"] = "Detalles";
+}
+
+<h2>Detalles</h2>
+
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<a asp-page="./List" class="btn btn-default" style="display: inline-block; vertical-align: middle;"><i class="fas fa-chevron-left"></i></a>
+<h2 style="display: inline-block; vertical-align: middle; margin-left: 1rem;">Medicamento</h2>
+
+<hr />
+<div>
+    <label id="id"></label>
+</div>
+<hr />
+<div>
+    <label id="name"></label>
+</div>
+<hr />
+<div>
+    <label id="proportion"></label>
+</div>
+<hr />
+<div>
+    <label id="laboratory"></label>
+</div>
+<hr />
+<div>
+    <label id="presentation"></label>
+</div>
+<hr />
+<div>
+    <label id="stock"></label>
+</div>
+<hr />
+<div>
+    <label id="drug"></label>
+</div>
+<hr />
+
+<a class="btn btn-default" asp-page="./Edit" style="margin-bottom: 2rem;">Editar</a>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var id = "@RouteData.Values["medicineId"]";
+            $.ajax({
+                url: '/api/Medicines/' + id,
+                type: 'GET',
+                success: function (response) {
+                    $("#id").text("ID: " + response.id);
+                    $("#name").text("Nombre: " + response.name);
+                    $("#proportion").text("Proporción: " + response.proportion);
+                    $("#laboratory").text("Laboratorio: " + response.laboratory);
+                    $("#presentation").text("Presentación: " + response.presentation);
+                    $("#stock").text("Stock disponible: " + response.stock);
+                    $("#drug").text("Droga: " + response.drug);
+                }
+                });
+        });
+    </script>
+}
