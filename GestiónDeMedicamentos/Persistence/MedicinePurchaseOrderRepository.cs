@@ -2,6 +2,7 @@
 using GestiónDeMedicamentos.Domain;
 using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,36 @@ namespace GestiónDeMedicamentos.Persistence
         {
             return await _context.MedicinePurchaseOrders.ToListAsync();
         }
+
+        public async Task<MedicinePurchaseOrder> FindAsync(int id)
+        {
+            return await _context.MedicinePurchaseOrders.FindAsync(id);
+        }
+
+        public EntityState Update(MedicinePurchaseOrder medicinePurchaseOrder)
+        {
+            return _context.Entry(medicinePurchaseOrder).State = EntityState.Modified;
+        }
+
+        public async Task<EntityEntry> CreateAsync(MedicinePurchaseOrder medicinePurchaseOrder)
+        {
+            return await _context.MedicinePurchaseOrders.AddAsync(medicinePurchaseOrder);
+        }
+
+        public EntityEntry Delete(MedicinePurchaseOrder medicinePurchaseOrder)
+        {
+            return _context.MedicinePurchaseOrders.Remove(medicinePurchaseOrder);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        public bool MedicinePurchaseOrderExists(int id)
+        {
+            return _context.MedicinePurchaseOrders.Any(e => e.Id == id);
+        }
     }
 }
+
