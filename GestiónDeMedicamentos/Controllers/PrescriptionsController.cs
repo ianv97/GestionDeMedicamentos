@@ -49,7 +49,7 @@ namespace GestiónDeMedicamentos.Controllers
         }
 
         // GET: api/Prescription/aaaa-mm-dd
-        [HttpGet("{{date:datetime}}")]
+        [HttpGet("{date:datetime}")]
         public async Task<IActionResult> GetPrescriptionByDate([FromRoute] DateTime date)
         {
             if (!ModelState.IsValid)
