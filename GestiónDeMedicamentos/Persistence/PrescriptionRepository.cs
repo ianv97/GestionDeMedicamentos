@@ -26,6 +26,11 @@ namespace GestiónDeMedicamentos.Persistence
             return await _context.Prescriptions.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Prescription>> FindAsyncByDate(DateTime date)
+        {
+            return await _context.Prescriptions.Where(b => (b.Date)
+            == (date)).ToListAsync();
+        }
 
         public EntityState Update(Prescription prescription)
         {

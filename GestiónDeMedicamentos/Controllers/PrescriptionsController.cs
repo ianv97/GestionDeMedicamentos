@@ -48,6 +48,20 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(prescription);
         }
 
+        // GET: api/Prescription/aaaa-mm-dd
+        [HttpGet("{{date:datetime}}")]
+        public async Task<IActionResult> GetPrescriptionByDate([FromRoute] DateTime date)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<Prescription> prescription = await _prescriptionRepository.FindAsyncByDate(date);
+
+            return Ok(prescription);
+        }
+
 
         // PUT: api/Prescriptions/5
         [HttpPut("{id}")]

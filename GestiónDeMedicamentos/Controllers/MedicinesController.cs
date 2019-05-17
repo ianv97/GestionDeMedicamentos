@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Models;
+using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
@@ -14,18 +15,18 @@ namespace GestiónDeMedicamentos.Controllers
     [ApiController]
     public class MedicinesController : ControllerBase
     {
-        private readonly PostgreContext _context;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public MedicinesController(PostgreContext context)
+        public MedicinesController(IMedicineRepository medicineRepository)
         {
-            _context = context;
+            _medicineRepository = medicineRepository;
         }
 
         // GET: api/Medicines
         [HttpGet]
-        public IEnumerable<Medicine> GetMedicines()
+        public async Task<IEnumerable<Medicine>> GetMedicines()
         {
-            return _context.Medicines;
+            return await _medicineRepository.ListAsync();
         }
 
         // GET: api/Medicines/5
@@ -37,7 +38,7 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var medicine = await _context.Medicines.FindAsync(id);
+            var medicine = await _medicineRepository.FindAsync(id);
 
             if (medicine == null)
             {
@@ -56,9 +57,9 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<Medicine> medicines = await _context.Medicines.Where(d => d.Name.StartsWith(name)).ToListAsync();
+            IEnumerable<Medicine> medicine = await _medicineRepository.FindAsyncByName(name);
 
-            return Ok(medicines);
+            return Ok(medicine);
         }
 
         // PUT: api/Medicines/5
@@ -75,15 +76,15 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(medicine).State = EntityState.Modified;
+            _medicineRepository.Update(medicine);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _medicineRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MedicineExists(id))
+                if (!_medicineRepository.MedicineExists(id))
                 {
                     return NotFound();
                 }
@@ -105,8 +106,8 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Medicines.Add(medicine);
-            await _context.SaveChangesAsync();
+            await _medicineRepository.CreateAsync(medicine);
+            await _medicineRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetMedicine", new { id = medicine.Id }, medicine);
         }
@@ -120,21 +121,18 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var medicine = await _context.Medicines.FindAsync(id);
+            var medicine = await _medicineRepository.FindAsync(id);
             if (medicine == null)
             {
                 return NotFound();
             }
 
-            _context.Medicines.Remove(medicine);
-            await _context.SaveChangesAsync();
+            _medicineRepository.Delete(medicine);
+            await _medicineRepository.SaveChangesAsync();
 
             return Ok(medicine);
         }
 
-        private bool MedicineExists(int id)
-        {
-            return _context.Medicines.Any(e => e.Id == id);
-        }
+
     }
 }
