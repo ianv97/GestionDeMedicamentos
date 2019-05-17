@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Pages\Medicines\Details.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Medicines\List.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

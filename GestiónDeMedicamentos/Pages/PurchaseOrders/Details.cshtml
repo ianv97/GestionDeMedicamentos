@@ -1,4 +1,4 @@
-﻿@page "{drugId:int}"
+﻿@page "{purchaseOrderId:int}"
 @{
     ViewData["Title"] = "Detalles";
 }
@@ -12,7 +12,7 @@
 }
 
 <a asp-page="./List" class="btn btn-default" style="display: inline-block; vertical-align: middle;"><i class="fas fa-chevron-left"></i></a>
-<h2 style="display: inline-block; vertical-align: middle; margin-left: 1rem;">Droga</h2>
+<h2 style="display: inline-block; vertical-align: middle; margin-left: 1rem;">Nota de adquisición</h2>
 
 <hr />
 <div>
@@ -20,9 +20,10 @@
 </div>
 <hr />
 <div>
-    <label id="name"></label>
+    <label date="date"></label>
 </div>
 <hr />
+
 
 <a class="btn btn-default" asp-page="./Edit" style="margin-bottom: 2rem;">Editar</a>
 
@@ -30,14 +31,13 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            var id = "@RouteData.Values["drugId"]";
+            var id = "@RouteData.Values["purchaseOrderId"]";
             $.ajax({
-                url: '/api/Drugs/' + id,
+                url: '/api/PurchaseOrders/' + id,
                 type: 'GET',
                 success: function (response) {
                     $("#id").text("ID: " + response.id);
-                    $("#name").text("Nombre: " + response.name);
-                }
+                    $("#date").text("Fecha: " + response.date);
                 });
         });
     </script>
