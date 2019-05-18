@@ -1,44 +1,25 @@
-﻿@page "{drugId:int}"
+﻿@page
+@model GestiónDeMedicamentos.Pages.Drugs.DetailsModel
+
 @{
-    ViewData["Title"] = "Detalles";
+    ViewData["Title"] = "Details";
 }
 
-<h2>Detalles</h2>
+<h2>Details</h2>
 
-
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">@TempData["Message"]</div>
-}
-
-<a asp-page="./List" class="btn btn-default" style="display: inline-block; vertical-align: middle;"><i class="fas fa-chevron-left"></i></a>
-<h2 style="display: inline-block; vertical-align: middle; margin-left: 1rem;">Droga</h2>
-
-<hr />
 <div>
-    <label id="id"></label>
+    <h4>Drug</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Drug.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Drug.Name)
+        </dd>
+    </dl>
 </div>
-<hr />
 <div>
-    <label id="name"></label>
+    <a asp-page="./Edit" asp-route-id="@Model.Drug.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
 </div>
-<hr />
-
-<a class="btn btn-default" asp-page="./Edit" style="margin-bottom: 2rem;">Editar</a>
-
-
-@section Scripts{
-    <script>
-        $(document).ready(function () {
-            var id = "@RouteData.Values["drugId"]";
-            $.ajax({
-                url: '/api/Drugs/' + id,
-                type: 'GET',
-                success: function (response) {
-                    $("#id").text("ID: " + response.id);
-                    $("#name").text("Nombre: " + response.name);
-                }
-                });
-        });
-    </script>
-}

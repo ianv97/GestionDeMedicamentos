@@ -3,16 +3,27 @@
     ViewData["Title"] = "Medicamentos";
 }
 
-<h2>Medicamentos</h2>
+<div class="row">
+    <h2 class="d-inline-flex ml-auto">Medicamentos</h2>
 
-<div class="table-responsive">
-    <table class="table table-hover" id="medicines_table"></table>
+    <div class="d-inline-flex ml-auto mb-2 mr-4">
+        <button type="button" class="btn btn-dark px-2">
+            <span class="fas fa-plus-square mr-1"></span> Añadir
+        </button>
+    </div>
+</div>
+
+<div id="responsive_table" class="container-fluid">
+    <table class="table table-hover text-center" id="medicines_table"></table>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $("#medicines_table").dataTable({
+            $('#responsive_table').addClass('table-responsive');
+
+            var table = $('#medicines_table').DataTable({
+                dom: '<"top"<"row col-12"<"mt-2"B><"d-inline-flex ml-auto mt-2"l>><"row col-12 mt-2"f>>rt<"bottom"<"row"<"col-8"i><"col-4"p>>>',
                 //serverSide: true,
                 ajax: {
                     url: '/api/Medicines',
@@ -20,27 +31,56 @@
                     dataSrc: ''
                 },
                 columns: [
-                    { "title": "Medicamento", "data": "name" },
+                    { "title": "ID", "data": "id" },
+                    { "title": "Nombre", "data": "name" },
                     {
                         "title": "Detalles", "data": "id", "render": function (data, type, row) {
-                            return '<a class="btn btn-lg" href="./Details/' + data + '"><i class="glyphicon glyphicon-zoom-in"></i></a>';
+                            return '<a class="btn btn-primary" href="./Details/' + data + '"><i class="fas fa-search"></i></a>';
                         }
                     },
                     {
                         "title": "Editar", "data": "id", "render": function (data, type, row) {
-                            return '<a class="btn btn-lg" href="./Edit/' + data + '"><i class="glyphicon glyphicon-edit"></i></a>';
+                            return '<a class="btn btn-warning" href="./Edit/' + data + '"><i class="fas fa-edit"></i></a>';
                         }
                     },
                     {
                         "title": "Eliminar", "data": "id", "render": function (data, type, row) {
-                            return '<a class="btn btn-lg" href="./Delete/' + data + '"><i class="glyphicon glyphicon-trash"></i></a>';
+                            return '<a class="btn btn-danger" href="./Delete/' + data + '"><i class="fas fa-trash"></i></a>';
                         }
                     }
-                ]
+                ],
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        columns: ':not(.noVis)',
+                        text: 'Columnas',
+                        className: 'btn-dark'
+                    }
+                ],
+                "order": [[1, "asc"]],
+                "columnDefs": [
+                    { "orderable": false, "targets": [2, 3, 4] },
+                    { "searchable": false, "targets": [2, 3, 4] }
+                ],
+                "autoWidth": false,
+                "language": {
+                    "emptyTable": "Tabla vacía",
+                    "lengthMenu": "Mostrar _MENU_ resultados por página",
+                    "zeroRecords": "No hay coincidencias con el criterio de búsqueda",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ resultados",
+                    "infoEmpty": "No hay resultados para mostrar",
+                    "infoFiltered": "(filtrado de un total de _MAX_ resultados)",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Búsqueda:",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
             });
+            table.columns([0]).visible(false);
         });
     </script>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/r-2.2.2/datatables.min.css" />
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/r-2.2.2/datatables.min.js"></script>
+    <partial name="_Datatables" />
 }
