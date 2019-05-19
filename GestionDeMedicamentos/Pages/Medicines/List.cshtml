@@ -33,6 +33,11 @@
                 columns: [
                     { "title": "ID", "data": "id" },
                     { "title": "Nombre", "data": "name" },
+                    { "title": "Droga", "data": "drug" },
+                    { "title": "Proporción", "data": "proportion" },
+                    { "title": "Presentación", "data": "presentation" },
+                    { "title": "Laboratorio", "data": "laboratory" },
+                    { "title": "Stock", "data": "stock" },
                     {
                         "title": "Detalles", "data": "id", "render": function (data, type, row) {
                             return '<a class="btn btn-primary" href="./Details/' + data + '"><i class="fas fa-search"></i></a>';
@@ -59,8 +64,8 @@
                 ],
                 "order": [[1, "asc"]],
                 "columnDefs": [
-                    { "orderable": false, "targets": [2, 3, 4] },
-                    { "searchable": false, "targets": [2, 3, 4] }
+                    { "orderable": false, "targets": [7, 8, 9] },
+                    { "searchable": false, "targets": [7, 8, 9] }
                 ],
                 "autoWidth": false,
                 "language": {
