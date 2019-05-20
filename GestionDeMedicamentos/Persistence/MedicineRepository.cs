@@ -18,7 +18,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<IEnumerable<Medicine>> ListAsync()
         {
-            return await _context.Medicines.ToListAsync();
+            return await _context.Medicines.Include(m => m.Drug).ToListAsync();
         }
 
         public async Task<Medicine> FindAsync(int id)

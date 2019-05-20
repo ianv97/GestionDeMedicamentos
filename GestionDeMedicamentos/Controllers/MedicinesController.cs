@@ -27,6 +27,7 @@ namespace GestiónDeMedicamentos.Controllers
         public async Task<IEnumerable<Medicine>> GetMedicines()
         {
             return await _medicineRepository.ListAsync();
+            //Enum.GetName(m.Presentation.GetType(), m.Presentation)
         }
 
         // GET: api/Medicines/5
@@ -94,7 +95,7 @@ namespace GestiónDeMedicamentos.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(medicine);
         }
 
         // POST: api/Medicines
