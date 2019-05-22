@@ -16,19 +16,36 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Medicine>> ListAsync()
+        public async Task<IEnumerable<Medicine>> ListAsync(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
         {
-            return await _context.Medicines.Include(m => m.Drug).ToListAsync();
+            var medicines = _context.Medicines.Include(m => m.Drug).Where(m => (name == null || m.Name.StartsWith(name)) && (drug == null || m.Drug.Name.StartsWith(drug)) && (proportion == null || m.Proportion == proportion) && (presentation == null || m.Presentation.ToString().StartsWith(presentation)) && (laboratory == null || m.Laboratory.StartsWith(laboratory)));
+
+            bool descending = false;
+            if (order != null)
+            {
+                order = order.Substring(0, 1).ToUpper() + order.Substring(1, order.Length - 1);
+                if (order.EndsWith("_desc"))
+                {
+                    order = order.Substring(0, order.Length - 5);
+                    descending = true;
+                }
+
+                if (descending)
+                {
+                    medicines = medicines.OrderByDescending(e => EF.Property<object>(e, order));
+                }
+                else
+                {
+                    medicines = medicines.OrderBy(e => EF.Property<object>(e, order));
+                }
+            }
+
+            return await medicines.ToListAsync();
         }
 
         public async Task<Medicine> FindAsync(int id)
         {
-            return await _context.Medicines.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Medicine>> FindAsyncByName(string name)
-        {
-            return await _context.Medicines.Where(d => d.Name.StartsWith(name)).ToListAsync();
+            return await _context.Medicines.Include(m => m.Drug).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public EntityState Update(Medicine medicine)

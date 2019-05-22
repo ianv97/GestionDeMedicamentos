@@ -22,12 +22,18 @@ namespace GestiónDeMedicamentos.Controllers
             _medicineRepository = medicineRepository;
         }
 
-        // GET: api/Medicines
+        // GET: api/Medicines?name=Ibupirac&drug=Ibuprofeno&order=name
         [HttpGet]
-        public async Task<IEnumerable<Medicine>> GetMedicines()
+        public async Task<IActionResult> GetMedicine(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
         {
-            return await _medicineRepository.ListAsync();
-            //Enum.GetName(m.Presentation.GetType(), m.Presentation)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<Medicine> medicine = await _medicineRepository.ListAsync(name, drug, proportion, presentation, laboratory, order);
+
+            return Ok(medicine);
         }
 
         // GET: api/Medicines/5
@@ -45,20 +51,6 @@ namespace GestiónDeMedicamentos.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(medicine);
-        }
-
-        // GET: api/Medicines/Ibupirac
-        [HttpGet("{name}")]
-        public async Task<IActionResult> GetMedicineByName([FromRoute] string name)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IEnumerable<Medicine> medicine = await _medicineRepository.FindAsyncByName(name);
 
             return Ok(medicine);
         }
