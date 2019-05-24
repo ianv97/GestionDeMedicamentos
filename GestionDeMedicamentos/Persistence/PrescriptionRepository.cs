@@ -16,20 +16,36 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Prescription>> ListAsync()
+        public async Task<IEnumerable<Prescription>> ListAsync(DateTime date, string order)
         {
-            return await _context.Prescriptions.ToListAsync();
+            var prescriptions = _context.Prescriptions.Include(p => p.MedicinePrescriptions).ThenInclude(mp => mp.Medicine).Where(mp => date == null || mp.Date == date);
+
+            bool descending = false;
+            if (order != null)
+            {
+                order = order.Substring(0, 1).ToUpper() + order.Substring(1, order.Length - 1);
+                if (order.EndsWith("_desc"))
+                {
+                    order = order.Substring(0, order.Length - 5);
+                    descending = true;
+                }
+
+                if (descending)
+                {
+                    prescriptions = prescriptions.OrderByDescending(e => EF.Property<object>(e, order));
+                }
+                else
+                {
+                    prescriptions = prescriptions.OrderBy(e => EF.Property<object>(e, order));
+                }
+            }
+
+            return await prescriptions.ToListAsync();
         }
 
         public async Task<Prescription> FindAsync(int id)
         {
-            return await _context.Prescriptions.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Prescription>> FindAsyncByDate(DateTime date)
-        {
-            return await _context.Prescriptions.Where(b => (b.Date)
-            == (date)).ToListAsync();
+            return await _context.Prescriptions.Include(p => p.MedicinePrescriptions).ThenInclude(mp => mp.Medicine).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public EntityState Update(Prescription prescription)

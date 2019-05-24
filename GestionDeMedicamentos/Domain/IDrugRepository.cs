@@ -10,9 +10,8 @@ namespace GestiónDeMedicamentos.Domain
 {
     public interface IDrugRepository
     {
-        Task<IEnumerable<Drug>> ListAsync();
+        Task<IEnumerable<Drug>> ListAsync(string name, string order);
         Task<Drug> FindAsync(int id);
-        Task<IEnumerable<Drug>> FindAsyncByName(string name);
         EntityState Update(Drug drug);
         Task<EntityEntry> CreateAsync(Drug drug);
         EntityEntry Delete(Drug drug);

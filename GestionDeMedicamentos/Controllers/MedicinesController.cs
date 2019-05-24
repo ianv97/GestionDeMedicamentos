@@ -11,7 +11,7 @@ using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/medicamentos")]
     [ApiController]
     public class MedicinesController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace GestiónDeMedicamentos.Controllers
             _medicineRepository = medicineRepository;
         }
 
-        // GET: api/Medicines?name=Ibupirac&drug=Ibuprofeno&order=name
+        // GET: api/medicamentos?name=Ibupirac&drug=Ibuprofeno&order=name
         [HttpGet]
         public async Task<IActionResult> GetMedicine(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
         {
@@ -36,7 +36,7 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(medicine);
         }
 
-        // GET: api/Medicines/5
+        // GET: api/medicamentos/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetMedicine([FromRoute] int id)
         {
@@ -55,7 +55,7 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(medicine);
         }
 
-        // PUT: api/Medicines/5
+        // PUT: api/medicamentos/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMedicine([FromRoute] int id, [FromBody] Medicine medicine)
         {
@@ -90,7 +90,7 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(medicine);
         }
 
-        // POST: api/Medicines
+        // POST: api/medicamentos
         [HttpPost]
         public async Task<IActionResult> PostMedicine([FromBody] Medicine medicine)
         {
@@ -105,7 +105,7 @@ namespace GestiónDeMedicamentos.Controllers
             return CreatedAtAction("GetMedicine", new { id = medicine.Id }, medicine);
         }
 
-        // DELETE: api/Medicines/5
+        // DELETE: api/medicamentos/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedicine([FromRoute] int id)
         {

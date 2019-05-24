@@ -11,7 +11,7 @@ using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/drogas")]
     [ApiController]
     public class DrugsController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace GestiónDeMedicamentos.Controllers
             _drugRepository = drugRepository;
         }
 
-        // GET: api/Drugs
+        // GET: api/drogas?name=Ibuprofeno
         [HttpGet]
-        public async Task<IEnumerable<Drug>> GetDrugs()
+        public async Task<IEnumerable<Drug>> GetDrugs(string name, string order)
         {
-            return await _drugRepository.ListAsync();
+            return await _drugRepository.ListAsync(name, order);
         }
 
-        // GET: api/Drugs/5
+        // GET: api/drogas/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetDrug([FromRoute] int id)
         {
@@ -48,21 +48,7 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(drug);
         }
 
-        // GET: api/Drugs/Ibuprofeno
-        [HttpGet("{name}")]
-        public async Task<IActionResult> GetDrugByName([FromRoute] string name)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IEnumerable<Drug> drugs = await _drugRepository.FindAsyncByName(name);
-
-            return Ok(drugs);
-        }
-
-        // PUT: api/Drugs/5
+        // PUT: api/drogas/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDrug([FromRoute] int id, [FromBody] Drug drug)
         {
@@ -97,7 +83,7 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/Drugs
+        // POST: api/drogas
         [HttpPost]
         public async Task<IActionResult> PostDrug([FromBody] Drug drug)
         {
@@ -112,7 +98,7 @@ namespace GestiónDeMedicamentos.Controllers
             return CreatedAtAction("GetDrug", new { id = drug.Id }, drug);
         }
 
-        // DELETE: api/Drugs/5
+        // DELETE: api/drogas/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDrug([FromRoute] int id)
         {

@@ -18,12 +18,12 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<IEnumerable<MedicineStockOrder>> ListAsync()
         {
-            return await _context.MedicineStockOrders.ToListAsync();
+            return await _context.MedicineStockOrders.Include(medstock => medstock.Medicine).Include(medstock => medstock.StockOrder).ToListAsync();
         }
 
         public async Task<MedicineStockOrder> FindAsync(int id)
         {
-            return await _context.MedicineStockOrders.FindAsync(id);
+            return await _context.MedicineStockOrders.Include(medstock => medstock.Medicine).Include(medstock => medstock.StockOrder).FirstOrDefaultAsync(medstock => medstock.Id == id);
         }
 
 
