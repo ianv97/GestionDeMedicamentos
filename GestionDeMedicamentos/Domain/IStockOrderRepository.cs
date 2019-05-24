@@ -10,7 +10,7 @@ namespace GestiónDeMedicamentos.Domain
 {
     public interface IStockOrderRepository
     {
-        Task<IEnumerable<StockOrder>> ListAsync();
+        Task<IEnumerable<StockOrder>> ListAsync(DateTime date, string order);
         Task<StockOrder> FindAsync(int id);
         EntityState Update(StockOrder stockOrder);
         Task<EntityEntry> CreateAsync(StockOrder stockOrder);

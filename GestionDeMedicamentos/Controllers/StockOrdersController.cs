@@ -11,7 +11,7 @@ using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/stock")]
     [ApiController]
     public class StockOrdersController : ControllerBase
     {
@@ -22,14 +22,8 @@ namespace GestiónDeMedicamentos.Controllers
             _stockOrderRepository = stockOrderRepository;
         }
 
-        // GET: api/StockOrder
-        [HttpGet]
-        public async Task<IEnumerable<StockOrder>> GetStockOrders()
-        {
-            return await _stockOrderRepository.ListAsync();
-        }
 
-        // GET: api/StockOrder/5
+        // GET: api/stock/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetStockOrders([FromRoute] int id)
         {
@@ -48,8 +42,22 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(stockOrder);
         }
 
+        //GET: api/StockOrder por fecha
+        [HttpGet]
+        public async Task<IActionResult> GetStockOrder(DateTime date, string order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        // PUT: api/StockOrder/5
+            IEnumerable<StockOrder> stockOrder = await _stockOrderRepository.ListAsync(date, order);
+
+            return Ok(stockOrder);
+        }
+
+
+        // PUT: api/stock/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStockOrder([FromRoute] int id, [FromBody] StockOrder stockOrder)
         {
@@ -99,7 +107,7 @@ namespace GestiónDeMedicamentos.Controllers
             return CreatedAtAction("GetStockOrder", new { id = stockOrder.Id }, stockOrder);
         }
 
-        // DELETE: api/StockOrder/5
+        // DELETE: api/stock/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStockOrder([FromRoute] int id)
         {

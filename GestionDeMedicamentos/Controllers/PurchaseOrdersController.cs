@@ -11,7 +11,7 @@ using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/compras")]
     [ApiController]
     public class PurchaseOrdersController : ControllerBase
     {
@@ -22,14 +22,7 @@ namespace GestiónDeMedicamentos.Controllers
             _purchaseOrderRepository = purchaseOrderRepository;
         }
 
-        // GET: api/PurchaseOrders
-        [HttpGet]
-        public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrders()
-        {
-            return await _purchaseOrderRepository.ListAsync();
-        }
-
-        // GET: api/PurchaseOrders/5
+        // GET: api/compras/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPurchaseOrders([FromRoute] int id)
         {
@@ -48,8 +41,21 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(purchaseOrders);
         }
 
+        //GET: api/PurchaseOrder por fecha
+        [HttpGet]
+        public async Task<IActionResult> GetPurchaseOrder(DateTime date, string order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        // PUT: api/PurchaseOrders/5
+            IEnumerable<PurchaseOrder> purchaseOrder = await _purchaseOrderRepository.ListAsync(date, order);
+
+            return Ok(purchaseOrder);
+        }
+
+        // PUT: api/compras/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPurchaseOrders([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrders)
         {
@@ -99,7 +105,7 @@ namespace GestiónDeMedicamentos.Controllers
             return CreatedAtAction("GetPurchaseOrders", new { id = purchaseOrder.Id }, purchaseOrder);
         }
 
-        // DELETE: api/PurchaseOrders/5
+        // DELETE: api/compras/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePurchaseOrders([FromRoute] int id)
         {

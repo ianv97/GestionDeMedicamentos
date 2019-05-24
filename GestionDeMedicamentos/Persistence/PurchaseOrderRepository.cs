@@ -21,9 +21,36 @@ namespace GestiónDeMedicamentos.Persistence
             return await _context.PurchaseOrders.ToListAsync();
         }
 
+        public async Task<IEnumerable<PurchaseOrder>> ListAsync(DateTime date, string order)
+        {
+            var purchaseOrders = _context.PurchaseOrders.Include(p => p.MedicinePurchaseOrders).ThenInclude(mp => mp.Medicine).Where(p => (date == null || p.Date == (date)));
+
+            bool descending = false;
+            if (order != null)
+            {
+                order = order.Substring(0, 1).ToUpper() + order.Substring(1, order.Length - 1);
+                if (order.EndsWith("_desc"))
+                {
+                    order = order.Substring(0, order.Length - 5);
+                    descending = true;
+                }
+
+                if (descending)
+                {
+                    purchaseOrders = purchaseOrders.OrderByDescending(e => EF.Property<object>(e, order));
+                }
+                else
+                {
+                    purchaseOrders = purchaseOrders.OrderBy(e => EF.Property<object>(e, order));
+                }
+            }
+
+            return await purchaseOrders.ToListAsync();
+        }
+
         public async Task<PurchaseOrder> FindAsync(int id)
         {
-            return await _context.PurchaseOrders.FindAsync(id);
+            return await _context.PurchaseOrders.Include(p => p.MedicinePurchaseOrders).ThenInclude(mp => mp.Medicine).FirstOrDefaultAsync(p => p.Id == id);
         }
 
 
