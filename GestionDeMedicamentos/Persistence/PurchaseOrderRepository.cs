@@ -42,11 +42,6 @@ namespace GestiónDeMedicamentos.Persistence
             return _context.PurchaseOrders.Remove(purchaseOrder);
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
         public bool PurchaseOrderExists(int id)
         {
             return _context.Drugs.Any(e => e.Id == id);

@@ -15,7 +15,7 @@ namespace GestiónDeMedicamentos.Domain
         EntityState Update(MedicineStockOrder medicineStockOrder);
         Task<EntityEntry> CreateAsync(MedicineStockOrder medicineStockOrder);
         EntityEntry Delete(MedicineStockOrder medicineStockOrder);
-        Task<int> SaveChangesAsync();
+        Task SaveChangesAsync();
         bool MedicineStockOrderExists(int id);
     }
 }

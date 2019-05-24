@@ -42,11 +42,6 @@ namespace GestiónDeMedicamentos.Persistence
             return _context.StockOrders.Remove(stockOrder);
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
         public bool StockOrderExists(int id)
         {
             return _context.StockOrders.Any(e => e.Id == id);

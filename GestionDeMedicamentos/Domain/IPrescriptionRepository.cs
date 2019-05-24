@@ -17,7 +17,7 @@ namespace GestiónDeMedicamentos.Domain
         Task<EntityEntry> CreateAsync(Prescription prescription);
         Task<IEnumerable<Prescription>> FindAsyncByDate(DateTime date);
         EntityEntry Delete(Prescription prescription);
-        Task<int> SaveChangesAsync();
+        Task SaveChangesAsync();
         bool PrescriptionExists(int id);
 
 
