@@ -16,19 +16,36 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Drug>> ListAsync()
+        public async Task<IEnumerable<Drug>> ListAsync(string name, string order)
         {
-            return await _context.Drugs.ToListAsync();
+            var drugs = _context.Drugs.Where(d => name == null || d.Name.StartsWith(name));
+
+            bool descending = false;
+            if (order != null)
+            {
+                order = order.Substring(0, 1).ToUpper() + order.Substring(1, order.Length - 1);
+                if (order.EndsWith("_desc"))
+                {
+                    order = order.Substring(0, order.Length - 5);
+                    descending = true;
+                }
+
+                if (descending)
+                {
+                    drugs = drugs.OrderByDescending(e => EF.Property<object>(e, order));
+                }
+                else
+                {
+                    drugs = drugs.OrderBy(e => EF.Property<object>(e, order));
+                }
+            }
+
+            return await drugs.ToListAsync();
         }
 
         public async Task<Drug> FindAsync(int id)
         {
             return await _context.Drugs.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Drug>> FindAsyncByName(string name)
-        {
-            return await _context.Drugs.Where(d => d.Name.StartsWith(name)).ToListAsync();
         }
 
         public EntityState Update(Drug drug)

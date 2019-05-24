@@ -11,15 +11,12 @@ namespace GestiónDeMedicamentos.Domain
 {
     public interface IPrescriptionRepository
     {
-        Task<IEnumerable<Prescription>> ListAsync();
+        Task<IEnumerable<Prescription>> ListAsync(DateTime date, string order);
         Task<Prescription> FindAsync(int id);
         EntityState Update(Prescription prescription);
         Task<EntityEntry> CreateAsync(Prescription prescription);
-        Task<IEnumerable<Prescription>> FindAsyncByDate(DateTime date);
         EntityEntry Delete(Prescription prescription);
         Task SaveChangesAsync();
         bool PrescriptionExists(int id);
-
-
     }
 }

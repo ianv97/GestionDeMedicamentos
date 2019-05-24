@@ -11,7 +11,7 @@ using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/partidas")]
     [ApiController]
     public class PrescriptionsController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace GestiónDeMedicamentos.Controllers
             _prescriptionRepository = prescriptionRepository;
         }
 
-        // GET: api/Prescriptions
+        // GET: api/partidas
         [HttpGet]
-        public async Task<IEnumerable<Prescription>> GetPrescriptions()
+        public async Task<IEnumerable<Prescription>> GetPrescriptions(DateTime date, string order)
         {
-            return await _prescriptionRepository.ListAsync();
+            return await _prescriptionRepository.ListAsync(date, order);
         }
 
-        // GET: api/Prescriptions/5
+        // GET: api/partidas/5
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPrescription([FromRoute] int id)
         {
@@ -48,22 +48,8 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(prescription);
         }
 
-        // GET: api/Prescription/aaaa-mm-dd
-        [HttpGet("{date:datetime}")]
-        public async Task<IActionResult> GetPrescriptionByDate([FromRoute] DateTime date)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            IEnumerable<Prescription> prescription = await _prescriptionRepository.FindAsyncByDate(date);
-
-            return Ok(prescription);
-        }
-
-
-        // PUT: api/Prescriptions/5
+        // PUT: api/partidas/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPrescription([FromRoute] int id, [FromBody] Prescription prescription)
         {
@@ -98,7 +84,7 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/Prescriptions
+        // POST: api/partidas
         [HttpPost]
         public async Task<IActionResult> PostPrescription([FromBody] Prescription prescription)
         {
@@ -113,7 +99,7 @@ namespace GestiónDeMedicamentos.Controllers
             return CreatedAtAction("GetPrescription", new { id = prescription.Id }, prescription);
         }
 
-        // DELETE: api/Prescriptions/5
+        // DELETE: api/partidas/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePrescription([FromRoute] int id)
         {
