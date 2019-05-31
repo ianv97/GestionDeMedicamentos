@@ -54,6 +54,12 @@ namespace GestiónDeMedicamentos
             services.AddMvc().AddJsonOptions(op => {
                 op.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder.AllowAnyOrigin());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +79,7 @@ namespace GestiónDeMedicamentos
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseCors("AllowOrigin"); //Debe estar antes de UseMvc
             app.UseMvc();
         }
     }

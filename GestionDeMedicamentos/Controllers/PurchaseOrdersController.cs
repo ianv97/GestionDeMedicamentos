@@ -11,7 +11,7 @@ using GestiónDeMedicamentos.Domain;
 
 namespace GestiónDeMedicamentos.Controllers
 {
-    [Route("api/compras")]
+    [Route("api/reposiciones")]
     [ApiController]
     public class PurchaseOrdersController : ControllerBase
     {

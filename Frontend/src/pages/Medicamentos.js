@@ -1,7 +1,14 @@
 import React from "react";
+import TablaMedicamentos from "../components/TablaMedicamentos"
+
 class Medicamentos extends React.Component {
   render() {
-    return <h1>Medicamentos</h1>;
+    return (
+      <React.Fragment>
+        <h1>Medicamentos</h1>
+        <TablaMedicamentos/>
+      </React.Fragment>
+    )
   }
 }
 
