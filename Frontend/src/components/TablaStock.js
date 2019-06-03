@@ -1,29 +1,54 @@
-import React from "react"
-import MaterialTable from "./MaterialTable.js"
+import React from "react";
+import MaterialTable from "./MaterialTable.js";
 
 class TablaStock extends React.Component {
-    state = {data: []}
+  state = {
+    loading: true,
+    error: null,
+    data: []
+  };
 
-    componentDidMount() {
-        this.getData()
-    }
+  componentDidMount() {
+    this.getData();
+  }
 
-    async getData() {
-        const response = await fetch("http://medicamentos.us-east-1.elasticbeanstalk.com/api/stock");
-        const data = await response.json();
-        const displayData = [];
-        data.forEach(function (presc){
-            displayData.push([presc.id, presc.date])
-        })
-        this.setState({
-            data: displayData
-        });
-    }
-
-    render() {
-      return (
-          <MaterialTable titles={["ID", "Fecha"]} data={this.state.data}/>)
+  async getData() {
+    try {
+      const response = await fetch(
+        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/stock"
+      );
+      this.setState({
+        loading: false
+      });
+      if (!response.ok) {
+        throw Error(response.status + " " + response.statusText);
+      }
+      const data = await response.json();
+      const displayData = [];
+      data.forEach(function(stock) {
+        displayData.push([stock.id, stock.date]);
+      });
+      this.setState({
+        data: displayData
+      });
+    } catch (error) {
+      this.setState({
+        error: error
+      });
     }
   }
-  
-  export default TablaStock;
+
+  render() {
+    return (
+      <MaterialTable
+        titles={["ID", "Fecha"]}
+        data={this.state.data}
+        currentUrl={"Stock"}
+        loading={this.state.loading}
+        error={this.state.error}
+      />
+    );
+  }
+}
+
+export default TablaStock;

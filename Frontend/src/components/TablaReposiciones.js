@@ -1,29 +1,54 @@
-import React from "react"
-import MaterialTable from "./MaterialTable.js"
+import React from "react";
+import MaterialTable from "./MaterialTable.js";
 
 class TablaReposiciones extends React.Component {
-    state = {data: []}
+  state = {
+    loading: true,
+    error: null,
+    data: []
+  };
 
-    componentDidMount() {
-        this.getData()
-    }
+  componentDidMount() {
+    this.getData();
+  }
 
-    async getData() {
-        const response = await fetch("http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones");
-        const data = await response.json();
-        const displayData = [];
-        data.forEach(function (presc){
-            displayData.push([presc.id, presc.date])
-        })
-        this.setState({
-            data: displayData
-        });
-    }
-
-    render() {
-      return (
-          <MaterialTable titles={["ID", "Fecha"]} data={this.state.data}/>)
+  async getData() {
+    try {
+      const response = await fetch(
+        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones"
+      );
+      this.setState({
+        loading: false
+      });
+      if (!response.ok) {
+        throw Error(response.status + " " + response.statusText);
+      }
+      const data = await response.json();
+      const displayData = [];
+      data.forEach(function(reposicion) {
+        displayData.push([reposicion.id, reposicion.date]);
+      });
+      this.setState({
+        data: displayData
+      });
+    } catch (error) {
+      this.setState({
+        error: error
+      });
     }
   }
-  
-  export default TablaReposiciones;
+
+  render() {
+    return (
+      <MaterialTable
+        titles={["ID", "Fecha"]}
+        data={this.state.data}
+        currentUrl={"Reposiciones"}
+        loading={this.state.loading}
+        error={this.state.error}
+      />
+    );
+  }
+}
+
+export default TablaReposiciones;
