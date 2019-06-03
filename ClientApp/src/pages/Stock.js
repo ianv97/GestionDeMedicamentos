@@ -13,9 +13,11 @@ class Stock extends React.Component {
             <h1>Stock</h1>
           </Grid>
           <Grid item>
-            <Fab color="primary" size="medium">
-              <AddIcon />
-            </Fab>
+            <Link to="/Stock/Añadir">
+                <Fab color="primary" size="medium">
+                 <AddIcon />
+                </Fab>
+            </Link>
           </Grid>
         </Grid>
         <TablaStock />
