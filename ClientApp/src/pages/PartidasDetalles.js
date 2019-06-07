@@ -1,11 +1,8 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
+import Breadcrumbs from "../components/Breadcrumbs";
 import Button from "@material-ui/core/Button";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import { Link } from "react-router-dom";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 
 class PartidasDetalles extends React.Component {
   state = { id: null, fecha: null };
@@ -35,17 +32,8 @@ class PartidasDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-          <Link color="inherit" to="/">
-            Gestión de medicamentos
-          </Link>
-          <Link color="inherit" to="/Partidas">
-            Partidas
-          </Link>
-          <Typography color="textPrimary">
-            {this.props.match.params.id}
-          </Typography>
-        </Breadcrumbs>
+        <Breadcrumbs currentUrl={"Partidas"} id={this.props.match.params.id} />
+
         <Grid container direction="row" justify="center" className="mt-5">
           <Grid item>
             <Grid container direction="column">

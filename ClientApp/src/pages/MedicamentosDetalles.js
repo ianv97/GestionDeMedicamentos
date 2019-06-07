@@ -1,27 +1,21 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import { Link } from "react-router-dom";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import Box from "@material-ui/core/Box";
-import post from "../methods/post.js";
-import put from "../methods/put.js";
-import del from "../methods/delete.js";
+import ButtonsRow from "../components/ButtonsRow";
+import changeMode from "../functions/changeMode";
+import post from "../functions/post";
+import put from "../functions/put";
+import del from "../functions/delete";
 
 class MedicamentosDetalles extends React.Component {
   state = {
-    add: false,
-    edit: false,
-    delete: false,
+    mode: "read",
     form: {
       id: 0,
       name: "",
@@ -33,6 +27,7 @@ class MedicamentosDetalles extends React.Component {
     },
     drugs: []
   };
+  changeMode = changeMode.bind(this);
 
   async getData() {
     const response = await fetch(
@@ -51,7 +46,6 @@ class MedicamentosDetalles extends React.Component {
         stock: data.stock
       }
     });
-    this.getDrugs();
   }
 
   async getDrugs() {
@@ -72,29 +66,13 @@ class MedicamentosDetalles extends React.Component {
   componentDidMount() {
     if (this.props.match.params.id !== "Añadir") {
       this.getData();
-    } else {
-      this.getDrugs();
     }
+    this.getDrugs();
     this.changeMode();
   }
 
   componentDidUpdate() {
-    this.changeMode();
-  }
-
-  changeMode() {
-    if (this.props.match.params.id === "Añadir") {
-      if (!this.state.add) {
-        this.setState({ add: true });
-      }
-    } else {
-      const params = new URLSearchParams(this.props.location.search);
-      if (params.get("edit") && !this.state.edit) {
-        this.setState({ edit: true });
-      } else if (params.get("delete") && !this.state.delete) {
-        this.setState({ delete: true });
-      }
-    }
+    this.props.history.listen(location => this.changeMode());
   }
 
   handleChange = e => {
@@ -106,42 +84,23 @@ class MedicamentosDetalles extends React.Component {
     });
   };
 
-  edit = e => {
-    const params = new URLSearchParams(this.props.location.search);
-    if (!params.get("edit")) {
-      this.props.history.push(
-        "/Medicamentos/" + this.props.match.params.id + "?edit=true"
-      );
-    }
-  };
-
-  delete = e => {
-    const params = new URLSearchParams(this.props.location.search);
-    if (!params.get("delete")) {
-      this.props.history.push(
-        "/Medicamentos/" + this.props.match.params.id + "?delete=true"
-      );
-    }
-  };
-
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state.form);
-    if (this.state.add) {
+    if (this.state.mode === "create") {
       post(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos",
         this.state.form
       );
       this.props.history.push("/Medicamentos");
-    } else if (this.state.edit) {
+    } else if (this.state.mode === "update") {
       put(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" +
           this.props.match.params.id,
         this.state.form
       );
-      this.setState({ edit: false });
+      this.setState({ mode: "read" });
       this.props.history.push("/Medicamentos/" + this.props.match.params.id);
-    } else if (this.state.delete) {
+    } else if (this.state.mode === "delete") {
       del(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" +
           this.props.match.params.id
@@ -153,17 +112,10 @@ class MedicamentosDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-          <Link color="inherit" to="/">
-            Gestión de medicamentos
-          </Link>
-          <Link color="inherit" to="/Medicamentos">
-            Medicamentos
-          </Link>
-          <Typography color="textPrimary">
-            {this.props.match.params.id}
-          </Typography>
-        </Breadcrumbs>
+        <Breadcrumbs
+          currentUrl={"Medicamentos"}
+          id={this.props.match.params.id}
+        />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
@@ -172,7 +124,7 @@ class MedicamentosDetalles extends React.Component {
             </Grid>
           </Grid>
           <form onSubmit={this.handleSubmit}>
-            {this.state.add ? null : (
+            {this.state.mode !== "create" && (
               <Grid container direction="row" justify="center" spacing={5}>
                 <Grid item>
                   <TextField
@@ -197,7 +149,8 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.name}
                   InputProps={{
-                    readOnly: !this.state.edit && !this.state.add
+                    readOnly:
+                      this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
@@ -210,7 +163,8 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.laboratory}
                   InputProps={{
-                    readOnly: !this.state.edit && !this.state.add
+                    readOnly:
+                      this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
@@ -230,7 +184,9 @@ class MedicamentosDetalles extends React.Component {
                     value={this.state.form.drugId}
                     input={<OutlinedInput labelWidth={55} />}
                     inputProps={{
-                      readOnly: !this.state.edit && !this.state.add
+                      readOnly:
+                        this.state.mode === "read" ||
+                        this.state.mode === "delete"
                     }}
                   >
                     {Object.keys(this.state.drugs).map(key => {
@@ -252,7 +208,8 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.proportion}
                   InputProps={{
-                    readOnly: !this.state.edit && !this.state.add
+                    readOnly:
+                      this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
@@ -268,7 +225,9 @@ class MedicamentosDetalles extends React.Component {
                     value={this.state.form.presentation}
                     input={<OutlinedInput labelWidth={95} />}
                     inputProps={{
-                      readOnly: !this.state.edit && !this.state.add
+                      readOnly:
+                        this.state.mode === "read" ||
+                        this.state.mode === "delete"
                     }}
                   >
                     <MenuItem value="Inyectable">Inyectable</MenuItem>
@@ -292,47 +251,13 @@ class MedicamentosDetalles extends React.Component {
                 />
               </Grid>
             </Grid>
-            <Grid container direction="row" justify="center" spacing={10}>
-              {this.state.add || this.state.edit || this.state.delete ? (
-                this.state.add || this.state.edit ? (
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      className="bg-success"
-                    >
-                      Guardar
-                    </Button>
-                  </Grid>
-                ) : (
-                  <Grid item>
-                    <Button type="submit" variant="contained" color="secondary">
-                      Confirmar eliminación
-                    </Button>
-                  </Grid>
-                )
-              ) : (
-                <Grid item>
-                  <Box component="div" display="none">
-                    <Button type="submit" />
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={this.delete}
-                  >
-                    Eliminar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    className="bg-warning ml-4"
-                    onClick={this.edit}
-                  >
-                    Editar
-                  </Button>
-                </Grid>
-              )}
-            </Grid>
+            <ButtonsRow
+              id={this.props.match.params.id}
+              mode={this.state.mode}
+              currentUrl="Medicamentos"
+              location={this.props.location}
+              history={this.props.history}
+            />
           </form>
         </Grid>
       </div>

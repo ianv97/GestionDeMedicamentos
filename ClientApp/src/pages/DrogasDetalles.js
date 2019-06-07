@@ -1,18 +1,16 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import { Link } from "react-router-dom";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import post from "../methods/post.js";
-import put from "../methods/put.js";
-import del from "../methods/delete.js";
+import ButtonsRow from "../components/ButtonsRow";
+import changeMode from "../functions/changeMode";
+import post from "../functions/post";
+import put from "../functions/put";
+import del from "../functions/delete";
 
 class DrogasDetalles extends React.Component {
-  state = { add: false, edit: false, delete: false, form: { id: 0, name: "" } };
+  state = { mode: "read", form: { id: 0, name: "" } };
+  changeMode = changeMode.bind(this);
 
   async getData() {
     const response = await fetch(
@@ -36,22 +34,7 @@ class DrogasDetalles extends React.Component {
   }
 
   componentDidUpdate() {
-    this.changeMode();
-  }
-
-  changeMode() {
-    if (this.props.match.params.id === "Añadir") {
-      if (!this.state.add) {
-        this.setState({ add: true });
-      }
-    } else {
-      const params = new URLSearchParams(this.props.location.search);
-      if (params.get("edit") && !this.state.edit) {
-        this.setState({ edit: true });
-      } else if (params.get("delete") && !this.state.delete) {
-        this.setState({ delete: true });
-      }
-    }
+    this.props.history.listen(location => this.changeMode());
   }
 
   handleChange = e => {
@@ -63,41 +46,23 @@ class DrogasDetalles extends React.Component {
     });
   };
 
-  edit = e => {
-    const params = new URLSearchParams(this.props.location.search);
-    if (!params.get("edit")) {
-      this.props.history.push(
-        "/Drogas/" + this.props.match.params.id + "?edit=true"
-      );
-    }
-  };
-
-  delete = e => {
-    const params = new URLSearchParams(this.props.location.search);
-    if (!params.get("delete")) {
-      this.props.history.push(
-        "/Drogas/" + this.props.match.params.id + "?delete=true"
-      );
-    }
-  };
-
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.add) {
+    if (this.state.mode === "create") {
       post(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas",
         this.state.form
       );
       this.props.history.push("/Drogas");
-    } else if (this.state.edit) {
+    } else if (this.state.mode === "update") {
       put(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas/" +
           this.props.match.params.id,
         this.state.form
       );
-      this.setState({ edit: false });
+      this.setState({ mode: "read" });
       this.props.history.push("/Drogas/" + this.props.match.params.id);
-    } else if (this.state.delete) {
+    } else if (this.state.mode === "delete") {
       del(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas/" +
           this.props.match.params.id
@@ -109,17 +74,7 @@ class DrogasDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-          <Link color="inherit" to="/">
-            Gestión de medicamentos
-          </Link>
-          <Link color="inherit" to="/Drogas">
-            Drogas
-          </Link>
-          <Typography color="textPrimary">
-            {this.props.match.params.id}
-          </Typography>
-        </Breadcrumbs>
+        <Breadcrumbs currentUrl={"Drogas"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
@@ -128,7 +83,7 @@ class DrogasDetalles extends React.Component {
             </Grid>
           </Grid>
           <form onSubmit={this.handleSubmit}>
-            {this.state.add ? null : (
+            {this.state.mode !== "create" && (
               <Grid container direction="row" justify="center" className="mt-3">
                 <Grid item>
                   <TextField
@@ -153,52 +108,17 @@ class DrogasDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.name}
                   InputProps={{
-                    readOnly: !this.state.edit && !this.state.add
+                    readOnly:
+                      this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
             </Grid>
-            <Grid container direction="row" justify="center" className="mt-3">
-              {this.state.add || this.state.edit || this.state.delete ? (
-                this.state.add || this.state.edit ? (
-                  <Grid item>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      className="bg-success"
-                    >
-                      Guardar
-                    </Button>
-                  </Grid>
-                ) : (
-                  <Grid item>
-                    <Button type="submit" variant="contained" color="secondary">
-                      Confirmar eliminación
-                    </Button>
-                  </Grid>
-                )
-              ) : (
-                <Grid item>
-                  <Box component="div" display="none">
-                    <Button type="submit" />
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={this.delete}
-                  >
-                    Eliminar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    className="bg-warning ml-4"
-                    onClick={this.edit}
-                  >
-                    Editar
-                  </Button>
-                </Grid>
-              )}
-            </Grid>
+            <ButtonsRow
+              id={this.props.match.params.id}
+              mode={this.state.mode}
+              history={this.props.history}
+            />
           </form>
         </Grid>
       </div>

@@ -81,21 +81,21 @@ function CustomizedTables(props) {
                   </StyledTableCell>
                 ))}
                 <StyledTableCell align="center">
-                  <Link to={props.currentUrl + "/" + row[0]}>
+                  <Link to={props.currentUrl + "/" + row[0] + "?mode=read"}>
                     <Fab size="small">
                       <Icon className="fas fa-search" />
                     </Fab>
                   </Link>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <Link to={props.currentUrl + "/" + row[0] + "?edit=true"}>
+                  <Link to={props.currentUrl + "/" + row[0] + "?mode=update"}>
                     <Fab className="bg-warning" size="small">
                       <Icon>edit_icon</Icon>
                     </Fab>
                   </Link>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <Link to={props.currentUrl + "/" + row[0] + "?delete=true"}>
+                  <Link to={props.currentUrl + "/" + row[0] + "?mode=delete"}>
                     <Fab color="secondary" size="small">
                       <Icon>delete_icon</Icon>
                     </Fab>

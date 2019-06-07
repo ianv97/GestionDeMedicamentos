@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import TablaStock from "../components/TablaStock";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import { Link } from "react-router-dom";
 
 class Stock extends React.Component {
   render() {
@@ -13,10 +14,10 @@ class Stock extends React.Component {
             <h1>Stock</h1>
           </Grid>
           <Grid item>
-            <Link to="/Stock/Añadir">
-                <Fab color="primary" size="medium">
-                 <AddIcon />
-                </Fab>
+            <Link to="/Stock/AÃ±adir">
+              <Fab color="primary" size="medium">
+                <AddIcon />
+              </Fab>
             </Link>
           </Grid>
         </Grid>

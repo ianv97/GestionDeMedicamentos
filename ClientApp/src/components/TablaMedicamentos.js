@@ -12,14 +12,17 @@ class TablaMedicamentos extends React.Component {
     this.getData();
   }
 
+  componentDidUpdate() {
+    if (!this.state.error) {
+      this.getData();
+    }
+  }
+
   async getData() {
     try {
       const response = await fetch(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos?order=name"
       );
-      this.setState({
-        loading: false
-      });
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -43,6 +46,10 @@ class TablaMedicamentos extends React.Component {
       this.setState({
         error: error
       });
+    } finally {
+      this.setState({
+        loading: false
+      });
     }
   }
 
@@ -53,7 +60,7 @@ class TablaMedicamentos extends React.Component {
           "ID",
           "Nombre",
           "Droga",
-          "Proporción",
+          "Proporción (mg)",
           "Presentación",
           "Laboratorio",
           "En Stock"

@@ -1,14 +1,16 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import { Link } from "react-router-dom";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Typography from "@material-ui/core/Typography";
+import ButtonsRow from "../components/ButtonsRow";
+import changeMode from "../functions/changeMode";
+import post from "../functions/post";
+import put from "../functions/put";
+import del from "../functions/delete";
 
 class StockDetalles extends React.Component {
   state = { id: null, fecha: null };
+  changeMode = changeMode.bind(this);
 
   async getData() {
     const response = await fetch(
@@ -23,29 +25,21 @@ class StockDetalles extends React.Component {
   }
 
   componentDidMount() {
-    this.getData();
+    if (this.props.match.params.id !== "Añadir") {
+      this.getData();
+    }
+    this.changeMode();
   }
 
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
+  componentDidUpdate() {
+    this.props.history.listen(location => this.changeMode());
+  }
 
   render() {
     return (
       <div>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-          <Link color="inherit" to="/">
-            Gestión de medicamentos
-          </Link>
-          <Link color="inherit" to="/Stock">
-            Stock
-          </Link>
-          <Typography color="textPrimary">
-            {this.props.match.params.id}
-          </Typography>
-        </Breadcrumbs>
+        <Breadcrumbs currentUrl={"Drogas"} id={this.props.match.params.id} />
+
         <Grid container direction="row" justify="center" className="mt-5">
           <Grid item>
             <Grid container direction="column">
@@ -77,14 +71,11 @@ class StockDetalles extends React.Component {
                   }}
                 />
               </Grid>
-              <Grid item className="mt-3">
-                <Button variant="contained" color="secondary">
-                  Eliminar
-                </Button>
-                <Button variant="contained" className="bg-warning ml-4">
-                  Editar
-                </Button>
-              </Grid>
+              <ButtonsRow
+                id={this.props.match.params.id}
+                mode={this.state.mode}
+                history={this.props.history}
+              />
             </Grid>
           </Grid>
         </Grid>

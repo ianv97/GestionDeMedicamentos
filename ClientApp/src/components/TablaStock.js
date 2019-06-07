@@ -12,14 +12,17 @@ class TablaStock extends React.Component {
     this.getData();
   }
 
+  componentDidUpdate() {
+    if (!this.state.error) {
+      this.getData();
+    }
+  }
+
   async getData() {
     try {
       const response = await fetch(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/stock"
       );
-      this.setState({
-        loading: false
-      });
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -34,6 +37,10 @@ class TablaStock extends React.Component {
     } catch (error) {
       this.setState({
         error: error
+      });
+    } finally {
+      this.setState({
+        loading: false
       });
     }
   }
