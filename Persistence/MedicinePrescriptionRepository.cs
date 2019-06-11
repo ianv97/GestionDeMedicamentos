@@ -18,12 +18,12 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<IEnumerable<MedicinePrescription>> ListAsync()
         {
-            return await _context.MedicinePrescriptions.Include(medpresc => medpresc.Medicine).Include(medpresc => medpresc.Prescription).ToListAsync();
+            return await _context.MedicinePrescriptions.ToListAsync();
         }
 
         public async Task<MedicinePrescription> FindAsync(int id)
         {
-            return await _context.MedicinePrescriptions.Include(medpresc => medpresc.Medicine).Include(medpresc => medpresc.Prescription).FirstOrDefaultAsync(medpresc => medpresc.Id == id);
+            return await _context.MedicinePrescriptions.FindAsync(id);
         }
 
         public EntityState Update(MedicinePrescription medicinePrescription)

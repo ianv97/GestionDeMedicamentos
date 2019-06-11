@@ -16,9 +16,9 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Prescription>> ListAsync(DateTime date, string order)
+        public async Task<IEnumerable<Prescription>> ListAsync(DateTime? date, string order)
         {
-            var prescriptions = _context.Prescriptions.Include(p => p.MedicinePrescriptions).ThenInclude(mp => mp.Medicine).Where(mp => date == null || mp.Date == date);
+            var prescriptions = _context.Prescriptions.Include(p => p.MedicinePrescriptions).Where(p => date == null || p.Date == date);
 
             bool descending = false;
             if (order != null)
@@ -45,7 +45,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<Prescription> FindAsync(int id)
         {
-            return await _context.Prescriptions.Include(p => p.MedicinePrescriptions).ThenInclude(mp => mp.Medicine).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Prescriptions.Include(p => p.MedicinePrescriptions).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public EntityState Update(Prescription prescription)

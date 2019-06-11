@@ -22,6 +22,20 @@ namespace GestiónDeMedicamentos.Controllers
             _stockOrderRepository = stockOrderRepository;
         }
 
+        //GET: api/stock/?date=01/01/2019
+        [HttpGet]
+        public async Task<IActionResult> GetStockOrders(DateTime? date, string order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<StockOrder> stockOrders = await _stockOrderRepository.ListAsync(date, order);
+
+            return Ok(stockOrders);
+        }
+
 
         // GET: api/stock/5
         [HttpGet("{id:int}")]
@@ -38,20 +52,6 @@ namespace GestiónDeMedicamentos.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(stockOrder);
-        }
-
-        //GET: api/StockOrder por fecha
-        [HttpGet]
-        public async Task<IActionResult> GetStockOrder(DateTime date, string order)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IEnumerable<StockOrder> stockOrder = await _stockOrderRepository.ListAsync(date, order);
 
             return Ok(stockOrder);
         }
