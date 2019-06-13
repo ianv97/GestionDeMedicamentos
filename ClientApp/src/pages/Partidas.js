@@ -12,11 +12,6 @@ class Partidas extends React.Component {
           <Grid item>
             <h1>Partidas</h1>
           </Grid>
-          <Grid item>
-            <Fab color="primary" size="medium">
-              <AddIcon />
-            </Fab>
-          </Grid>
         </Grid>
         <TablaPartidas />
       </React.Fragment>

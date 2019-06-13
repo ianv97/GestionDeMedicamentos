@@ -24,9 +24,16 @@ namespace GestiónDeMedicamentos.Controllers
 
         // GET: api/drogas?name=Ibuprofeno
         [HttpGet]
-        public async Task<IEnumerable<Drug>> GetDrugs(string name, string order)
+        public async Task<IActionResult> GetDrugs(string name, string order)
         {
-            return await _drugRepository.ListAsync(name, order);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<Drug> drugs = await _drugRepository.ListAsync(name, order);
+
+            return Ok(drugs);
         }
 
         // GET: api/drogas/5

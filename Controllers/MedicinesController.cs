@@ -24,16 +24,16 @@ namespace GestiónDeMedicamentos.Controllers
 
         // GET: api/medicamentos?name=Ibupirac&drug=Ibuprofeno&order=name
         [HttpGet]
-        public async Task<IActionResult> GetMedicine(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
+        public async Task<IActionResult> GetMedicines(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<Medicine> medicine = await _medicineRepository.ListAsync(name, drug, proportion, presentation, laboratory, order);
+            IEnumerable<Medicine> medicines = await _medicineRepository.ListAsync(name, drug, proportion, presentation, laboratory, order);
 
-            return Ok(medicine);
+            return Ok(medicines);
         }
 
         // GET: api/medicamentos/5

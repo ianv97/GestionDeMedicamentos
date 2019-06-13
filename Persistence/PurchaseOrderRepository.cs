@@ -16,14 +16,9 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<PurchaseOrder>> ListAsync()
+        public async Task<IEnumerable<PurchaseOrder>> ListAsync(DateTime? date, string order)
         {
-            return await _context.PurchaseOrders.ToListAsync();
-        }
-
-        public async Task<IEnumerable<PurchaseOrder>> ListAsync(DateTime date, string order)
-        {
-            var purchaseOrders = _context.PurchaseOrders.Include(p => p.MedicinePurchaseOrders).ThenInclude(mp => mp.Medicine).Where(p => (date == null || p.Date == (date)));
+            var purchaseOrders = _context.PurchaseOrders.Include(po => po.MedicinePurchaseOrders).Where(po => (date == null || po.Date == (date)));
 
             bool descending = false;
             if (order != null)
@@ -50,7 +45,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<PurchaseOrder> FindAsync(int id)
         {
-            return await _context.PurchaseOrders.Include(p => p.MedicinePurchaseOrders).ThenInclude(mp => mp.Medicine).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.PurchaseOrders.Include(po => po.MedicinePurchaseOrders).FirstOrDefaultAsync(po => po.Id == id);
         }
 
 

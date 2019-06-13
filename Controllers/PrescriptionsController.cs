@@ -24,9 +24,16 @@ namespace GestiónDeMedicamentos.Controllers
 
         // GET: api/partidas
         [HttpGet]
-        public async Task<IEnumerable<Prescription>> GetPrescriptions(DateTime date, string order)
+        public async Task<IActionResult> GetPrescriptions(DateTime? date, string order)
         {
-            return await _prescriptionRepository.ListAsync(date, order);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<Prescription> prescriptions = await _prescriptionRepository.ListAsync(date, order);
+
+            return Ok(prescriptions);
         }
 
         // GET: api/partidas/5

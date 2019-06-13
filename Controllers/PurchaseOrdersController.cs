@@ -22,9 +22,23 @@ namespace GestiónDeMedicamentos.Controllers
             _purchaseOrderRepository = purchaseOrderRepository;
         }
 
-        // GET: api/compras/5
+        //GET: api/reposiciones?date=01/01/2019
+        [HttpGet]
+        public async Task<IActionResult> GetPurchaseOrders(DateTime? date, string order)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IEnumerable<PurchaseOrder> purchaseOrders = await _purchaseOrderRepository.ListAsync(date, order);
+
+            return Ok(purchaseOrders);
+        }
+
+        // GET: api/reposiciones/5
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetPurchaseOrders([FromRoute] int id)
+        public async Task<IActionResult> GetPurchaseOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -41,23 +55,9 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(purchaseOrders);
         }
 
-        //GET: api/PurchaseOrder por fecha
-        [HttpGet]
-        public async Task<IActionResult> GetPurchaseOrder(DateTime date, string order)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IEnumerable<PurchaseOrder> purchaseOrder = await _purchaseOrderRepository.ListAsync(date, order);
-
-            return Ok(purchaseOrder);
-        }
-
-        // PUT: api/compras/5
+        // PUT: api/reposiciones/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPurchaseOrders([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrders)
+        public async Task<IActionResult> PutPurchaseOrder([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrders)
         {
             if (!ModelState.IsValid)
             {
@@ -90,14 +90,19 @@ namespace GestiónDeMedicamentos.Controllers
             return NoContent();
         }
 
-        // POST: api/PurchaseOrders
+        // POST: api/reposiciones
         [HttpPost]
-        public async Task<IActionResult> PostDrug([FromBody] PurchaseOrder purchaseOrder)
+        public async Task<IActionResult> PostPurchaseOrder([FromBody] PurchaseOrder purchaseOrder)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            //foreach (var MedicinePurchaseOrder in purchaseOrder.MedicinePurchaseOrders)
+            //{
+
+            //}
 
             await _purchaseOrderRepository.CreateAsync(purchaseOrder);
             await _purchaseOrderRepository.SaveChangesAsync();
@@ -105,9 +110,9 @@ namespace GestiónDeMedicamentos.Controllers
             return CreatedAtAction("GetPurchaseOrders", new { id = purchaseOrder.Id }, purchaseOrder);
         }
 
-        // DELETE: api/compras/5
+        // DELETE: api/reposiciones/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePurchaseOrders([FromRoute] int id)
+        public async Task<IActionResult> DeletePurchaseOrder([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
