@@ -2,14 +2,10 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
-import ButtonsRow from "../components/ButtonsRow";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Fila from "../components/Fila";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import post from "../functions/post";
 import put from "../functions/put";
@@ -17,12 +13,13 @@ import del from "../functions/delete";
 
 class ReposicionesDetalles extends React.Component {
   state = {
-    add: false,
-    edit: false,
-    delete: false,
+    mode: "read",
     medicines: [],
-    medicinePurchases: [{ medicineId: 0, quantity: 0 }],
-    form: { id: 0, date: "" }
+    form: {
+      id: 0,
+      date: "",
+      medicinePurchases: [{ medicineId: 0, quantity: 0 }]
+    }
   };
   changeMode = changeMode.bind(this);
 
@@ -38,7 +35,6 @@ class ReposicionesDetalles extends React.Component {
         nombre: data.date
       }
     });
-    this.getMedicines();
   }
 
   async getMedicines() {
@@ -59,9 +55,8 @@ class ReposicionesDetalles extends React.Component {
   componentDidMount() {
     if (this.props.match.params.id !== "Añadir") {
       this.getData();
-    } else {
-      this.getMedicines();
     }
+    this.getMedicines();
     this.changeMode();
   }
 
@@ -79,35 +74,38 @@ class ReposicionesDetalles extends React.Component {
   };
 
   handleRowChange = (e, index) => {
-    console.log(index);
     let { name, value } = e.target;
-    let { medicinePurchases } = this.state;
-    console.log(medicinePurchases);
-    if (name === "medicineId") {
-      medicinePurchases[index].medicineId = value;
-    } else {
-      medicinePurchases[index].quantity = value;
-    }
+    let { medicinePurchases } = this.state.form;
+    medicinePurchases[index][name] = value;
+
     this.setState({
-      medicinePurchases
+      form: {
+        ...this.state.form,
+        medicinePurchases
+      }
     });
   };
 
   addNewRow = () => {
-    let { medicinePurchases } = this.state;
+    let { medicinePurchases } = this.state.form;
     medicinePurchases.push({ medicineId: 0, quantity: 0 });
-    this.setState({ medicinePurchases });
+    this.setState({
+      form: {
+        ...this.state.form,
+        medicinePurchases
+      }
+    });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.add) {
+    if (this.state.mode === "create") {
       post(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones",
         this.state.form
       );
       this.props.history.push("/Reposiciones");
-    } else if (this.state.edit) {
+    } else if (this.state.mode === "update") {
       put(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones/" +
           this.props.match.params.id,
@@ -115,7 +113,7 @@ class ReposicionesDetalles extends React.Component {
       );
       this.setState({ edit: false });
       this.props.history.push("/Reposiciones/" + this.props.match.params.id);
-    } else if (this.state.delete) {
+    } else if (this.state.mode === "delete") {
       del(
         "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones/" +
           this.props.match.params.id
@@ -125,64 +123,6 @@ class ReposicionesDetalles extends React.Component {
   };
 
   render() {
-    let ReposicionesFila = this.state.medicinePurchases.map(
-      (elemento, index) => {
-        return (
-          <Grid
-            key={"FI" + index}
-            container
-            direction="row"
-            justify="center"
-            spacing={5}
-          >
-            <Grid item className="mt-3">
-              <FormControl
-                required
-                variant="outlined"
-                style={{ minWidth: 210 }}
-              >
-                <InputLabel htmlFor="medicineId">Medicamento</InputLabel>
-                <Select
-                  id="medicineId"
-                  name="medicineId"
-                  onChange={e => this.handleRowChange(e, index)}
-                  value={elemento.medicineId}
-                  input={<OutlinedInput labelWidth={110} />}
-                  inputProps={{
-                    readOnly:
-                      this.state.mode === "read" || this.state.mode === "delete"
-                  }}
-                >
-                  {Object.keys(this.state.medicines).map(key => {
-                    return (
-                      <MenuItem key={key} value={key}>
-                        {this.state.medicines[key]}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item>
-              <TextField
-                required
-                type="number"
-                label="Cantidad"
-                margin="normal"
-                variant="outlined"
-                name="quantity"
-                onChange={e => this.handleRowChange(e, index)}
-                value={elemento.quantity}
-                InputProps={{
-                  readOnly:
-                    this.state.mode === "read" || this.state.mode === "delete"
-                }}
-              />
-            </Grid>
-          </Grid>
-        );
-      }
-    );
     return (
       <div>
         <Breadcrumbs
@@ -230,7 +170,15 @@ class ReposicionesDetalles extends React.Component {
                 />
               </Grid>
             </Grid>
-            {ReposicionesFila}
+            {this.state.form.medicinePurchases.map((element, index) => (
+              <Fila
+                key={index}
+                mode={this.state.mode}
+                medicinePurchase={element}
+                medicines={this.state.medicines}
+                handleChange={e => this.handleRowChange(e, index)}
+              />
+            ))}
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item>
                 <Fab onClick={this.addNewRow} color="primary" size="medium">

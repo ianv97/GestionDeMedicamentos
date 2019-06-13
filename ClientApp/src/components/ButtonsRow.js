@@ -10,7 +10,7 @@ class ButtonsRow extends React.Component {
         {this.props.mode === "read" ? (
           <Grid item>
             <Box component="div" display="none">
-              <Button type="submit" />
+              <Button type="submit">.</Button>
             </Box>
             <Button
               variant="contained"

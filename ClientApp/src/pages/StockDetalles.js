@@ -38,7 +38,7 @@ class StockDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"Drogas"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={"Stock"} id={this.props.match.params.id} />
 
         <Grid container direction="row" justify="center" className="mt-5">
           <Grid item>
