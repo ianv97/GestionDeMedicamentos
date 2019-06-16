@@ -13,16 +13,12 @@ class TablaPartidas extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!this.state.error) {
-      this.getData();
-    }
+    this.props.history.listen(location => this.getData());
   }
 
   async getData() {
     try {
-      const response = await fetch(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/partidas"
-      );
+      const response = await fetch(window.ApiUrl + "partidas");
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -31,17 +27,11 @@ class TablaPartidas extends React.Component {
       data.forEach(function(partida) {
         displayData.push([partida.id, partida.date]);
       });
-      this.setState({
-        data: displayData
-      });
+      this.setState({ data: displayData });
     } catch (error) {
-      this.setState({
-        error: error
-      });
+      this.setState({ error: error });
     } finally {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
     }
   }
 

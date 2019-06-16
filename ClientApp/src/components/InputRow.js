@@ -18,11 +18,10 @@ class Fila extends React.Component {
               id="medicineId"
               name="medicineId"
               onChange={e => this.props.handleChange(e)}
-              value={this.props.medicinePurchase.medicineId}
+              value={this.props.medicinePurchaseOrder.medicineId}
               input={<OutlinedInput labelWidth={110} />}
               inputProps={{
-                readOnly:
-                  this.props.mode === "read" || this.props.mode === "delete"
+                readOnly: this.props.mode === "read" || this.props.mode === "delete"
               }}
             >
               {Object.keys(this.props.medicines).map(key => {
@@ -44,10 +43,9 @@ class Fila extends React.Component {
             variant="outlined"
             name="quantity"
             onChange={e => this.props.handleChange(e)}
-            value={this.props.medicinePurchase.quantity}
+            value={this.props.medicinePurchaseOrder.quantity}
             InputProps={{
-              readOnly:
-                this.props.mode === "read" || this.props.mode === "delete"
+              readOnly: this.props.mode === "read" || this.props.mode === "delete"
             }}
           />
         </Grid>

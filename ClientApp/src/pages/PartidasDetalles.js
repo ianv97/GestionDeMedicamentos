@@ -1,17 +1,13 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "../components/Breadcrumbs";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
 class PartidasDetalles extends React.Component {
   state = { id: null, fecha: null };
 
   async getData() {
-    const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/partidas/" +
-        this.props.match.params.id
-    );
+    const response = await fetch(window.ApiUrl + "partidas/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       id: data.id,
@@ -22,12 +18,6 @@ class PartidasDetalles extends React.Component {
   componentDidMount() {
     this.getData();
   }
-
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
 
   render() {
     return (
@@ -64,14 +54,6 @@ class PartidasDetalles extends React.Component {
                     readOnly: true
                   }}
                 />
-              </Grid>
-              <Grid item className="mt-3">
-                <Button variant="contained" color="secondary">
-                  Eliminar
-                </Button>
-                <Button variant="contained" className="bg-warning ml-4">
-                  Editar
-                </Button>
               </Grid>
             </Grid>
           </Grid>

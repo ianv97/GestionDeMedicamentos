@@ -14,15 +14,13 @@ class TablaMedicamentos extends React.Component {
 
   componentDidUpdate() {
     if (!this.state.error) {
-      this.getData();
+      this.props.history.listen(location => this.getData());
     }
   }
 
   async getData() {
     try {
-      const response = await fetch(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos?order=name"
-      );
+      const response = await fetch(window.ApiUrl + "medicamentos?order=name");
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -39,32 +37,18 @@ class TablaMedicamentos extends React.Component {
           med.stock
         ]);
       });
-      this.setState({
-        data: displayData
-      });
+      this.setState({ data: displayData });
     } catch (error) {
-      this.setState({
-        error: error
-      });
+      this.setState({ error: error });
     } finally {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
     }
   }
 
   render() {
     return (
       <MaterialTable
-        titles={[
-          "ID",
-          "Nombre",
-          "Droga",
-          "Proporción (mg)",
-          "Presentación",
-          "Laboratorio",
-          "En Stock"
-        ]}
+        titles={["ID", "Nombre", "Droga", "Proporción (mg)", "Presentación", "Laboratorio", "En Stock"]}
         data={this.state.data}
         currentUrl={"Medicamentos"}
         loading={this.state.loading}

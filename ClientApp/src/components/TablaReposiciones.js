@@ -14,15 +14,13 @@ class TablaReposiciones extends React.Component {
 
   componentDidUpdate() {
     if (!this.state.error) {
-      this.getData();
+      this.props.history.listen(location => this.getData());
     }
   }
 
   async getData() {
     try {
-      const response = await fetch(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones"
-      );
+      const response = await fetch(window.ApiUrl + "reposiciones");
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -31,17 +29,11 @@ class TablaReposiciones extends React.Component {
       data.forEach(function(reposicion) {
         displayData.push([reposicion.id, reposicion.date]);
       });
-      this.setState({
-        data: displayData
-      });
+      this.setState({ data: displayData });
     } catch (error) {
-      this.setState({
-        error: error
-      });
+      this.setState({ error: error });
     } finally {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
     }
   }
 

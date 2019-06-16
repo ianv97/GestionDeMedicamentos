@@ -68,9 +68,7 @@ function CustomizedTables(props) {
             </StyledTableRow>
           ) : props.error ? (
             <StyledTableRow>
-              <StyledTableCell align="center">
-                Error {props.error.message}
-              </StyledTableCell>
+              <StyledTableCell align="center">Error {props.error.message}</StyledTableCell>
             </StyledTableRow>
           ) : (
             props.data.map(row => (

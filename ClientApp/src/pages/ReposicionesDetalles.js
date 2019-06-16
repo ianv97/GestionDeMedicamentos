@@ -2,7 +2,7 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
-import Fila from "../components/Fila";
+import InputRow from "../components/InputRow";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import ButtonsRow from "../components/ButtonsRow";
@@ -18,29 +18,25 @@ class ReposicionesDetalles extends React.Component {
     form: {
       id: 0,
       date: "",
-      medicinePurchases: [{ medicineId: 0, quantity: 0 }]
+      medicinePurchaseOrders: [{ medicineId: 0, quantity: 0 }]
     }
   };
   changeMode = changeMode.bind(this);
 
   async getData() {
-    const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones/" +
-        this.props.match.params.id
-    );
+    const response = await fetch(window.ApiUrl + "reposiciones/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
         id: data.id,
-        nombre: data.date
+        date: data.date,
+        medicinePurchaseOrders: data.medicinePurchaseOrders
       }
     });
   }
 
   async getMedicines() {
-    const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos?order=name"
-    );
+    const response = await fetch(window.ApiUrl + "medicamentos?order=name");
     const data = await response.json();
     data.forEach(medicine => {
       this.setState({
@@ -75,24 +71,24 @@ class ReposicionesDetalles extends React.Component {
 
   handleRowChange = (e, index) => {
     let { name, value } = e.target;
-    let { medicinePurchases } = this.state.form;
-    medicinePurchases[index][name] = value;
+    let { medicinePurchaseOrders } = this.state.form;
+    medicinePurchaseOrders[index][name] = value;
 
     this.setState({
       form: {
         ...this.state.form,
-        medicinePurchases
+        medicinePurchaseOrders
       }
     });
   };
 
   addNewRow = () => {
-    let { medicinePurchases } = this.state.form;
-    medicinePurchases.push({ medicineId: 0, quantity: 0 });
+    let { medicinePurchaseOrders } = this.state.form;
+    medicinePurchaseOrders.push({ medicineId: 0, quantity: 0 });
     this.setState({
       form: {
         ...this.state.form,
-        medicinePurchases
+        medicinePurchaseOrders
       }
     });
   };
@@ -100,24 +96,14 @@ class ReposicionesDetalles extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.state.mode === "create") {
-      post(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones",
-        this.state.form
-      );
+      post(window.ApiUrl + "reposiciones", this.state.form);
       this.props.history.push("/Reposiciones");
     } else if (this.state.mode === "update") {
-      put(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones/" +
-          this.props.match.params.id,
-        this.state.form
-      );
+      put(window.ApiUrl + "reposiciones/" + this.props.match.params.id, this.state.form);
       this.setState({ edit: false });
       this.props.history.push("/Reposiciones/" + this.props.match.params.id);
     } else if (this.state.mode === "delete") {
-      del(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/reposiciones/" +
-          this.props.match.params.id
-      );
+      del(window.ApiUrl + "reposiciones/" + this.props.match.params.id);
       this.props.history.push("/Reposiciones");
     }
   };
@@ -125,10 +111,7 @@ class ReposicionesDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs
-          currentUrl={"Reposiciones"}
-          id={this.props.match.params.id}
-        />
+        <Breadcrumbs currentUrl={"Reposiciones"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
@@ -155,7 +138,7 @@ class ReposicionesDetalles extends React.Component {
               <Grid item>
                 <TextField
                   required
-                  type="date"
+                  type="datetime-local"
                   label="Fecha"
                   margin="normal"
                   variant="outlined"
@@ -163,18 +146,17 @@ class ReposicionesDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.date}
                   InputProps={{
-                    readOnly:
-                      this.state.mode === "read" || this.state.mode === "delete"
+                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
             </Grid>
-            {this.state.form.medicinePurchases.map((element, index) => (
-              <Fila
+            {this.state.form.medicinePurchaseOrders.map((element, index) => (
+              <InputRow
                 key={index}
                 mode={this.state.mode}
-                medicinePurchase={element}
+                medicinePurchaseOrder={element}
                 medicines={this.state.medicines}
                 handleChange={e => this.handleRowChange(e, index)}
               />
@@ -186,11 +168,7 @@ class ReposicionesDetalles extends React.Component {
                 </Fab>
               </Grid>
             </Grid>
-            <ButtonsRow
-              id={this.props.match.params.id}
-              mode={this.state.mode}
-              history={this.props.history}
-            />
+            <ButtonsRow id={this.props.match.params.id} mode={this.state.mode} history={this.props.history} />
           </form>
         </Grid>
       </div>

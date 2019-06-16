@@ -14,15 +14,13 @@ class TablaDrogas extends React.Component {
 
   componentDidUpdate() {
     if (!this.state.error) {
-      this.getData();
+      this.props.history.listen(location => this.getData());
     }
   }
 
   async getData() {
     try {
-      const response = await fetch(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas?order=name"
-      );
+      const response = await fetch({ API_URL } + "?order=name");
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -31,17 +29,11 @@ class TablaDrogas extends React.Component {
       data.forEach(function(drug) {
         displayData.push([drug.id, drug.name]);
       });
-      this.setState({
-        data: displayData
-      });
+      this.setState({ data: displayData });
     } catch (error) {
-      this.setState({
-        error: error
-      });
+      this.setState({ error: error });
     } finally {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
     }
   }
 

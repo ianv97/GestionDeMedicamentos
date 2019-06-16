@@ -13,10 +13,7 @@ class DrogasDetalles extends React.Component {
   changeMode = changeMode.bind(this);
 
   async getData() {
-    const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas/" +
-        this.props.match.params.id
-    );
+    const response = await fetch(window.ApiUrl + "drogas/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
@@ -49,24 +46,14 @@ class DrogasDetalles extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.state.mode === "create") {
-      post(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas",
-        this.state.form
-      );
+      post(window.ApiUrl + "drogas", this.state.form);
       this.props.history.push("/Drogas");
     } else if (this.state.mode === "update") {
-      put(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas/" +
-          this.props.match.params.id,
-        this.state.form
-      );
+      put(window.ApiUrl + "drogas/" + this.props.match.params.id, this.state.form);
       this.setState({ mode: "read" });
       this.props.history.push("/Drogas/" + this.props.match.params.id);
     } else if (this.state.mode === "delete") {
-      del(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas/" +
-          this.props.match.params.id
-      );
+      del(window.ApiUrl + "drogas/" + this.props.match.params.id);
       this.props.history.push("/Drogas");
     }
   };
@@ -108,17 +95,12 @@ class DrogasDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.name}
                   InputProps={{
-                    readOnly:
-                      this.state.mode === "read" || this.state.mode === "delete"
+                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
             </Grid>
-            <ButtonsRow
-              id={this.props.match.params.id}
-              mode={this.state.mode}
-              history={this.props.history}
-            />
+            <ButtonsRow id={this.props.match.params.id} mode={this.state.mode} history={this.props.history} />
           </form>
         </Grid>
       </div>

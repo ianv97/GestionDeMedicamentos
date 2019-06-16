@@ -31,8 +31,7 @@ class MedicamentosDetalles extends React.Component {
 
   async getData() {
     const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" +
-        this.props.match.params.id
+      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" + this.props.match.params.id
     );
     const data = await response.json();
     this.setState({
@@ -49,9 +48,7 @@ class MedicamentosDetalles extends React.Component {
   }
 
   async getDrugs() {
-    const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas?order=name"
-    );
+    const response = await fetch("http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas?order=name");
     const data = await response.json();
     data.forEach(drug => {
       this.setState({
@@ -87,24 +84,14 @@ class MedicamentosDetalles extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.state.mode === "create") {
-      post(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos",
-        this.state.form
-      );
+      post(window.ApiUrl + "medicamentos", this.state.form);
       this.props.history.push("/Medicamentos");
     } else if (this.state.mode === "update") {
-      put(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" +
-          this.props.match.params.id,
-        this.state.form
-      );
+      put(window.ApiUrl + "medicamentos/" + this.props.match.params.id, this.state.form);
       this.setState({ mode: "read" });
       this.props.history.push("/Medicamentos/" + this.props.match.params.id);
     } else if (this.state.mode === "delete") {
-      del(
-        "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" +
-          this.props.match.params.id
-      );
+      del(window.ApiUrl + "medicamentos/" + this.props.match.params.id);
       this.props.history.push("/Medicamentos");
     }
   };
@@ -112,10 +99,7 @@ class MedicamentosDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs
-          currentUrl={"Medicamentos"}
-          id={this.props.match.params.id}
-        />
+        <Breadcrumbs currentUrl={"Medicamentos"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
@@ -149,8 +133,7 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.name}
                   InputProps={{
-                    readOnly:
-                      this.state.mode === "read" || this.state.mode === "delete"
+                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
@@ -163,19 +146,14 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.laboratory}
                   InputProps={{
-                    readOnly:
-                      this.state.mode === "read" || this.state.mode === "delete"
+                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
             </Grid>
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item className="mt-3">
-                <FormControl
-                  required
-                  variant="outlined"
-                  style={{ minWidth: 210 }}
-                >
+                <FormControl required variant="outlined" style={{ minWidth: 210 }}>
                   <InputLabel htmlFor="drugId">Droga</InputLabel>
                   <Select
                     id="drugId"
@@ -184,9 +162,7 @@ class MedicamentosDetalles extends React.Component {
                     value={this.state.form.drugId}
                     input={<OutlinedInput labelWidth={55} />}
                     inputProps={{
-                      readOnly:
-                        this.state.mode === "read" ||
-                        this.state.mode === "delete"
+                      readOnly: this.state.mode === "read" || this.state.mode === "delete"
                     }}
                   >
                     {Object.keys(this.state.drugs).map(key => {
@@ -208,8 +184,7 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.proportion}
                   InputProps={{
-                    readOnly:
-                      this.state.mode === "read" || this.state.mode === "delete"
+                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
               </Grid>
@@ -225,9 +200,7 @@ class MedicamentosDetalles extends React.Component {
                     value={this.state.form.presentation}
                     input={<OutlinedInput labelWidth={95} />}
                     inputProps={{
-                      readOnly:
-                        this.state.mode === "read" ||
-                        this.state.mode === "delete"
+                      readOnly: this.state.mode === "read" || this.state.mode === "delete"
                     }}
                   >
                     <MenuItem value="Inyectable">Inyectable</MenuItem>

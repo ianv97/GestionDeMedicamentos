@@ -14,6 +14,8 @@ import Stock from "./pages/Stock";
 import StockDetalles from "./pages/StockDetalles";
 
 function App() {
+    window.ApiUrl = "http://localhost:51536/api/";
+
   return (
     <Navbar>
       <Switch>
@@ -21,17 +23,9 @@ function App() {
         <Route exact path="/Drogas" component={Drogas} />
         <Route exact path="/Drogas/:id" component={DrogasDetalles} />
         <Route exact path="/Medicamentos" component={Medicamentos} />
-        <Route
-          exact
-          path="/Medicamentos/:id"
-          component={MedicamentosDetalles}
-        />
+        <Route exact path="/Medicamentos/:id" component={MedicamentosDetalles} />
         <Route exact path="/Reposiciones" component={Reposiciones} />
-        <Route
-          exact
-          path="/Reposiciones/:id"
-          component={ReposicionesDetalles}
-        />
+        <Route exact path="/Reposiciones/:id" component={ReposicionesDetalles} />
         <Route exact path="/Partidas" component={Partidas} />
         <Route exact path="/Partidas/:id" component={PartidasDetalles} />
         <Route exact path="/Stock" component={Stock} />
