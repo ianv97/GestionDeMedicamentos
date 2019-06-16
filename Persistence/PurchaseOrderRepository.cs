@@ -18,7 +18,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<IEnumerable<PurchaseOrder>> ListAsync(DateTime? date, string order)
         {
-            var purchaseOrders = _context.PurchaseOrders.Include(po => po.MedicinePurchaseOrders).Where(po => (date == null || po.Date == (date)));
+            var purchaseOrders = _context.PurchaseOrders.Where(po => (date == null || po.Date == (date)));
 
             bool descending = false;
             if (order != null)

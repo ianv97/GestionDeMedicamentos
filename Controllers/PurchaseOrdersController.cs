@@ -16,10 +16,12 @@ namespace GestiónDeMedicamentos.Controllers
     public class PurchaseOrdersController : ControllerBase
     {
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public PurchaseOrdersController(IPurchaseOrderRepository purchaseOrderRepository)
+        public PurchaseOrdersController(IPurchaseOrderRepository purchaseOrderRepository, IMedicineRepository medicineRepository)
         {
             _purchaseOrderRepository = purchaseOrderRepository;
+            _medicineRepository = medicineRepository;
         }
 
         //GET: api/reposiciones?date=01/01/2019
@@ -45,31 +47,45 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var purchaseOrders = await _purchaseOrderRepository.FindAsync(id);
+            var purchaseOrder = await _purchaseOrderRepository.FindAsync(id);
 
-            if (purchaseOrders == null)
+            if (purchaseOrder == null)
             {
                 return NotFound();
             }
 
-            return Ok(purchaseOrders);
+            return Ok(purchaseOrder);
         }
 
         // PUT: api/reposiciones/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPurchaseOrder([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrders)
+        public async Task<IActionResult> PutPurchaseOrder([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrderUpdated)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != purchaseOrders.Id)
+            if (id != purchaseOrderUpdated.Id)
             {
                 return BadRequest();
             }
 
-            _purchaseOrderRepository.Update(purchaseOrders);
+            var purchaseOrder = await _purchaseOrderRepository.FindAsync(id);
+            foreach (var medicinePurchaseOrder in purchaseOrder.MedicinePurchaseOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePurchaseOrder.MedicineId);
+                medicine.Stock -= medicinePurchaseOrder.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+            foreach (var medicinePurchaseOrderUpdated in purchaseOrderUpdated.MedicinePurchaseOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePurchaseOrderUpdated.MedicineId);
+                medicine.Stock += medicinePurchaseOrderUpdated.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
+            _purchaseOrderRepository.Update(purchaseOrderUpdated);
 
             try
             {
@@ -99,12 +115,15 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            //foreach (var MedicinePurchaseOrder in purchaseOrder.MedicinePurchaseOrders)
-            //{
-
-            //}
-
             await _purchaseOrderRepository.CreateAsync(purchaseOrder);
+
+            foreach (var medicinePurchaseOrder in purchaseOrder.MedicinePurchaseOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePurchaseOrder.MedicineId);
+                medicine.Stock += medicinePurchaseOrder.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
             await _purchaseOrderRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetPurchaseOrders", new { id = purchaseOrder.Id }, purchaseOrder);
@@ -119,16 +138,23 @@ namespace GestiónDeMedicamentos.Controllers
                 return BadRequest(ModelState);
             }
 
-            var purchaseOrders = await _purchaseOrderRepository.FindAsync(id);
-            if (purchaseOrders == null)
+            var purchaseOrder = await _purchaseOrderRepository.FindAsync(id);
+            if (purchaseOrder == null)
             {
                 return NotFound();
             }
 
-            _purchaseOrderRepository.Delete(purchaseOrders);
+            foreach (var medicinePurchaseOrder in purchaseOrder.MedicinePurchaseOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePurchaseOrder.MedicineId);
+                medicine.Stock -= medicinePurchaseOrder.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+            _purchaseOrderRepository.Delete(purchaseOrder);
+
             await _purchaseOrderRepository.SaveChangesAsync();
 
-            return Ok(purchaseOrders);
+            return Ok(purchaseOrder);
         }
 
 

@@ -54,6 +54,7 @@ namespace GestiónDeMedicamentos
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().AddJsonOptions(op => {
                 op.SerializerSettings.Converters.Add(new StringEnumConverter());
+                op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
             services.AddCors(options =>

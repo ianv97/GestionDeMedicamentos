@@ -16,10 +16,12 @@ namespace GestiónDeMedicamentos.Controllers
     public class PrescriptionsController : ControllerBase
     {
         private readonly IPrescriptionRepository _prescriptionRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public PrescriptionsController(IPrescriptionRepository prescriptionRepository)
+        public PrescriptionsController(IPrescriptionRepository prescriptionRepository, IMedicineRepository medicineRepository)
         {
             _prescriptionRepository = prescriptionRepository;
+            _medicineRepository = medicineRepository;
         }
 
         // GET: api/partidas
@@ -58,19 +60,33 @@ namespace GestiónDeMedicamentos.Controllers
 
         // PUT: api/partidas/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPrescription([FromRoute] int id, [FromBody] Prescription prescription)
+        public async Task<IActionResult> PutPrescription([FromRoute] int id, [FromBody] Prescription prescriptionUpdated)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != prescription.Id)
+            if (id != prescriptionUpdated.Id)
             {
                 return BadRequest();
             }
 
-            _prescriptionRepository.Update(prescription);
+            var prescription = await _prescriptionRepository.FindAsync(id);
+            foreach (var medicinePrescription in prescription.MedicinePrescriptions)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePrescription.MedicineId);
+                medicine.Stock += medicinePrescription.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+            foreach (var medicinePrescriptionUpdated in prescriptionUpdated.MedicinePrescriptions)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePrescriptionUpdated.MedicineId);
+                medicine.Stock -= medicinePrescriptionUpdated.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
+            _prescriptionRepository.Update(prescriptionUpdated);
 
             try
             {
@@ -101,6 +117,14 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             await _prescriptionRepository.CreateAsync(prescription);
+
+            foreach (var medicinePrescription in prescription.MedicinePrescriptions)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePrescription.MedicineId);
+                medicine.Stock -= medicinePrescription.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
             await _prescriptionRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetPrescription", new { id = prescription.Id }, prescription);
@@ -121,7 +145,15 @@ namespace GestiónDeMedicamentos.Controllers
                 return NotFound();
             }
 
+            foreach (var medicinePrescription in prescription.MedicinePrescriptions)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicinePrescription.MedicineId);
+                medicine.Stock += medicinePrescription.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
             _prescriptionRepository.Delete(prescription);
+
             await _prescriptionRepository.SaveChangesAsync();
 
             return Ok(prescription);

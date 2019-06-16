@@ -16,10 +16,12 @@ namespace GestiónDeMedicamentos.Controllers
     public class StockOrdersController : ControllerBase
     {
         private readonly IStockOrderRepository _stockOrderRepository;
+        private readonly IMedicineRepository _medicineRepository;
 
-        public StockOrdersController(IStockOrderRepository stockOrderRepository)
+        public StockOrdersController(IStockOrderRepository stockOrderRepository, IMedicineRepository medicineRepository)
         {
             _stockOrderRepository = stockOrderRepository;
+            _medicineRepository = medicineRepository;
         }
 
         //GET: api/stock/?date=01/01/2019
@@ -59,19 +61,33 @@ namespace GestiónDeMedicamentos.Controllers
 
         // PUT: api/stock/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStockOrder([FromRoute] int id, [FromBody] StockOrder stockOrder)
+        public async Task<IActionResult> PutStockOrder([FromRoute] int id, [FromBody] StockOrder stockOrderUpdated)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != stockOrder.Id)
+            if (id != stockOrderUpdated.Id)
             {
                 return BadRequest();
             }
 
-            _stockOrderRepository.Update(stockOrder);
+            var stockOrder = await _stockOrderRepository.FindAsync(id);
+            foreach (var medicineStockOrder in stockOrder.MedicineStockOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrder.MedicineId);
+                medicine.Stock -= medicineStockOrder.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+            foreach (var medicineStockOrderUpdated in stockOrderUpdated.MedicineStockOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrderUpdated.MedicineId);
+                medicine.Stock += medicineStockOrderUpdated.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
+            _stockOrderRepository.Update(stockOrderUpdated);
 
             try
             {
@@ -102,6 +118,14 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             await _stockOrderRepository.CreateAsync(stockOrder);
+
+            foreach (var medicineStockOrder in stockOrder.MedicineStockOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrder.MedicineId);
+                medicine.Stock += medicineStockOrder.Quantity;
+                _medicineRepository.Update(medicine);
+            }
+
             await _stockOrderRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetStockOrder", new { id = stockOrder.Id }, stockOrder);
@@ -120,6 +144,13 @@ namespace GestiónDeMedicamentos.Controllers
             if (stockOrder == null)
             {
                 return NotFound();
+            }
+
+            foreach (var medicineStockOrder in stockOrder.MedicineStockOrders)
+            {
+                Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrder.MedicineId);
+                medicine.Stock -= medicineStockOrder.Quantity;
+                _medicineRepository.Update(medicine);
             }
 
             _stockOrderRepository.Delete(stockOrder);
