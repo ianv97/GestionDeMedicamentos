@@ -24,18 +24,20 @@ class ButtonsRow extends React.Component {
             >
               Eliminar
             </Button>
-            <Button
-              variant="contained"
-              className="bg-warning ml-4"
-              onClick={() =>
-                this.props.history.push({
-                  pathname: this.props.id,
-                  search: "?mode=update"
-                })
-              }
-            >
-              Editar
-            </Button>
+            {this.props.edit === undefined && (
+              <Button
+                variant="contained"
+                className="bg-warning ml-4"
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: this.props.id,
+                    search: "?mode=update"
+                  })
+                }
+              >
+                Editar
+              </Button>
+            )}
           </Grid>
         ) : this.props.mode === "create" || this.props.mode === "update" ? (
           <Grid item>

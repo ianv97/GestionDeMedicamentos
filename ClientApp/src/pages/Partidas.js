@@ -19,7 +19,7 @@ class Partidas extends React.Component {
 
   async getData() {
     try {
-      const response = await fetch(window.ApiUrl + "partidas");
+      const response = await fetch(window.ApiUrl + "partidas?order=date");
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -49,6 +49,7 @@ class Partidas extends React.Component {
           titles={["ID", "Fecha"]}
           data={this.state.data}
           currentUrl={"Partidas"}
+          edit={false}
           loading={this.state.loading}
           error={this.state.error}
         />

@@ -22,7 +22,7 @@ class Reposiciones extends React.Component {
 
   async getData() {
     try {
-      const response = await fetch(window.ApiUrl + "reposiciones");
+      const response = await fetch(window.ApiUrl + "reposiciones?order=date");
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
@@ -59,6 +59,7 @@ class Reposiciones extends React.Component {
           titles={["ID", "Fecha"]}
           data={this.state.data}
           currentUrl={"Reposiciones"}
+          edit={false}
           loading={this.state.loading}
           error={this.state.error}
         />

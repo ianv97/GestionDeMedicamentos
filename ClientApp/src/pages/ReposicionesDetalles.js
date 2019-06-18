@@ -8,7 +8,6 @@ import AddIcon from "@material-ui/icons/Add";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import post from "../functions/post";
-import put from "../functions/put";
 import del from "../functions/delete";
 
 class ReposicionesDetalles extends React.Component {
@@ -98,10 +97,6 @@ class ReposicionesDetalles extends React.Component {
     if (this.state.mode === "create") {
       post(window.ApiUrl + "reposiciones", this.state.form);
       this.props.history.push("/Reposiciones");
-    } else if (this.state.mode === "update") {
-      put(window.ApiUrl + "reposiciones/" + this.props.match.params.id, this.state.form);
-      this.setState({ edit: false });
-      this.props.history.push("/Reposiciones/" + this.props.match.params.id);
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "reposiciones/" + this.props.match.params.id);
       this.props.history.push("/Reposiciones");
@@ -156,19 +151,26 @@ class ReposicionesDetalles extends React.Component {
               <InputRow
                 key={index}
                 mode={this.state.mode}
-                medicinePurchaseOrder={element}
+                element={element}
                 medicines={this.state.medicines}
                 handleChange={e => this.handleRowChange(e, index)}
               />
             ))}
-            <Grid container direction="row" justify="center" spacing={5}>
-              <Grid item>
-                <Fab onClick={this.addNewRow} color="primary" size="medium">
-                  <AddIcon />
-                </Fab>
+            {this.state.mode === "create" && (
+              <Grid container direction="row" justify="center" spacing={5}>
+                <Grid item>
+                  <Fab onClick={this.addNewRow} color="primary" size="medium">
+                    <AddIcon />
+                  </Fab>
+                </Grid>
               </Grid>
-            </Grid>
-            <ButtonsRow id={this.props.match.params.id} mode={this.state.mode} history={this.props.history} />
+            )}
+            <ButtonsRow
+              id={this.props.match.params.id}
+              mode={this.state.mode}
+              history={this.props.history}
+              edit={false}
+            />
           </form>
         </Grid>
       </div>

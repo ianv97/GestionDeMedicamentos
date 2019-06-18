@@ -7,7 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 
-class Fila extends React.Component {
+class InputRow extends React.Component {
   render() {
     return (
       <Grid container direction="row" justify="center" spacing={5}>
@@ -18,7 +18,7 @@ class Fila extends React.Component {
               id="medicineId"
               name="medicineId"
               onChange={e => this.props.handleChange(e)}
-              value={this.props.medicinePurchaseOrder.medicineId}
+              value={this.props.element.medicineId}
               input={<OutlinedInput labelWidth={110} />}
               inputProps={{
                 readOnly: this.props.mode === "read" || this.props.mode === "delete"
@@ -43,7 +43,7 @@ class Fila extends React.Component {
             variant="outlined"
             name="quantity"
             onChange={e => this.props.handleChange(e)}
-            value={this.props.medicinePurchaseOrder.quantity}
+            value={this.props.element.quantity}
             InputProps={{
               readOnly: this.props.mode === "read" || this.props.mode === "delete"
             }}
@@ -54,4 +54,4 @@ class Fila extends React.Component {
   }
 }
 
-export default Fila;
+export default InputRow;

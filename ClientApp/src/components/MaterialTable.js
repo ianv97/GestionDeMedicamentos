@@ -55,7 +55,7 @@ function CustomizedTables(props) {
               </StyledTableCell>
             ))}
             <StyledTableCell align="center">Detalles</StyledTableCell>
-            <StyledTableCell align="center">Editar</StyledTableCell>
+            {props.edit === undefined && <StyledTableCell align="center">Editar</StyledTableCell>}
             <StyledTableCell align="center">Eliminar</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -85,13 +85,15 @@ function CustomizedTables(props) {
                     </Fab>
                   </Link>
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Link to={props.currentUrl + "/" + row[0] + "?mode=update"}>
-                    <Fab className="bg-warning" size="small">
-                      <Icon>edit_icon</Icon>
-                    </Fab>
-                  </Link>
-                </StyledTableCell>
+                {props.edit === undefined && (
+                  <StyledTableCell align="center">
+                    <Link to={props.currentUrl + "/" + row[0] + "?mode=update"}>
+                      <Fab className="bg-warning" size="small">
+                        <Icon>edit_icon</Icon>
+                      </Fab>
+                    </Link>
+                  </StyledTableCell>
+                )}
                 <StyledTableCell align="center">
                   <Link to={props.currentUrl + "/" + row[0] + "?mode=delete"}>
                     <Fab color="secondary" size="small">

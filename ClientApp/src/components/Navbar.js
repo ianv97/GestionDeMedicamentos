@@ -91,6 +91,7 @@ function MiniDrawer(props) {
   const [active, setActive] = React.useState();
 
   function handleDrawerOpen() {
+    console.dir(props.history);
     setOpen(true);
   }
 

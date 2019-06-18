@@ -51,7 +51,7 @@ class DrogasDetalles extends React.Component {
     } else if (this.state.mode === "update") {
       put(window.ApiUrl + "drogas/" + this.props.match.params.id, this.state.form);
       this.setState({ mode: "read" });
-      this.props.history.push("/Drogas/" + this.props.match.params.id);
+      this.props.history.push("/Drogas/" + this.props.match.params.id + "?mode=read");
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "drogas/" + this.props.match.params.id);
       this.props.history.push("/Drogas");

@@ -30,9 +30,7 @@ class MedicamentosDetalles extends React.Component {
   changeMode = changeMode.bind(this);
 
   async getData() {
-    const response = await fetch(
-      "http://medicamentos.us-east-1.elasticbeanstalk.com/api/medicamentos/" + this.props.match.params.id
-    );
+    const response = await fetch(window.ApiUrl + "medicamentos/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
@@ -48,7 +46,7 @@ class MedicamentosDetalles extends React.Component {
   }
 
   async getDrugs() {
-    const response = await fetch("http://medicamentos.us-east-1.elasticbeanstalk.com/api/drogas?order=name");
+    const response = await fetch(window.ApiUrl + "drogas?order=name");
     const data = await response.json();
     data.forEach(drug => {
       this.setState({
@@ -89,7 +87,7 @@ class MedicamentosDetalles extends React.Component {
     } else if (this.state.mode === "update") {
       put(window.ApiUrl + "medicamentos/" + this.props.match.params.id, this.state.form);
       this.setState({ mode: "read" });
-      this.props.history.push("/Medicamentos/" + this.props.match.params.id);
+      this.props.history.push("/Medicamentos/" + this.props.match.params.id + "?mode=read");
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "medicamentos/" + this.props.match.params.id);
       this.props.history.push("/Medicamentos");

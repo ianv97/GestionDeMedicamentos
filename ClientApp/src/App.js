@@ -14,7 +14,7 @@ import Stock from "./pages/Stock";
 import StockDetalles from "./pages/StockDetalles";
 
 function App() {
-    window.ApiUrl = "http://localhost:51536/api/";
+  window.ApiUrl = "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
 
   return (
     <Navbar>
