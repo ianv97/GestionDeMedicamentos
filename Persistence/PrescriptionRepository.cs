@@ -48,11 +48,6 @@ namespace GestiónDeMedicamentos.Persistence
             return await _context.Prescriptions.Include(p => p.MedicinePrescriptions).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public EntityState Update(Prescription prescription)
-        {
-            return _context.Entry(prescription).State = EntityState.Modified;
-        }
-
         public async Task<EntityEntry> CreateAsync(Prescription prescription)
         {
             return await _context.Prescriptions.AddAsync(prescription);

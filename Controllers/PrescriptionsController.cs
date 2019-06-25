@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using GestiónDeMedicamentos.Models;
 using GestiónDeMedicamentos.Domain;
 
@@ -53,56 +52,6 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(prescription);
         }
 
-
-        // PUT: api/partidas/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPrescription([FromRoute] int id, [FromBody] Prescription prescriptionUpdated)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != prescriptionUpdated.Id)
-            {
-                return BadRequest();
-            }
-
-            var prescription = await _prescriptionRepository.FindAsync(id);
-            foreach (var medicinePrescription in prescription.MedicinePrescriptions)
-            {
-                Medicine medicine = await _medicineRepository.FindAsync(medicinePrescription.MedicineId);
-                medicine.Stock += medicinePrescription.Quantity;
-                _medicineRepository.Update(medicine);
-            }
-            foreach (var medicinePrescriptionUpdated in prescriptionUpdated.MedicinePrescriptions)
-            {
-                Medicine medicine = await _medicineRepository.FindAsync(medicinePrescriptionUpdated.MedicineId);
-                medicine.Stock -= medicinePrescriptionUpdated.Quantity;
-                _medicineRepository.Update(medicine);
-            }
-
-            _prescriptionRepository.Update(prescriptionUpdated);
-
-            try
-            {
-                await _prescriptionRepository.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_prescriptionRepository.PrescriptionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/partidas
         [HttpPost]
         public async Task<IActionResult> PostPrescription([FromBody] Prescription prescription)
@@ -117,8 +66,16 @@ namespace GestiónDeMedicamentos.Controllers
             foreach (var medicinePrescription in prescription.MedicinePrescriptions)
             {
                 Medicine medicine = await _medicineRepository.FindAsync(medicinePrescription.MedicineId);
-                medicine.Stock -= medicinePrescription.Quantity;
-                _medicineRepository.Update(medicine);
+                if (medicinePrescription.Quantity <= medicine.Stock)
+                {
+                    medicine.Stock -= medicinePrescription.Quantity;
+                    _medicineRepository.Update(medicine);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+                
             }
 
             await _prescriptionRepository.SaveChangesAsync();

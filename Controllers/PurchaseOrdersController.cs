@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using GestiónDeMedicamentos.Models;
 using GestiónDeMedicamentos.Domain;
 
@@ -51,55 +50,6 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             return Ok(purchaseOrder);
-        }
-
-        // PUT: api/reposiciones/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPurchaseOrder([FromRoute] int id, [FromBody] PurchaseOrder purchaseOrderUpdated)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != purchaseOrderUpdated.Id)
-            {
-                return BadRequest();
-            }
-
-            var purchaseOrder = await _purchaseOrderRepository.FindAsync(id);
-            foreach (var medicinePurchaseOrder in purchaseOrder.MedicinePurchaseOrders)
-            {
-                Medicine medicine = await _medicineRepository.FindAsync(medicinePurchaseOrder.MedicineId);
-                medicine.Stock -= medicinePurchaseOrder.Quantity;
-                _medicineRepository.Update(medicine);
-            }
-            foreach (var medicinePurchaseOrderUpdated in purchaseOrderUpdated.MedicinePurchaseOrders)
-            {
-                Medicine medicine = await _medicineRepository.FindAsync(medicinePurchaseOrderUpdated.MedicineId);
-                medicine.Stock += medicinePurchaseOrderUpdated.Quantity;
-                _medicineRepository.Update(medicine);
-            }
-
-            _purchaseOrderRepository.Update(purchaseOrderUpdated);
-
-            try
-            {
-                await _purchaseOrderRepository.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_purchaseOrderRepository.PurchaseOrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/reposiciones

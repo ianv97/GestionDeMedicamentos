@@ -10,7 +10,7 @@ namespace GestiónDeMedicamentos.Models
     public class MedicinePrescription
     {
         public int Id { get; set; }
-        public int Quantity { get; set; }
+        public uint Quantity { get; set; }
         [Required]
         public int MedicineId { get; set; }
         [ForeignKey("MedicineId")]

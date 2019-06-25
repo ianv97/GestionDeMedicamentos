@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using GestiónDeMedicamentos.Models;
 using GestiónDeMedicamentos.Domain;
+using System;
 
 namespace GestiónDeMedicamentos.Controllers
 {
@@ -54,56 +54,6 @@ namespace GestiónDeMedicamentos.Controllers
             return Ok(stockOrder);
         }
 
-
-        // PUT: api/stock/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStockOrder([FromRoute] int id, [FromBody] StockOrder stockOrderUpdated)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != stockOrderUpdated.Id)
-            {
-                return BadRequest();
-            }
-
-            var stockOrder = await _stockOrderRepository.FindAsync(id);
-            foreach (var medicineStockOrder in stockOrder.MedicineStockOrders)
-            {
-                Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrder.MedicineId);
-                medicine.Stock -= medicineStockOrder.Quantity;
-                _medicineRepository.Update(medicine);
-            }
-            foreach (var medicineStockOrderUpdated in stockOrderUpdated.MedicineStockOrders)
-            {
-                Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrderUpdated.MedicineId);
-                medicine.Stock += medicineStockOrderUpdated.Quantity;
-                _medicineRepository.Update(medicine);
-            }
-
-            _stockOrderRepository.Update(stockOrderUpdated);
-
-            try
-            {
-                await _stockOrderRepository.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_stockOrderRepository.StockOrderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/StockOrder
         [HttpPost]
         public async Task<IActionResult> PostStockOrder([FromBody] StockOrder stockOrder)
@@ -118,7 +68,14 @@ namespace GestiónDeMedicamentos.Controllers
             foreach (var medicineStockOrder in stockOrder.MedicineStockOrders)
             {
                 Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrder.MedicineId);
-                medicine.Stock += medicineStockOrder.Quantity;
+                if (medicineStockOrder.Quantity < 0)
+                {
+                    medicine.Stock -= (uint)Math.Abs(medicineStockOrder.Quantity);
+                }
+                else
+                {
+                    medicine.Stock += (uint)medicineStockOrder.Quantity;
+                }
                 _medicineRepository.Update(medicine);
             }
 
@@ -145,7 +102,14 @@ namespace GestiónDeMedicamentos.Controllers
             foreach (var medicineStockOrder in stockOrder.MedicineStockOrders)
             {
                 Medicine medicine = await _medicineRepository.FindAsync(medicineStockOrder.MedicineId);
-                medicine.Stock -= medicineStockOrder.Quantity;
+                if (medicineStockOrder.Quantity < 0)
+                {
+                    medicine.Stock += (uint)Math.Abs(medicineStockOrder.Quantity);
+                }
+                else
+                {
+                    medicine.Stock -= (uint)medicineStockOrder.Quantity;
+                }
                 _medicineRepository.Update(medicine);
             }
 

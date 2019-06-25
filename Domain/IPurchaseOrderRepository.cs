@@ -1,9 +1,6 @@
 ﻿using GestiónDeMedicamentos.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GestiónDeMedicamentos.Domain
@@ -12,7 +9,6 @@ namespace GestiónDeMedicamentos.Domain
     {
         Task<IEnumerable<PurchaseOrder>> ListAsync(string date, string order);
         Task<PurchaseOrder> FindAsync(int id);
-        EntityState Update(PurchaseOrder purchaseOrder);
         Task<EntityEntry> CreateAsync(PurchaseOrder purchaseOrder);
         EntityEntry Delete(PurchaseOrder purchaseOrder);
         Task SaveChangesAsync();

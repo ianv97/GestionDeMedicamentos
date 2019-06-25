@@ -15,8 +15,8 @@ namespace GestiónDeMedicamentos.Models
         public string Laboratory { get; set; }
         public enum PresentationTypes { Inyectable, Jarabe, Píldora, Comprimido }
         public PresentationTypes Presentation { get; set; }
-        public int Stock { get; set; }
-        public int? DrugId { get; set; }
+        public uint Stock { get; set; }
+        public int DrugId { get; set; }
         [ForeignKey("DrugId")]
         public ICollection<MedicinePrescription> MedicinePrescriptions {get; set; }
         public ICollection<MedicinePurchaseOrder> MedicinePurchaseOrders { get; set; }
