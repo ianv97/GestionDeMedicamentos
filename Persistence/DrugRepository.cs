@@ -18,7 +18,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<IEnumerable<Drug>> ListAsync(string name, string order)
         {
-            var drugs = _context.Drugs.Where(d => name == null || d.Name.StartsWith(name));
+            var drugs = _context.Drugs.Where(d => name == null || d.Name.ToLower().StartsWith(name.ToLower()));
 
             bool descending = false;
             if (order != null)

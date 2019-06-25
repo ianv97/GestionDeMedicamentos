@@ -10,7 +10,7 @@ namespace GestiónDeMedicamentos.Domain
 {
     public interface IMedicineRepository
     {
-        Task<IEnumerable<Medicine>> ListAsync(string name, string drug, decimal? proportion, string presentation, string laboratory, string order);
+        Task<IEnumerable<Medicine>> ListAsync(string name, string drug, string proportion, string presentation, string laboratory, string stock, string order);
         Task<Medicine> FindAsync(int id);
         EntityState Update(Medicine medicine);
         Task<EntityEntry> CreateAsync(Medicine medicine);

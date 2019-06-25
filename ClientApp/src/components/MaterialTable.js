@@ -68,7 +68,7 @@ function CustomizedTables(props) {
                   type="search"
                   variant="outlined"
                   name={title[1]}
-                  inputProps={{ style: { textAlign: "center" } }}
+                  inputProps={{ style: { textAlign: "center" }, autocomplete: "off" }}
                   onChange={props.handleSearch}
                 />
               </TableCell>

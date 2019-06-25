@@ -3,7 +3,6 @@ using GestiónDeMedicamentos.Domain;
 using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,9 +15,9 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<StockOrder>> ListAsync(DateTime? date, string order)
+        public async Task<IEnumerable<StockOrder>> ListAsync(string date, string order)
         {
-            var stockOrders = _context.StockOrders.Where(so => (date == null || so.Date == (date)));
+            var stockOrders = _context.StockOrders.Where(so => (date == null || so.Date.ToString().StartsWith(date)));
 
             bool descending = false;
             if (order != null)

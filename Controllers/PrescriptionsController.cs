@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Models;
 using GestiónDeMedicamentos.Domain;
 
@@ -26,7 +22,7 @@ namespace GestiónDeMedicamentos.Controllers
 
         // GET: api/partidas
         [HttpGet]
-        public async Task<IActionResult> GetPrescriptions(DateTime? date, string order)
+        public async Task<IActionResult> GetPrescriptions(string date, string order)
         {
             if (!ModelState.IsValid)
             {

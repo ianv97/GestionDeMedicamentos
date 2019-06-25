@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Models;
 using GestiónDeMedicamentos.Domain;
 
@@ -24,14 +20,14 @@ namespace GestiónDeMedicamentos.Controllers
 
         // GET: api/medicamentos?name=Ibupirac&drug=Ibuprofeno&order=name
         [HttpGet]
-        public async Task<IActionResult> GetMedicines(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
+        public async Task<IActionResult> GetMedicines(string name, string drug, string proportion, string presentation, string laboratory, string stock, string order)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<Medicine> medicines = await _medicineRepository.ListAsync(name, drug, proportion, presentation, laboratory, order);
+            IEnumerable<Medicine> medicines = await _medicineRepository.ListAsync(name, drug, proportion, presentation, laboratory, stock, order);
 
             return Ok(medicines);
         }

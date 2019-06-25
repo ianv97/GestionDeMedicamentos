@@ -16,9 +16,9 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Medicine>> ListAsync(string name, string drug, decimal? proportion, string presentation, string laboratory, string order)
+        public async Task<IEnumerable<Medicine>> ListAsync(string name, string drug, string proportion, string presentation, string laboratory, string stock, string order)
         {
-            var medicines = _context.Medicines.Include(m => m.Drug).Where(m => (name == null || m.Name.StartsWith(name)) && (drug == null || m.Drug.Name.StartsWith(drug)) && (proportion == null || m.Proportion == proportion) && (presentation == null || m.Presentation.ToString().StartsWith(presentation)) && (laboratory == null || m.Laboratory.StartsWith(laboratory)));
+            var medicines = _context.Medicines.Include(m => m.Drug).Where(m => (name == null || m.Name.ToLower().StartsWith(name.ToLower())) && (drug == null || m.Drug.Name.ToLower().StartsWith(drug.ToLower())) && (proportion == null || m.Proportion.ToString().StartsWith(proportion)) && (presentation == null || m.Presentation.ToString().ToLower().StartsWith(presentation.ToLower())) && (laboratory == null || m.Laboratory.ToLower().StartsWith(laboratory.ToLower())) && (stock == null || m.Stock.ToString().StartsWith(stock)));
 
             bool descending = false;
             if (order != null)

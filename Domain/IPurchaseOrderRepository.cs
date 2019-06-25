@@ -10,7 +10,7 @@ namespace GestiónDeMedicamentos.Domain
 {
     public interface IPurchaseOrderRepository
     {
-        Task<IEnumerable<PurchaseOrder>> ListAsync(DateTime? date, string order);
+        Task<IEnumerable<PurchaseOrder>> ListAsync(string date, string order);
         Task<PurchaseOrder> FindAsync(int id);
         EntityState Update(PurchaseOrder purchaseOrder);
         Task<EntityEntry> CreateAsync(PurchaseOrder purchaseOrder);
