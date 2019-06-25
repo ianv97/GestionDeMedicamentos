@@ -3,11 +3,8 @@ import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
 import InputRow from "../components/InputRow";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
-import post from "../functions/post";
 import del from "../functions/delete";
 
 class PartidasDetalles extends React.Component {

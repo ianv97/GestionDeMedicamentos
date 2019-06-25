@@ -4,13 +4,19 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { Link } from "react-router-dom";
 import MaterialTable from "../components/MaterialTable.js";
+import handleSearch from "../functions/handleSearch";
 
 class Reposiciones extends React.Component {
   state = {
     loading: true,
     error: null,
-    data: []
+    data: [],
+    search: {
+      id: "",
+      date: ""
+    }
   };
+  handleSearch = handleSearch.bind(this);
 
   componentDidMount() {
     this.getData();
@@ -20,13 +26,22 @@ class Reposiciones extends React.Component {
     this.props.history.listen(location => this.getData());
   }
 
-  async getData() {
+  async getData(search) {
+    this.setState({ error: null });
     try {
-      const response = await fetch(window.ApiUrl + "reposiciones?order=date");
+      let response;
+      this.state.search.id
+        ? (response = await fetch(window.ApiUrl + "reposiciones/" + this.state.search.id))
+        : search
+        ? (response = await fetch(window.ApiUrl + "reposiciones?order=date" + search))
+        : (response = await fetch(window.ApiUrl + "reposiciones?order=date"));
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
       }
-      const data = await response.json();
+      let data = await response.json();
+      if (!Array.isArray(data)) {
+        data = [data];
+      }
       const displayData = [];
       data.forEach(function(reposicion) {
         displayData.push([reposicion.id, reposicion.date]);
@@ -56,12 +71,13 @@ class Reposiciones extends React.Component {
         </Grid>
 
         <MaterialTable
-          titles={["ID", "Fecha"]}
+          titles={[["ID", "id"], ["Fecha", "date"]]}
           data={this.state.data}
           currentUrl={"Reposiciones"}
           edit={false}
           loading={this.state.loading}
           error={this.state.error}
+          handleSearch={this.handleSearch}
         />
       </React.Fragment>
     );

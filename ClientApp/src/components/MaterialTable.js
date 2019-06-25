@@ -5,6 +5,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
 import Icon from "@material-ui/core/Icon";
@@ -50,13 +51,31 @@ function CustomizedTables(props) {
         <TableHead>
           <TableRow>
             {props.titles.map(title => (
-              <StyledTableCell key={title} align="center">
-                {title}
+              <StyledTableCell key={title[0]} align="center">
+                {title[0]}
               </StyledTableCell>
             ))}
             <StyledTableCell align="center">Detalles</StyledTableCell>
             {props.edit === undefined && <StyledTableCell align="center">Editar</StyledTableCell>}
             <StyledTableCell align="center">Eliminar</StyledTableCell>
+          </TableRow>
+          <TableRow>
+            {props.titles.map(title => (
+              <TableCell key={title[1]} align="center" padding="none">
+                <TextField
+                  align="center"
+                  placeholder={title[0]}
+                  type="search"
+                  variant="outlined"
+                  name={title[1]}
+                  inputProps={{ style: { textAlign: "center" } }}
+                  onChange={props.handleSearch}
+                />
+              </TableCell>
+            ))}
+            <TableCell />
+            {props.edit === undefined && <TableCell />}
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
