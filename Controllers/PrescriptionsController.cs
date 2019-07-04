@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GestiónDeMedicamentos.Models;
 using GestiónDeMedicamentos.Domain;
+using GestionDeMedicamentos.Controllers;
 
 namespace GestiónDeMedicamentos.Controllers
 {
@@ -21,14 +21,14 @@ namespace GestiónDeMedicamentos.Controllers
 
         // GET: api/partidas
         [HttpGet]
-        public async Task<IActionResult> GetPrescriptions(string date, string order)
+        public async Task<IActionResult> GetPrescriptions(string date, string order, int? pageNumber, int? pageSize)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IEnumerable<Prescription> prescriptions = await _prescriptionRepository.ListAsync(date, order);
+            PaginatedList<Prescription> prescriptions = await _prescriptionRepository.ListAsync(date, order, pageNumber, pageSize);
 
             return Ok(prescriptions);
         }

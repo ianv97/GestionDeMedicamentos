@@ -1,10 +1,9 @@
-﻿using GestiónDeMedicamentos.Database;
+﻿using GestionDeMedicamentos.Controllers;
+using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Domain;
 using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,7 +15,7 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Drug>> ListAsync(string name, string order)
+        public async Task<PaginatedList<Drug>> ListAsync(string name, string order, int? pageNumber, int? pageSize)
         {
             var drugs = _context.Drugs.Where(d => name == null || d.Name.ToLower().StartsWith(name.ToLower()));
 
@@ -40,7 +39,7 @@ namespace GestiónDeMedicamentos.Persistence
                 }
             }
 
-            return await drugs.ToListAsync();
+            return await PaginatedList<Drug>.CreateAsync(drugs, pageNumber ?? 1, pageSize ?? 0);
         }
 
         public async Task<Drug> FindAsync(int id)

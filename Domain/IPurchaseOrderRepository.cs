@@ -1,13 +1,13 @@
-﻿using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Controllers;
+using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GestiónDeMedicamentos.Domain
 {
     public interface IPurchaseOrderRepository
     {
-        Task<IEnumerable<PurchaseOrder>> ListAsync(string date, string order);
+        Task<PaginatedList<PurchaseOrder>> ListAsync(string date, string order, int? pageNumber, int? pageSize);
         Task<PurchaseOrder> FindAsync(int id);
         Task<EntityEntry> CreateAsync(PurchaseOrder purchaseOrder);
         EntityEntry Delete(PurchaseOrder purchaseOrder);

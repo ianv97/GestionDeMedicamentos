@@ -1,6 +1,6 @@
-﻿using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Controllers;
+using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
@@ -8,7 +8,7 @@ namespace GestiónDeMedicamentos.Domain
 {
     public interface IPrescriptionRepository
     {
-        Task<IEnumerable<Prescription>> ListAsync(string date, string order);
+        Task<PaginatedList<Prescription>> ListAsync(string date, string order, int? pageNumber, int? pageSize);
         Task<Prescription> FindAsync(int id);
         Task<EntityEntry> CreateAsync(Prescription prescription);
         EntityEntry Delete(Prescription prescription);

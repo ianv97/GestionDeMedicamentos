@@ -1,10 +1,9 @@
-﻿using GestiónDeMedicamentos.Database;
+﻿using GestionDeMedicamentos.Controllers;
+using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Domain;
 using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,7 +15,7 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<Medicine>> ListAsync(string name, string drug, string proportion, string presentation, string laboratory, string stock, string order)
+        public async Task<PaginatedList<Medicine>> ListAsync(string name, string drug, string proportion, string presentation, string laboratory, string stock, string order, int? pageNumber, int? pageSize)
         {
             var medicines = _context.Medicines.Include(m => m.Drug).Where(m => (name == null || m.Name.ToLower().StartsWith(name.ToLower())) && (drug == null || m.Drug.Name.ToLower().StartsWith(drug.ToLower())) && (proportion == null || m.Proportion.ToString().StartsWith(proportion)) && (presentation == null || m.Presentation.ToString().ToLower().StartsWith(presentation.ToLower())) && (laboratory == null || m.Laboratory.ToLower().StartsWith(laboratory.ToLower())) && (stock == null || m.Stock.ToString().StartsWith(stock)));
 
@@ -40,7 +39,7 @@ namespace GestiónDeMedicamentos.Persistence
                 }
             }
 
-            return await medicines.ToListAsync();
+            return await PaginatedList<Medicine>.CreateAsync(medicines, pageNumber ?? 1, pageSize ?? 0);
         }
 
         public async Task<Medicine> FindAsync(int id)

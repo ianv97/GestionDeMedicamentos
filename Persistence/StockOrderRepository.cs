@@ -1,4 +1,5 @@
-﻿using GestiónDeMedicamentos.Database;
+﻿using GestionDeMedicamentos.Controllers;
+using GestiónDeMedicamentos.Database;
 using GestiónDeMedicamentos.Domain;
 using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace GestiónDeMedicamentos.Persistence
         {
         }
 
-        public async Task<IEnumerable<StockOrder>> ListAsync(string date, string order)
+        public async Task<PaginatedList<StockOrder>> ListAsync(string date, string order, int? pageNumber, int? pageSize)
         {
             var stockOrders = _context.StockOrders.Where(so => (date == null || so.Date.ToString().StartsWith(date)));
 
@@ -39,7 +40,7 @@ namespace GestiónDeMedicamentos.Persistence
                 }
             }
 
-            return await stockOrders.ToListAsync();
+            return await PaginatedList<StockOrder>.CreateAsync(stockOrders, pageNumber ?? 1, pageSize ?? 0);
         }
 
         public async Task<StockOrder> FindAsync(int id)

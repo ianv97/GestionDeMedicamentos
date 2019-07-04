@@ -1,14 +1,14 @@
-﻿using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Controllers;
+using GestiónDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GestiónDeMedicamentos.Domain
 {
     public interface IDrugRepository
     {
-        Task<IEnumerable<Drug>> ListAsync(string name, string order);
+        Task<PaginatedList<Drug>> ListAsync(string name, string order, int? pageNumber, int? pageSize);
         Task<Drug> FindAsync(int id);
         EntityState Update(Drug drug);
         Task<EntityEntry> CreateAsync(Drug drug);
