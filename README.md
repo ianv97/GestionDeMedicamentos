@@ -22,7 +22,14 @@
 4. [API Partidas](http://medicamentos.us-east-1.elasticbeanstalk.com/api/partidas);
 5. [API Stock](http://medicamentos.us-east-1.elasticbeanstalk.com/api/stock).
 
-## Tecnologías empleadas
+
+#### Funcionalidad de la Aplicación
+La aplicación desarrollada, permite realizar altas, bajas, modificaciones y consultas (CRUD), de los medicamentos, de las reposiciones y de las partidas que se encuentran en stock en el hospital.
+#### Arquitectura empleada
+La arquitectura de software empleada es Modelo-Vista-Controlador, la cual separa los datos, la interfaz de usuario, y la lógica de control en tres componentes distintos: Modelo que contiene una representación de los datos que maneja el sistema, su lógica de negocio, y sus mecanismos de persistencia. Vista, o interfaz de usuario, que compone la información que se envía al cliente y los mecanismos interacción con éste. Controlador, que actúa como intermediario entre el Modelo y la Vista, gestionando el flujo de información entre ellos y las transformaciones para adaptar los datos a las necesidades de cada uno.
+#### Acceso a datos
+El servicio realiza el acceso a datos a través de la una ORM.
+
 #### Lenguaje de programación Backend: C#
 C# es un lenguaje de programación orientado a objetos desarrollado y estandarizado por Microsoft como parte de su plataforma .NET. Su sintaxis es similiar al del lenguaje de programacion Java, aunque incluye aspectos derivados de otros lenguajes. 
 
