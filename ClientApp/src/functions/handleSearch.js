@@ -4,7 +4,8 @@ export default function handleSearch(e) {
       search: {
         ...this.state.search,
         [e.target.name]: e.target.value
-      }
+      },
+      pageNumber: 1
     },
     () => {
       let search = "";
