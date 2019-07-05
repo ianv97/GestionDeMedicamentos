@@ -179,6 +179,7 @@ class MedicamentosDetalles extends React.Component {
                   margin="normal"
                   variant="outlined"
                   name="proportion"
+                  type="number"
                   onChange={this.handleChange}
                   value={this.state.form.proportion}
                   InputProps={{
