@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -9,12 +8,13 @@ namespace GestionDeMedicamentos.Controllers
     public class PaginatedList<T> : List<T>
     {
         public int PageIndex { get; private set; }
+        public int TotalRecords { get; private set; }
         public int TotalPages { get; private set; }
 
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+        public PaginatedList(List<T> items, int count, int pageIndex)
         {
             PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalRecords = count;
 
             this.AddRange(items);
         }
@@ -43,7 +43,7 @@ namespace GestionDeMedicamentos.Controllers
                 source = source.Skip((pageIndex - 1) * pageSize).Take(pageSize);
             }
             var items = await source.ToListAsync();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            return new PaginatedList<T>(items, count, pageIndex);
         }
     }
 }

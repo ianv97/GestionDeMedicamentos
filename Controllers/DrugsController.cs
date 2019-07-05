@@ -29,7 +29,8 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             PaginatedList<Drug> drugs = await _drugRepository.ListAsync(name, order, pageNumber, pageSize);
-
+            HttpContext.Response.Headers.Add("page", drugs.PageIndex.ToString());
+            HttpContext.Response.Headers.Add("totalRecords", drugs.TotalRecords.ToString());
             return Ok(drugs);
         }
 

@@ -30,7 +30,8 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             PaginatedList<StockOrder> stockOrders = await _stockOrderRepository.ListAsync(date, order, pageNumber, pageSize);
-
+            HttpContext.Response.Headers.Add("page", stockOrders.PageIndex.ToString());
+            HttpContext.Response.Headers.Add("totalRecords", stockOrders.TotalRecords.ToString());
             return Ok(stockOrders);
         }
 

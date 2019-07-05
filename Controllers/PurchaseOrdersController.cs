@@ -29,7 +29,8 @@ namespace GestiónDeMedicamentos.Controllers
             }
 
             PaginatedList<PurchaseOrder> purchaseOrders = await _purchaseOrderRepository.ListAsync(date, order, pageNumber, pageSize);
-
+            HttpContext.Response.Headers.Add("page", purchaseOrders.PageIndex.ToString());
+            HttpContext.Response.Headers.Add("totalRecords", purchaseOrders.TotalRecords.ToString());
             return Ok(purchaseOrders);
         }
 
