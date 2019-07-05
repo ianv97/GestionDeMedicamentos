@@ -48,7 +48,7 @@ class StockDetalles extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id !== "Añadir") {
+    if (this.props.match.params.id !== "añadir") {
       this.getData();
     }
     this.getMedicines();
@@ -96,17 +96,17 @@ class StockDetalles extends React.Component {
     e.preventDefault();
     if (this.state.mode === "create") {
       post(window.ApiUrl + "stock", this.state.form);
-      this.props.history.push("/Stock");
+      this.props.history.push("/stock");
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "stock/" + this.props.match.params.id);
-      this.props.history.push("/Stock");
+      this.props.history.push("/stock");
     }
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"Stock"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={"stock"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

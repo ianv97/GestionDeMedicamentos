@@ -24,7 +24,7 @@ class DrogasDetalles extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id !== "Añadir") {
+    if (this.props.match.params.id !== "añadir") {
       this.getData();
     }
     this.changeMode();
@@ -47,21 +47,21 @@ class DrogasDetalles extends React.Component {
     e.preventDefault();
     if (this.state.mode === "create") {
       post(window.ApiUrl + "drogas", this.state.form);
-      this.props.history.push("/Drogas");
+      this.props.history.push("/drogas");
     } else if (this.state.mode === "update") {
       put(window.ApiUrl + "drogas/" + this.props.match.params.id, this.state.form);
       this.setState({ mode: "read" });
-      this.props.history.push("/Drogas/" + this.props.match.params.id + "?mode=read");
+      this.props.history.push("/drogas/" + this.props.match.params.id + "?mode=read");
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "drogas/" + this.props.match.params.id);
-      this.props.history.push("/Drogas");
+      this.props.history.push("/drogas");
     }
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"Drogas"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={"drogas"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

@@ -45,7 +45,7 @@ class PartidasDetalles extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id !== "Añadir") {
+    if (this.props.match.params.id !== "añadir") {
       this.getData();
     }
     this.getMedicines();
@@ -89,7 +89,7 @@ class PartidasDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"Partidas"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={"partidas"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

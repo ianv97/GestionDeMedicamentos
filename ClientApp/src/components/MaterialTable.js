@@ -1,10 +1,13 @@
 import React from "react";
+import Grid from "@material-ui/core/Grid";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
@@ -42,7 +45,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function CustomizedTables(props) {
+function MaterialTable(props) {
   const classes = useStyles();
 
   return (
@@ -68,7 +71,7 @@ function CustomizedTables(props) {
                   type="search"
                   variant="outlined"
                   name={title[1]}
-                  inputProps={{ style: { textAlign: "center" }, autocomplete: "off" }}
+                  inputProps={{ style: { textAlign: "center" }, autoComplete: "off" }}
                   onChange={props.handleSearch}
                 />
               </TableCell>
@@ -125,8 +128,23 @@ function CustomizedTables(props) {
           )}
         </TableBody>
       </Table>
+      <Grid container direction="row" justify="flex-end">
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          colSpan={3}
+          count={props.totalRecords}
+          rowsPerPage={props.pageSize}
+          page={props.pageNumber - 1}
+          SelectProps={{
+            native: true
+          }}
+          onChangePage={props.handleChangePage}
+          onChangeRowsPerPage={props.handleChangeRowsPerPage}
+          labelRowsPerPage="Filas por página"
+        />
+      </Grid>
     </Paper>
   );
 }
 
-export default CustomizedTables;
+export default MaterialTable;

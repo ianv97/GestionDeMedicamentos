@@ -59,7 +59,7 @@ class MedicamentosDetalles extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id !== "Añadir") {
+    if (this.props.match.params.id !== "añadir") {
       this.getData();
     }
     this.getDrugs();
@@ -83,21 +83,21 @@ class MedicamentosDetalles extends React.Component {
     e.preventDefault();
     if (this.state.mode === "create") {
       post(window.ApiUrl + "medicamentos", this.state.form);
-      this.props.history.push("/Medicamentos");
+      this.props.history.push("/medicamentos");
     } else if (this.state.mode === "update") {
       put(window.ApiUrl + "medicamentos/" + this.props.match.params.id, this.state.form);
       this.setState({ mode: "read" });
-      this.props.history.push("/Medicamentos/" + this.props.match.params.id + "?mode=read");
+      this.props.history.push("/medicamentos/" + this.props.match.params.id + "?mode=read");
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "medicamentos/" + this.props.match.params.id);
-      this.props.history.push("/Medicamentos");
+      this.props.history.push("/medicamentos");
     }
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"Medicamentos"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={"medicamentos"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

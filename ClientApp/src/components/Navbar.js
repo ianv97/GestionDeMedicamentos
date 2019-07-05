@@ -154,7 +154,7 @@ function MiniDrawer(props) {
             <ListItem
               button
               component={Link}
-              to="/Drogas"
+              to="/drogas"
               onClick={e => onSelectHandler(1)}
               className={active === 1 ? clsx(classes.active) : null}
             >
@@ -166,7 +166,7 @@ function MiniDrawer(props) {
             <ListItem
               button
               component={Link}
-              to="/Medicamentos"
+              to="/medicamentos"
               onClick={e => onSelectHandler(2)}
               className={active === 2 ? clsx(classes.active) : null}
             >
@@ -178,7 +178,7 @@ function MiniDrawer(props) {
             <ListItem
               button
               component={Link}
-              to="/Reposiciones"
+              to="/reposiciones"
               onClick={e => onSelectHandler(3)}
               className={active === 3 ? clsx(classes.active) : null}
             >
@@ -190,7 +190,7 @@ function MiniDrawer(props) {
             <ListItem
               button
               component={Link}
-              to="/Partidas"
+              to="/partidas"
               onClick={e => onSelectHandler(4)}
               className={active === 4 ? clsx(classes.active) : null}
             >
@@ -202,7 +202,7 @@ function MiniDrawer(props) {
             <ListItem
               button
               component={Link}
-              to="/Stock"
+              to="/stock"
               onClick={e => onSelectHandler(5)}
               className={active === 5 ? clsx(classes.active) : null}
             >

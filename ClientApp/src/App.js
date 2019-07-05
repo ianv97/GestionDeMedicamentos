@@ -14,22 +14,22 @@ import Stock from "./pages/Stock";
 import StockDetalles from "./pages/StockDetalles";
 
 function App() {
-    window.ApiUrl = "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
+  window.ApiUrl = "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
 
   return (
     <Navbar>
       <Switch>
         <Route exact path="/" component={Inicio} />
-        <Route exact path="/Drogas" component={Drogas} />
-        <Route exact path="/Drogas/:id" component={DrogasDetalles} />
-        <Route exact path="/Medicamentos" component={Medicamentos} />
-        <Route exact path="/Medicamentos/:id" component={MedicamentosDetalles} />
-        <Route exact path="/Reposiciones" component={Reposiciones} />
-        <Route exact path="/Reposiciones/:id" component={ReposicionesDetalles} />
-        <Route exact path="/Partidas" component={Partidas} />
-        <Route exact path="/Partidas/:id" component={PartidasDetalles} />
-        <Route exact path="/Stock" component={Stock} />
-        <Route exact path="/Stock/:id" component={StockDetalles} />
+        <Route exact path="/drogas" component={Drogas} />
+        <Route exact path="/drogas/:id" component={DrogasDetalles} />
+        <Route exact path="/medicamentos" component={Medicamentos} />
+        <Route exact path="/medicamentos/:id" component={MedicamentosDetalles} />
+        <Route exact path="/reposiciones" component={Reposiciones} />
+        <Route exact path="/reposiciones/:id" component={ReposicionesDetalles} />
+        <Route exact path="/partidas" component={Partidas} />
+        <Route exact path="/partidas/:id" component={PartidasDetalles} />
+        <Route exact path="/stock" component={Stock} />
+        <Route exact path="/stock/:id" component={StockDetalles} />
       </Switch>
     </Navbar>
   );

@@ -48,7 +48,7 @@ class ReposicionesDetalles extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id !== "Añadir") {
+    if (this.props.match.params.id !== "añadir") {
       this.getData();
     }
     this.getMedicines();
@@ -96,17 +96,17 @@ class ReposicionesDetalles extends React.Component {
     e.preventDefault();
     if (this.state.mode === "create") {
       post(window.ApiUrl + "reposiciones", this.state.form);
-      this.props.history.push("/Reposiciones");
+      this.props.history.push("/reposiciones");
     } else if (this.state.mode === "delete") {
       del(window.ApiUrl + "reposiciones/" + this.props.match.params.id);
-      this.props.history.push("/Reposiciones");
+      this.props.history.push("/reposiciones");
     }
   };
 
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"Reposiciones"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={"reposiciones"} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
