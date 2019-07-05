@@ -10,7 +10,6 @@ namespace GestiónDeMedicamentos.Domain
     {
         Task<IEnumerable<MedicinePrescription>> ListAsync();
         Task<MedicinePrescription> FindAsync(int id);
-        EntityState Update(MedicinePrescription medicinePrescription);
         Task<EntityEntry> CreateAsync(MedicinePrescription medicinePrescription);
         EntityEntry Delete(MedicinePrescription medicinePrescription);
         Task SaveChangesAsync();
