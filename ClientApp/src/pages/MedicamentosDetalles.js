@@ -183,6 +183,7 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.proportion}
                   InputProps={{
+                    inputProps: { min: 0},
                     readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />
