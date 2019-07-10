@@ -1,4 +1,4 @@
-# TP Final 2019 - Grupo 1 - Administración de Medicamentos
+# Desarrollo de Aplicaciones Cliente Servidor - TP Final 2019
 
 ## Colaboradores
 1. Fierro Cáceres, Victoria
