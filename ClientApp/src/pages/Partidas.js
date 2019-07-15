@@ -7,6 +7,7 @@ import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
 
 class Partidas extends React.Component {
   state = {
+    currentUrl: "partidas",
     loading: true,
     error: null,
     data: [],
@@ -36,7 +37,8 @@ class Partidas extends React.Component {
     try {
       let apiUrl =
         window.ApiUrl +
-        "partidas?order=" +
+        this.state.currentUrl +
+        "?order=" +
         this.state.order +
         "&pageSize=" +
         this.state.pageSize +
@@ -44,7 +46,7 @@ class Partidas extends React.Component {
         this.state.pageNumber;
       let response;
       this.state.search.id
-        ? (response = await fetch(window.ApiUrl + "partidas/" + this.state.search.id))
+        ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
         : search
         ? (response = await fetch(apiUrl + search))
         : (response = await fetch(apiUrl));
@@ -83,7 +85,7 @@ class Partidas extends React.Component {
         <MaterialTable
           titles={[["ID", "id"], ["Fecha", "date"]]}
           data={this.state.data}
-          currentUrl={"partidas"}
+          currentUrl={this.state.currentUrl}
           edit={false}
           loading={this.state.loading}
           error={this.state.error}

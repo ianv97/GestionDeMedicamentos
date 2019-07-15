@@ -12,27 +12,41 @@ import Partidas from "./pages/Partidas";
 import PartidasDetalles from "./pages/PartidasDetalles";
 import Stock from "./pages/Stock";
 import StockDetalles from "./pages/StockDetalles";
+import { ToastContainer } from "react-toastr";
+import { ToastMessageAnimated } from "react-toastr";
 
-function App() {
-  window.ApiUrl = "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
+import "toastr/build/toastr.css";
+import "animate.css/animate.css";
 
-  return (
-    <Navbar>
-      <Switch>
-        <Route exact path="/" component={Inicio} />
-        <Route exact path="/drogas" component={Drogas} />
-        <Route exact path="/drogas/:id" component={DrogasDetalles} />
-        <Route exact path="/medicamentos" component={Medicamentos} />
-        <Route exact path="/medicamentos/:id" component={MedicamentosDetalles} />
-        <Route exact path="/reposiciones" component={Reposiciones} />
-        <Route exact path="/reposiciones/:id" component={ReposicionesDetalles} />
-        <Route exact path="/partidas" component={Partidas} />
-        <Route exact path="/partidas/:id" component={PartidasDetalles} />
-        <Route exact path="/stock" component={Stock} />
-        <Route exact path="/stock/:id" component={StockDetalles} />
-      </Switch>
-    </Navbar>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <ToastContainer
+          toastMessageFactory={React.createFactory(ToastMessageAnimated)}
+          className="toast-top-right"
+          ref={ref => {
+            window.container = ref;
+          }}
+        />
+        <Navbar>
+          <Switch>
+            <Route exact path="/" component={Inicio} />
+            <Route exact path="/drogas" component={Drogas} />
+            <Route exact path="/drogas/:id" component={DrogasDetalles} />
+            <Route exact path="/medicamentos" component={Medicamentos} />
+            <Route exact path="/medicamentos/:id" component={MedicamentosDetalles} />
+            <Route exact path="/reposiciones" component={Reposiciones} />
+            <Route exact path="/reposiciones/:id" component={ReposicionesDetalles} />
+            <Route exact path="/partidas" component={Partidas} />
+            <Route exact path="/partidas/:id" component={PartidasDetalles} />
+            <Route exact path="/stock" component={Stock} />
+            <Route exact path="/stock/:id" component={StockDetalles} />
+          </Switch>
+        </Navbar>
+      </div>
+    );
+  }
 }
 
 export default App;

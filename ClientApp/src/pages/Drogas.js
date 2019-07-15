@@ -10,6 +10,7 @@ import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
 
 class Drogas extends React.Component {
   state = {
+    currentUrl: "drogas",
     loading: true,
     error: null,
     data: [],
@@ -31,7 +32,11 @@ class Drogas extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.history.listen(location => this.getData());
+    this.props.history.listen(location => {
+      if (location.pathname === "/" + this.state.currentUrl) {
+        this.getData();
+      }
+    });
   }
 
   async getData(search) {
@@ -39,7 +44,8 @@ class Drogas extends React.Component {
     try {
       let apiUrl =
         window.ApiUrl +
-        "drogas?order=" +
+        this.state.currentUrl +
+        "?order=" +
         this.state.order +
         "&pageSize=" +
         this.state.pageSize +
@@ -47,7 +53,7 @@ class Drogas extends React.Component {
         this.state.pageNumber;
       let response;
       this.state.search.id
-        ? (response = await fetch(window.ApiUrl + "drogas/" + this.state.search.id))
+        ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
         : search
         ? (response = await fetch(apiUrl + search))
         : (response = await fetch(apiUrl));
@@ -83,7 +89,7 @@ class Drogas extends React.Component {
             <h1>Drogas</h1>
           </Grid>
           <Grid item>
-            <Link to="/drogas/añadir">
+            <Link to={"/" + this.state.currentUrl + "/añadir"}>
               <Fab color="primary" size="medium">
                 <AddIcon />
               </Fab>
@@ -94,7 +100,7 @@ class Drogas extends React.Component {
         <MaterialTable
           titles={[["ID", "id"], ["Nombre", "name"]]}
           data={this.state.data}
-          currentUrl={"drogas"}
+          currentUrl={this.state.currentUrl}
           loading={this.state.loading}
           error={this.state.error}
           handleSearch={this.handleSearch}

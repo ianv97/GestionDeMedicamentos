@@ -7,11 +7,11 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
-import post from "../functions/post";
-import del from "../functions/delete";
+import handleSubmit from "../functions/handleSubmit";
 
 class ReposicionesDetalles extends React.Component {
   state = {
+    currentUrl: "reposiciones",
     mode: "read",
     medicines: [],
     form: {
@@ -21,9 +21,10 @@ class ReposicionesDetalles extends React.Component {
     }
   };
   changeMode = changeMode.bind(this);
+  handleSubmit = handleSubmit.bind(this);
 
   async getData() {
-    const response = await fetch(window.ApiUrl + "reposiciones/" + this.props.match.params.id);
+    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
@@ -92,21 +93,10 @@ class ReposicionesDetalles extends React.Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    if (this.state.mode === "create") {
-      post(window.ApiUrl + "reposiciones", this.state.form);
-      this.props.history.push("/reposiciones");
-    } else if (this.state.mode === "delete") {
-      del(window.ApiUrl + "reposiciones/" + this.props.match.params.id);
-      this.props.history.push("/reposiciones");
-    }
-  };
-
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"reposiciones"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={this.state.currentUrl} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

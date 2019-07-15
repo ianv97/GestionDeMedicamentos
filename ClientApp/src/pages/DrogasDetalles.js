@@ -4,16 +4,15 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
-import post from "../functions/post";
-import put from "../functions/put";
-import del from "../functions/delete";
+import handleSubmit from "../functions/handleSubmit";
 
 class DrogasDetalles extends React.Component {
-  state = { mode: "read", form: { id: 0, name: "" } };
+  state = { currentUrl: "drogas", mode: "read", form: { id: 0, name: "" } };
   changeMode = changeMode.bind(this);
+  handleSubmit = handleSubmit.bind(this);
 
   async getData() {
-    const response = await fetch(window.ApiUrl + "drogas/" + this.props.match.params.id);
+    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
@@ -43,25 +42,10 @@ class DrogasDetalles extends React.Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    if (this.state.mode === "create") {
-      post(window.ApiUrl + "drogas", this.state.form);
-      this.props.history.push("/drogas");
-    } else if (this.state.mode === "update") {
-      put(window.ApiUrl + "drogas/" + this.props.match.params.id, this.state.form);
-      this.setState({ mode: "read" });
-      this.props.history.push("/drogas/" + this.props.match.params.id + "?mode=read");
-    } else if (this.state.mode === "delete") {
-      del(window.ApiUrl + "drogas/" + this.props.match.params.id);
-      this.props.history.push("/drogas");
-    }
-  };
-
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"drogas"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={this.state.currentUrl} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

@@ -9,12 +9,11 @@ import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
-import post from "../functions/post";
-import put from "../functions/put";
-import del from "../functions/delete";
+import handleSubmit from "../functions/handleSubmit";
 
 class MedicamentosDetalles extends React.Component {
   state = {
+    currentUrl: "medicamentos",
     mode: "read",
     form: {
       id: 0,
@@ -28,9 +27,10 @@ class MedicamentosDetalles extends React.Component {
     drugs: []
   };
   changeMode = changeMode.bind(this);
+  handleSubmit = handleSubmit.bind(this);
 
   async getData() {
-    const response = await fetch(window.ApiUrl + "medicamentos/" + this.props.match.params.id);
+    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
@@ -79,25 +79,10 @@ class MedicamentosDetalles extends React.Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    if (this.state.mode === "create") {
-      post(window.ApiUrl + "medicamentos", this.state.form);
-      this.props.history.push("/medicamentos");
-    } else if (this.state.mode === "update") {
-      put(window.ApiUrl + "medicamentos/" + this.props.match.params.id, this.state.form);
-      this.setState({ mode: "read" });
-      this.props.history.push("/medicamentos/" + this.props.match.params.id + "?mode=read");
-    } else if (this.state.mode === "delete") {
-      del(window.ApiUrl + "medicamentos/" + this.props.match.params.id);
-      this.props.history.push("/medicamentos");
-    }
-  };
-
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"medicamentos"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={this.state.currentUrl} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
@@ -183,7 +168,7 @@ class MedicamentosDetalles extends React.Component {
                   onChange={this.handleChange}
                   value={this.state.form.proportion}
                   InputProps={{
-                    inputProps: { min: 0},
+                    inputProps: { min: 0 },
                     readOnly: this.state.mode === "read" || this.state.mode === "delete"
                   }}
                 />

@@ -10,6 +10,7 @@ import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
 
 class Stock extends React.Component {
   state = {
+    currentUrl: "stock",
     loading: true,
     error: null,
     data: [],
@@ -39,7 +40,8 @@ class Stock extends React.Component {
     try {
       let apiUrl =
         window.ApiUrl +
-        "reposiciones?order=" +
+        this.state.currentUrl +
+        "?order=" +
         this.state.order +
         "&pageSize=" +
         this.state.pageSize +
@@ -47,7 +49,7 @@ class Stock extends React.Component {
         this.state.pageNumber;
       let response;
       this.state.search.id
-        ? (response = await fetch(window.ApiUrl + "stock/" + this.state.search.id))
+        ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
         : search
         ? (response = await fetch(apiUrl + search))
         : (response = await fetch(apiUrl));
@@ -82,7 +84,7 @@ class Stock extends React.Component {
             <h1>Stock</h1>
           </Grid>
           <Grid item>
-            <Link to="/stock/añadir">
+            <Link to={"/" + this.state.currentUrl + "/añadir"}>
               <Fab color="primary" size="medium">
                 <AddIcon />
               </Fab>
@@ -93,7 +95,7 @@ class Stock extends React.Component {
         <MaterialTable
           titles={[["ID", "id"], ["Fecha", "date"]]}
           data={this.state.data}
-          currentUrl={"Stock"}
+          currentUrl={this.state.currentUrl}
           edit={false}
           loading={this.state.loading}
           error={this.state.error}

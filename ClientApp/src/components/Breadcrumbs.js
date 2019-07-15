@@ -11,7 +11,7 @@ function Breadcrumbs(props) {
         Gestión de medicamentos
       </Link>
       <Link color="inherit" to={"/" + props.currentUrl}>
-        {props.currentUrl}
+        {props.currentUrl.charAt(0).toUpperCase() + props.currentUrl.slice(1)}
       </Link>
       <Typography color="textPrimary">{props.id}</Typography>
     </Breadc>

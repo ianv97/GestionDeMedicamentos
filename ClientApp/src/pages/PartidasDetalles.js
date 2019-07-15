@@ -5,10 +5,11 @@ import TextField from "@material-ui/core/TextField";
 import InputRow from "../components/InputRow";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
-import del from "../functions/delete";
+import handleSubmit from "../functions/handleSubmit";
 
 class PartidasDetalles extends React.Component {
   state = {
+    currentUrl: "partidas",
     mode: "read",
     medicines: [],
     form: {
@@ -18,9 +19,10 @@ class PartidasDetalles extends React.Component {
     }
   };
   changeMode = changeMode.bind(this);
+  handleSubmit = handleSubmit.bind(this);
 
   async getData() {
-    const response = await fetch(window.ApiUrl + "partidas/" + this.props.match.params.id);
+    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
     const data = await response.json();
     this.setState({
       form: {
@@ -78,18 +80,10 @@ class PartidasDetalles extends React.Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    if (this.state.mode === "delete") {
-      del(window.ApiUrl + "partidas/" + this.props.match.params.id);
-      this.props.history.push("/partidas");
-    }
-  };
-
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={"partidas"} id={this.props.match.params.id} />
+        <Breadcrumbs currentUrl={this.state.currentUrl} id={this.props.match.params.id} />
 
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">

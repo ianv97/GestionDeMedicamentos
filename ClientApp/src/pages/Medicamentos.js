@@ -10,6 +10,7 @@ import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
 
 class Medicamentos extends React.Component {
   state = {
+    currentUrl: "medicamentos",
     loading: true,
     error: null,
     data: [],
@@ -43,7 +44,8 @@ class Medicamentos extends React.Component {
     try {
       let apiUrl =
         window.ApiUrl +
-        "medicamentos?order=" +
+        this.state.currentUrl +
+        "?order=" +
         this.state.order +
         "&pageSize=" +
         this.state.pageSize +
@@ -51,7 +53,7 @@ class Medicamentos extends React.Component {
         this.state.pageNumber;
       let response;
       this.state.search.id
-        ? (response = await fetch(window.ApiUrl + "medicamentos/" + this.state.search.id))
+        ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
         : search
         ? (response = await fetch(apiUrl + search))
         : (response = await fetch(apiUrl));
@@ -94,7 +96,7 @@ class Medicamentos extends React.Component {
             <h1>Medicamentos</h1>
           </Grid>
           <Grid item>
-            <Link to="/medicamentos/añadir">
+            <Link to={"/" + this.state.currentUrl + "/añadir"}>
               <Fab color="primary" size="medium">
                 <AddIcon />
               </Fab>
@@ -113,7 +115,7 @@ class Medicamentos extends React.Component {
             ["En Stock", "stock"]
           ]}
           data={this.state.data}
-          currentUrl={"medicamentos"}
+          currentUrl={this.state.currentUrl}
           loading={this.state.loading}
           error={this.state.error}
           handleSearch={this.handleSearch}
