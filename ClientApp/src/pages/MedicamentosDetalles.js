@@ -10,6 +10,8 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
+import RelationshipModal from "../components/RelationshipModal";
+import Button from "@material-ui/core/Button";
 
 class MedicamentosDetalles extends React.Component {
   state = {
@@ -18,13 +20,14 @@ class MedicamentosDetalles extends React.Component {
     form: {
       id: 0,
       name: "",
-      drugId: 0,
+      drugId: "",
       proportion: 0,
       presentation: "",
       laboratory: "",
       stock: 0
     },
-    drugs: []
+    drugs: [],
+    modalShow: false
   };
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
@@ -136,6 +139,18 @@ class MedicamentosDetalles extends React.Component {
             </Grid>
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item className="mt-3">
+                {/* <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.setState({ modalShow: true })}
+                >
+                  Droga
+                </Button>
+                <RelationshipModal
+                  show={this.state.modalShow}
+                  onHide={() => this.setState({ modalShow: false })}
+                /> */}
+
                 <FormControl required variant="outlined" style={{ minWidth: 210 }}>
                   <InputLabel htmlFor="drugId">Droga</InputLabel>
                   <Select
@@ -176,14 +191,14 @@ class MedicamentosDetalles extends React.Component {
             </Grid>
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item className="mt-3">
-                <FormControl variant="outlined" style={{ minWidth: 210 }}>
+                <FormControl required variant="outlined" style={{ minWidth: 210 }}>
                   <InputLabel htmlFor="presentation">Presentación</InputLabel>
                   <Select
                     id="presentation"
                     name="presentation"
                     onChange={this.handleChange}
                     value={this.state.form.presentation}
-                    input={<OutlinedInput labelWidth={95} />}
+                    input={<OutlinedInput labelWidth={105} />}
                     inputProps={{
                       readOnly: this.state.mode === "read" || this.state.mode === "delete"
                     }}

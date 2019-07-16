@@ -7,10 +7,12 @@ import MaterialTable from "../components/MaterialTable.js";
 import handleSearch from "../functions/handleSearch";
 import handleChangePage from "../functions/handleChangePage";
 import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
+import getData from "../functions/getData";
 
 class Stock extends React.Component {
   state = {
     currentUrl: "stock",
+    titles: [["ID", "id"], ["Fecha", "date"]],
     loading: true,
     error: null,
     data: [],
@@ -21,8 +23,11 @@ class Stock extends React.Component {
     search: {
       id: "",
       date: ""
-    }
+    },
+    searchString: ""
   };
+
+  getData = getData.bind(this);
   handleSearch = handleSearch.bind(this);
   handleChangePage = handleChangePage.bind(this);
   handleChangeRowsPerPage = handleChangeRowsPerPage.bind(this);
@@ -32,7 +37,11 @@ class Stock extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.history.listen(location => this.getData());
+    this.props.history.listen(location => {
+      if (location.pathname === "/" + this.state.currentUrl) {
+        this.getData();
+      }
+    });
   }
 
   async getData(search) {
@@ -50,8 +59,8 @@ class Stock extends React.Component {
       let response;
       this.state.search.id
         ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
-        : search
-        ? (response = await fetch(apiUrl + search))
+        : this.state.searchString
+        ? (response = await fetch(apiUrl + this.state.searchString))
         : (response = await fetch(apiUrl));
       if (!response.ok) {
         throw Error(response.status + " " + response.statusText);
@@ -93,7 +102,7 @@ class Stock extends React.Component {
         </Grid>
 
         <MaterialTable
-          titles={[["ID", "id"], ["Fecha", "date"]]}
+          titles={this.state.titles}
           data={this.state.data}
           currentUrl={this.state.currentUrl}
           edit={false}

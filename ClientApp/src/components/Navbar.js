@@ -16,6 +16,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { BrowserRouter, Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const drawerWidth = 220;
 
@@ -81,6 +82,9 @@ const useStyles = makeStyles(theme => ({
   active: {
     backgroundColor: "#3f51b5",
     color: "#fff"
+  },
+  title: {
+    flexGrow: 1
   }
 }));
 
@@ -91,7 +95,6 @@ function MiniDrawer(props) {
   const [active, setActive] = React.useState();
 
   function handleDrawerOpen() {
-    console.dir(props.history);
     setOpen(true);
   }
 
@@ -124,9 +127,12 @@ function MiniDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap className={classes.title}>
             Gestión de medicamentos
           </Typography>
+          <Button variant="contained" color="secondary">
+            Cerrar Sesión
+          </Button>
         </Toolbar>
       </AppBar>
       <BrowserRouter>

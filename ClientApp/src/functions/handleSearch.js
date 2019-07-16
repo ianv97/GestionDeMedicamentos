@@ -14,7 +14,9 @@ export default function handleSearch(e) {
           search += "&" + prop + "=" + this.state.search[prop];
         }
       }
-      this.getData(search);
+      this.setState({ searchString: search }, () => {
+        this.getData();
+      });
     }
   );
 }

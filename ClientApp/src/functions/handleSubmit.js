@@ -32,8 +32,8 @@ export default async function handleSubmit(event) {
     window.container.success("Acción realizada exitosamente", "Éxito", {
       showAnimation: "animated rubberBand",
       hideAnimation: "animated flipOutX",
-      timeOut: 70000,
-      extendedTimeOut: 20000
+      timeOut: 7000,
+      extendedTimeOut: 2000
     });
   } else {
     window.container.error(response.statusText, "Error", {

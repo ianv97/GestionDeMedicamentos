@@ -7,10 +7,20 @@ import MaterialTable from "../components/MaterialTable.js";
 import handleSearch from "../functions/handleSearch";
 import handleChangePage from "../functions/handleChangePage";
 import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
+import getData from "../functions/getData";
 
 class Medicamentos extends React.Component {
   state = {
     currentUrl: "medicamentos",
+    titles: [
+      ["ID", "id"],
+      ["Nombre", "name"],
+      ["Droga", "drug.name"],
+      ["Proporción (mg)", "proportion"],
+      ["Presentación", "presentation"],
+      ["Laboratorio", "laboratory"],
+      ["En Stock", "stock"]
+    ],
     loading: true,
     error: null,
     data: [],
@@ -25,8 +35,11 @@ class Medicamentos extends React.Component {
       proportion: "",
       presentation: "",
       laboratory: ""
-    }
+    },
+    searchString: ""
   };
+
+  getData = getData.bind(this);
   handleSearch = handleSearch.bind(this);
   handleChangePage = handleChangePage.bind(this);
   handleChangeRowsPerPage = handleChangeRowsPerPage.bind(this);
@@ -36,56 +49,11 @@ class Medicamentos extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.history.listen(location => this.getData());
-  }
-
-  async getData(search) {
-    this.setState({ error: null });
-    try {
-      let apiUrl =
-        window.ApiUrl +
-        this.state.currentUrl +
-        "?order=" +
-        this.state.order +
-        "&pageSize=" +
-        this.state.pageSize +
-        "&pageNumber=" +
-        this.state.pageNumber;
-      let response;
-      this.state.search.id
-        ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
-        : search
-        ? (response = await fetch(apiUrl + search))
-        : (response = await fetch(apiUrl));
-      if (!response.ok) {
-        throw Error(response.status + " " + response.statusText);
+    this.props.history.listen(location => {
+      if (location.pathname === "/" + this.state.currentUrl) {
+        this.getData();
       }
-      let data = await response.json();
-      if (!Array.isArray(data)) {
-        data = [data];
-      }
-      const displayData = [];
-      data.forEach(function(med) {
-        displayData.push([
-          med.id,
-          med.name,
-          med.drug.name,
-          med.proportion,
-          med.presentation,
-          med.laboratory,
-          med.stock
-        ]);
-      });
-      this.setState({
-        data: displayData,
-        page: response.headers.get("page"),
-        totalRecords: parseInt(response.headers.get("totalRecords"))
-      });
-    } catch (error) {
-      this.setState({ error: error });
-    } finally {
-      this.setState({ loading: false });
-    }
+    });
   }
 
   render() {
@@ -105,15 +73,7 @@ class Medicamentos extends React.Component {
         </Grid>
 
         <MaterialTable
-          titles={[
-            ["ID", "id"],
-            ["Nombre", "name"],
-            ["Droga", "drug"],
-            ["Proporción (mg)", "proportion"],
-            ["Presentación", "presentation"],
-            ["Laboratorio", "laboratory"],
-            ["En Stock", "stock"]
-          ]}
+          titles={this.state.titles}
           data={this.state.data}
           currentUrl={this.state.currentUrl}
           loading={this.state.loading}

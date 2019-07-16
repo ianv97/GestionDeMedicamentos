@@ -4,10 +4,12 @@ import MaterialTable from "../components/MaterialTable.js";
 import handleSearch from "../functions/handleSearch";
 import handleChangePage from "../functions/handleChangePage";
 import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
+import getData from "../functions/getData";
 
 class Partidas extends React.Component {
   state = {
     currentUrl: "partidas",
+    titles: [["ID", "id"], ["Fecha", "date"]],
     loading: true,
     error: null,
     data: [],
@@ -18,8 +20,11 @@ class Partidas extends React.Component {
     search: {
       id: "",
       date: ""
-    }
+    },
+    searchString: ""
   };
+
+  getData = getData.bind(this);
   handleSearch = handleSearch.bind(this);
   handleChangePage = handleChangePage.bind(this);
   handleChangeRowsPerPage = handleChangeRowsPerPage.bind(this);
@@ -29,48 +34,11 @@ class Partidas extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.history.listen(location => this.getData());
-  }
-
-  async getData(search) {
-    this.setState({ error: null });
-    try {
-      let apiUrl =
-        window.ApiUrl +
-        this.state.currentUrl +
-        "?order=" +
-        this.state.order +
-        "&pageSize=" +
-        this.state.pageSize +
-        "&pageNumber=" +
-        this.state.pageNumber;
-      let response;
-      this.state.search.id
-        ? (response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.state.search.id))
-        : search
-        ? (response = await fetch(apiUrl + search))
-        : (response = await fetch(apiUrl));
-      if (!response.ok) {
-        throw Error(response.status + " " + response.statusText);
+    this.props.history.listen(location => {
+      if (location.pathname === "/" + this.state.currentUrl) {
+        this.getData();
       }
-      let data = await response.json();
-      if (!Array.isArray(data)) {
-        data = [data];
-      }
-      const displayData = [];
-      data.forEach(function(partida) {
-        displayData.push([partida.id, partida.date]);
-      });
-      this.setState({
-        data: displayData,
-        page: response.headers.get("page"),
-        totalRecords: parseInt(response.headers.get("totalRecords"))
-      });
-    } catch (error) {
-      this.setState({ error: error });
-    } finally {
-      this.setState({ loading: false });
-    }
+    });
   }
 
   render() {
@@ -83,7 +51,7 @@ class Partidas extends React.Component {
         </Grid>
 
         <MaterialTable
-          titles={[["ID", "id"], ["Fecha", "date"]]}
+          titles={this.state.titles}
           data={this.state.data}
           currentUrl={this.state.currentUrl}
           edit={false}

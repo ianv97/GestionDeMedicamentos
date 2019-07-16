@@ -69,7 +69,7 @@ function MaterialTable(props) {
                   placeholder={title[0]}
                   type="search"
                   variant="outlined"
-                  name={title[1]}
+                  name={title[1].split(".")[0]}
                   inputProps={{ style: { textAlign: "center" }, autoComplete: "off" }}
                   onChange={props.handleSearch}
                 />
