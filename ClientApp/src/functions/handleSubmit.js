@@ -36,7 +36,7 @@ export default async function handleSubmit(event) {
       extendedTimeOut: 2000
     });
   } else {
-    window.container.error(response.statusText, "Error", {
+    window.container.error(response.status + " " + response.statusText, "Error", {
       showAnimation: "animated rubberBand",
       hideAnimation: "animated flipOutX",
       timeOut: 7000,

@@ -27,6 +27,7 @@ class Reposiciones extends React.Component {
     searchString: ""
   };
 
+  abortController = new AbortController();
   getData = getData.bind(this);
   handleSearch = handleSearch.bind(this);
   handleChangePage = handleChangePage.bind(this);
@@ -38,10 +39,12 @@ class Reposiciones extends React.Component {
 
   componentDidUpdate() {
     this.props.history.listen(location => {
-      if (location.pathname === "/" + this.state.currentUrl) {
-        this.getData();
-      }
+      this.getData();
     });
+  }
+
+  componentWillUnmount() {
+    this.abortController.abort();
   }
 
   render() {

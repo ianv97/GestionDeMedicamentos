@@ -13,7 +13,9 @@ function Breadcrumbs(props) {
       <Link color="inherit" to={"/" + props.currentUrl}>
         {props.currentUrl.charAt(0).toUpperCase() + props.currentUrl.slice(1)}
       </Link>
-      <Typography color="textPrimary">{props.id}</Typography>
+      <Typography color="textPrimary" style={{ textTransform: "capitalize" }}>
+        {props.id}
+      </Typography>
     </Breadc>
   );
 }

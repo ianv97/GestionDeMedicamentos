@@ -27,6 +27,7 @@ class Drogas extends React.Component {
     searchString: ""
   };
 
+  abortController = new AbortController();
   getData = getData.bind(this);
   handleSearch = handleSearch.bind(this);
   handleChangePage = handleChangePage.bind(this);
@@ -38,10 +39,12 @@ class Drogas extends React.Component {
 
   componentDidUpdate() {
     this.props.history.listen(location => {
-      if (location.pathname === "/" + this.state.currentUrl) {
-        this.getData();
-      }
+      this.getData();
     });
+  }
+
+  componentWillUnmount() {
+    this.abortController.abort();
   }
 
   render() {
@@ -72,6 +75,8 @@ class Drogas extends React.Component {
           totalRecords={this.state.totalRecords}
           handleChangePage={this.handleChangePage}
           handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+          select={this.props.select}
+          selectRelation={this.props.selectRelation}
         />
       </React.Fragment>
     );

@@ -7,11 +7,11 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Button from "@material-ui/core/Button";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
 import RelationshipModal from "../components/RelationshipModal";
-import Button from "@material-ui/core/Button";
 
 class MedicamentosDetalles extends React.Component {
   state = {
@@ -21,6 +21,7 @@ class MedicamentosDetalles extends React.Component {
       id: 0,
       name: "",
       drugId: "",
+      drugName: "",
       proportion: 0,
       presentation: "",
       laboratory: "",
@@ -29,6 +30,7 @@ class MedicamentosDetalles extends React.Component {
     drugs: [],
     modalShow: false
   };
+
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
 
@@ -39,7 +41,8 @@ class MedicamentosDetalles extends React.Component {
       form: {
         id: data.id,
         name: data.name,
-        drugId: data.drugId,
+        drugId: data.drug.id,
+        drugName: data.drug.name,
         proportion: data.proportion,
         presentation: data.presentation,
         laboratory: data.laboratory,
@@ -48,30 +51,16 @@ class MedicamentosDetalles extends React.Component {
     });
   }
 
-  async getDrugs() {
-    const response = await fetch(window.ApiUrl + "drogas?order=name");
-    const data = await response.json();
-    data.forEach(drug => {
-      this.setState({
-        drugs: {
-          ...this.state.drugs,
-          [drug.id]: drug.name
-        }
-      });
+  selectRelation = (id, name) => {
+    this.setState({
+      modalShow: false,
+      form: {
+        ...this.state.form,
+        drugId: id,
+        drugName: name
+      }
     });
-  }
-
-  componentDidMount() {
-    if (this.props.match.params.id !== "añadir") {
-      this.getData();
-    }
-    this.getDrugs();
-    this.changeMode();
-  }
-
-  componentDidUpdate() {
-    this.props.history.listen(location => this.changeMode());
-  }
+  };
 
   handleChange = e => {
     this.setState({
@@ -81,6 +70,17 @@ class MedicamentosDetalles extends React.Component {
       }
     });
   };
+
+  componentDidMount() {
+    if (this.props.match.params.id !== "añadir") {
+      this.getData();
+    }
+    this.changeMode();
+  }
+
+  componentDidUpdate() {
+    this.props.history.listen(location => this.changeMode());
+  }
 
   render() {
     return (
@@ -93,6 +93,7 @@ class MedicamentosDetalles extends React.Component {
               <h1>Medicamentos</h1>
             </Grid>
           </Grid>
+
           <form onSubmit={this.handleSubmit}>
             {this.state.mode !== "create" && (
               <Grid container direction="row" justify="center" spacing={5}>
@@ -108,6 +109,7 @@ class MedicamentosDetalles extends React.Component {
                 </Grid>
               </Grid>
             )}
+
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item>
                 <TextField
@@ -137,42 +139,40 @@ class MedicamentosDetalles extends React.Component {
                 />
               </Grid>
             </Grid>
+
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item className="mt-3">
-                {/* <Button
+                <TextField
+                  required
+                  label="Droga"
+                  margin="none"
+                  variant="outlined"
+                  name="drugName"
+                  value={this.state.form.drugName}
+                  style={{ width: 145 }}
+                  InputProps={{
+                    inputProps: { min: 0 },
+                    readOnly: true
+                  }}
+                />
+                <Button
+                  disabled={this.state.mode === "read" || this.state.mode === "delete"}
+                  className="mt-1 px-0"
+                  size="large"
                   variant="contained"
                   color="primary"
                   onClick={() => this.setState({ modalShow: true })}
                 >
-                  Droga
+                  <i className="fas fa-2x fa-prescription-bottle-alt" />
                 </Button>
-                <RelationshipModal
-                  show={this.state.modalShow}
-                  onHide={() => this.setState({ modalShow: false })}
-                /> */}
-
-                <FormControl required variant="outlined" style={{ minWidth: 210 }}>
-                  <InputLabel htmlFor="drugId">Droga</InputLabel>
-                  <Select
-                    id="drugId"
-                    name="drugId"
-                    onChange={this.handleChange}
-                    value={this.state.form.drugId}
-                    input={<OutlinedInput labelWidth={55} />}
-                    inputProps={{
-                      readOnly: this.state.mode === "read" || this.state.mode === "delete"
-                    }}
-                  >
-                    {Object.keys(this.state.drugs).map(key => {
-                      return (
-                        <MenuItem key={key} value={key}>
-                          {this.state.drugs[key]}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
               </Grid>
+              <RelationshipModal
+                show={this.state.modalShow}
+                onHide={() => this.setState({ modalShow: false })}
+                entity={"Drogas"}
+                history={this.props.history}
+                selectRelation={this.selectRelation}
+              />
               <Grid item>
                 <TextField
                   label="Proporción (mg)"
@@ -189,6 +189,7 @@ class MedicamentosDetalles extends React.Component {
                 />
               </Grid>
             </Grid>
+
             <Grid container direction="row" justify="center" spacing={5}>
               <Grid item className="mt-3">
                 <FormControl required variant="outlined" style={{ minWidth: 210 }}>
@@ -224,6 +225,7 @@ class MedicamentosDetalles extends React.Component {
                 />
               </Grid>
             </Grid>
+
             <ButtonsRow
               id={this.props.match.params.id}
               mode={this.state.mode}
