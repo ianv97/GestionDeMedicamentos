@@ -2,7 +2,8 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
-import InputRow from "../components/InputRow";
+import Button from "@material-ui/core/Button";
+import RelationshipModal from "../components/RelationshipModal";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import ButtonsRow from "../components/ButtonsRow";
@@ -13,12 +14,12 @@ class StockDetalles extends React.Component {
   state = {
     currentUrl: "stock",
     mode: "read",
-    medicines: [],
     form: {
       id: 0,
       date: "",
-      medicineStockOrders: [{ medicineId: 0, quantity: 0 }]
-    }
+      medicineStockOrders: [{ medicineId: 0, medicineName: "", quantity: 0 }]
+    },
+    modalShow: [false]
   };
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
@@ -35,24 +36,10 @@ class StockDetalles extends React.Component {
     });
   }
 
-  async getMedicines() {
-    const response = await fetch(window.ApiUrl + "medicamentos?order=name");
-    const data = await response.json();
-    data.forEach(medicine => {
-      this.setState({
-        medicines: {
-          ...this.state.medicines,
-          [medicine.id]: medicine.name
-        }
-      });
-    });
-  }
-
   componentDidMount() {
     if (this.props.match.params.id !== "añadir") {
       this.getData();
     }
-    this.getMedicines();
     this.changeMode();
   }
 
@@ -69,22 +56,41 @@ class StockDetalles extends React.Component {
     });
   };
 
-  handleRowChange = (e, index) => {
-    let { name, value } = e.target;
+  addNewRow = () => {
     let { medicineStockOrders } = this.state.form;
-    medicineStockOrders[index][name] = value;
+    let { modalShow } = this.state;
+    medicineStockOrders.push({ medicineId: 0, medicineName: "", quantity: 0 });
+    modalShow.push(false);
+    this.setState({
+      form: {
+        ...this.state.form,
+        medicineStockOrders
+      },
+      modalShow
+    });
+  };
+
+  selectRelation = (index, id, name) => {
+    let { medicineStockOrders } = this.state.form;
+    let { modalShow } = this.state;
+    medicineStockOrders[index]["medicineId"] = id;
+    medicineStockOrders[index]["medicineName"] = name;
+    modalShow[index] = false;
 
     this.setState({
       form: {
         ...this.state.form,
         medicineStockOrders
-      }
+      },
+      modalShow
     });
   };
 
-  addNewRow = () => {
+  handleRowChange = (e, index) => {
+    let { name, value } = e.target;
     let { medicineStockOrders } = this.state.form;
-    medicineStockOrders.push({ medicineId: 0, quantity: 0 });
+    medicineStockOrders[index][name] = value;
+
     this.setState({
       form: {
         ...this.state.form,
@@ -138,13 +144,62 @@ class StockDetalles extends React.Component {
               </Grid>
             </Grid>
             {this.state.form.medicineStockOrders.map((element, index) => (
-              <InputRow
-                key={index}
-                mode={this.state.mode}
-                element={element}
-                medicines={this.state.medicines}
-                handleChange={e => this.handleRowChange(e, index)}
-              />
+              <Grid container key={index} direction="row" justify="center" spacing={5}>
+                <Grid item className="mt-3">
+                  <TextField
+                    required
+                    label="Medicamento"
+                    margin="none"
+                    variant="outlined"
+                    name="medicineName"
+                    value={element.medicineName}
+                    style={{ width: 145 }}
+                    InputProps={{
+                      readOnly: true
+                    }}
+                  />
+                  <Button
+                    disabled={this.props.mode === "read" || this.props.mode === "delete"}
+                    className="mt-1 px-0"
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      let { modalShow } = this.state;
+                      modalShow[index] = true;
+                      this.setState({ modalShow });
+                    }}
+                  >
+                    <i className="fas fa-2x fa-pills" />
+                  </Button>
+                  <RelationshipModal
+                    show={this.state.modalShow[index]}
+                    onHide={() => {
+                      let { modalShow } = this.state;
+                      modalShow[index] = false;
+                      this.setState({ modalShow });
+                    }}
+                    entity={"Medicamentos"}
+                    history={this.props.history}
+                    selectRelation={(id, name) => this.selectRelation(index, id, name)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    required
+                    type="number"
+                    label="Cantidad"
+                    margin="normal"
+                    variant="outlined"
+                    name="quantity"
+                    onChange={e => this.handleRowChange(e, index)}
+                    value={element.quantity}
+                    InputProps={{
+                      readOnly: this.state.mode === "read" || this.state.mode === "delete"
+                    }}
+                  />
+                </Grid>
+              </Grid>
             ))}
             {this.state.mode === "create" && (
               <Grid container direction="row" justify="center" spacing={5}>

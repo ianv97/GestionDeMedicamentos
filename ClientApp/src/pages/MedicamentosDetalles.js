@@ -151,7 +151,6 @@ class MedicamentosDetalles extends React.Component {
                   value={this.state.form.drugName}
                   style={{ width: 145 }}
                   InputProps={{
-                    inputProps: { min: 0 },
                     readOnly: true
                   }}
                 />

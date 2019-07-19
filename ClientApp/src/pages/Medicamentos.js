@@ -87,6 +87,8 @@ class Medicamentos extends React.Component {
           totalRecords={this.state.totalRecords}
           handleChangePage={this.handleChangePage}
           handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+          select={this.props.select}
+          selectRelation={this.props.selectRelation}
         />
       </React.Fragment>
     );
