@@ -1,7 +1,8 @@
 import React from "react";
 import Navbar from "./components/Navbar";
-import { Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Inicio from "./pages/Inicio";
+import Login from "./pages/Login";
 import Drogas from "./pages/Drogas";
 import DrogasDetalles from "./pages/DrogasDetalles";
 import Medicamentos from "./pages/Medicamentos";
@@ -21,7 +22,7 @@ import "animate.css/animate.css";
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <React.Fragment>
         <ToastContainer
           toastMessageFactory={React.createFactory(ToastMessageAnimated)}
           className="toast-top-right"
@@ -29,22 +30,24 @@ class App extends React.Component {
             window.container = ref;
           }}
         />
-        <Navbar>
+        <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={Inicio} />
-            <Route exact path="/drogas" component={Drogas} />
-            <Route exact path="/drogas/:id" component={DrogasDetalles} />
-            <Route exact path="/medicamentos" component={Medicamentos} />
-            <Route exact path="/medicamentos/:id" component={MedicamentosDetalles} />
-            <Route exact path="/reposiciones" component={Reposiciones} />
-            <Route exact path="/reposiciones/:id" component={ReposicionesDetalles} />
-            <Route exact path="/partidas" component={Partidas} />
-            <Route exact path="/partidas/:id" component={PartidasDetalles} />
-            <Route exact path="/stock" component={Stock} />
-            <Route exact path="/stock/:id" component={StockDetalles} />
+            <Route exact path="/" component={Login} />
+            <Navbar>
+              <Route exact path="/drogas" component={Drogas} />
+              <Route exact path="/drogas/:id" component={DrogasDetalles} />
+              <Route exact path="/medicamentos" component={Medicamentos} />
+              <Route exact path="/medicamentos/:id" component={MedicamentosDetalles} />
+              <Route exact path="/reposiciones" component={Reposiciones} />
+              <Route exact path="/reposiciones/:id" component={ReposicionesDetalles} />
+              <Route exact path="/partidas" component={Partidas} />
+              <Route exact path="/partidas/:id" component={PartidasDetalles} />
+              <Route exact path="/stock" component={Stock} />
+              <Route exact path="/stock/:id" component={StockDetalles} />
+            </Navbar>
           </Switch>
-        </Navbar>
-      </div>
+        </BrowserRouter>
+      </React.Fragment>
     );
   }
 }

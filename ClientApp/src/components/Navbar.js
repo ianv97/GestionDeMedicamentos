@@ -15,7 +15,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
 const drawerWidth = 220;
@@ -88,7 +88,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function MiniDrawer(props) {
+function Navbar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -135,97 +135,95 @@ function MiniDrawer(props) {
           </Button>
         </Toolbar>
       </AppBar>
-      <BrowserRouter>
-        <Drawer
-          variant="permanent"
-          className={clsx(classes.drawer, {
+      <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open
+        })}
+        classes={{
+          paper: clsx({
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open
-          })}
-          classes={{
-            paper: clsx({
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open
-            })
-          }}
-          open={open}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <ListItem
-              button
-              component={Link}
-              to="/drogas"
-              onClick={e => onSelectHandler(1)}
-              className={active === 1 ? clsx(classes.active) : null}
-            >
-              <ListItemIcon>
-                <i className="fas fa-2x fa-prescription-bottle-alt" />
-              </ListItemIcon>
-              <ListItemText primary="Drogas" />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/medicamentos"
-              onClick={e => onSelectHandler(2)}
-              className={active === 2 ? clsx(classes.active) : null}
-            >
-              <ListItemIcon>
-                <i className="fas fa-2x fa-pills" />
-              </ListItemIcon>
-              <ListItemText primary="Medicamentos" />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/reposiciones"
-              onClick={e => onSelectHandler(3)}
-              className={active === 3 ? clsx(classes.active) : null}
-            >
-              <ListItemIcon>
-                <i className="fas fa-2x fa-sign-in-alt" />
-              </ListItemIcon>
-              <ListItemText primary="Reposiciones" />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/partidas"
-              onClick={e => onSelectHandler(4)}
-              className={active === 4 ? clsx(classes.active) : null}
-            >
-              <ListItemIcon>
-                <i className="fas fa-2x fa-sign-out-alt" />
-              </ListItemIcon>
-              <ListItemText primary="Partidas" />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/stock"
-              onClick={e => onSelectHandler(5)}
-              className={active === 5 ? clsx(classes.active) : null}
-            >
-              <ListItemIcon>
-                <i className="fas fa-2x fa-clipboard-list" />
-              </ListItemIcon>
-              <ListItemText primary="Stock" />
-            </ListItem>
-          </List>
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          {props.children}
-        </main>
-      </BrowserRouter>
+          })
+        }}
+        open={open}
+      >
+        <div className={classes.toolbar}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <ListItem
+            button
+            component={Link}
+            to="/drogas"
+            onClick={e => onSelectHandler(1)}
+            className={active === 1 ? clsx(classes.active) : null}
+          >
+            <ListItemIcon>
+              <i className="fas fa-2x fa-prescription-bottle-alt" />
+            </ListItemIcon>
+            <ListItemText primary="Drogas" />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to="/medicamentos"
+            onClick={e => onSelectHandler(2)}
+            className={active === 2 ? clsx(classes.active) : null}
+          >
+            <ListItemIcon>
+              <i className="fas fa-2x fa-pills" />
+            </ListItemIcon>
+            <ListItemText primary="Medicamentos" />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to="/reposiciones"
+            onClick={e => onSelectHandler(3)}
+            className={active === 3 ? clsx(classes.active) : null}
+          >
+            <ListItemIcon>
+              <i className="fas fa-2x fa-sign-in-alt" />
+            </ListItemIcon>
+            <ListItemText primary="Reposiciones" />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to="/partidas"
+            onClick={e => onSelectHandler(4)}
+            className={active === 4 ? clsx(classes.active) : null}
+          >
+            <ListItemIcon>
+              <i className="fas fa-2x fa-sign-out-alt" />
+            </ListItemIcon>
+            <ListItemText primary="Partidas" />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to="/stock"
+            onClick={e => onSelectHandler(5)}
+            className={active === 5 ? clsx(classes.active) : null}
+          >
+            <ListItemIcon>
+              <i className="fas fa-2x fa-clipboard-list" />
+            </ListItemIcon>
+            <ListItemText primary="Stock" />
+          </ListItem>
+        </List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {props.children}
+      </main>
     </div>
   );
 }
 
-export default MiniDrawer;
+export default Navbar;

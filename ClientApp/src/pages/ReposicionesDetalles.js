@@ -27,11 +27,19 @@ class ReposicionesDetalles extends React.Component {
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
     const data = await response.json();
+    let medicinePurchaseOrders = [];
+    data.medicinePurchaseOrders.forEach(medicinePurchaseOrder => {
+      medicinePurchaseOrders.push({
+        medicineId: medicinePurchaseOrder.medicineId,
+        // medicineName: medicinePurchaseOrder.medicine.name,
+        quantity: medicinePurchaseOrder.quantity
+      });
+    });
     this.setState({
       form: {
         id: data.id,
         date: data.date,
-        medicinePurchaseOrders: data.medicinePurchaseOrders
+        medicinePurchaseOrders
       }
     });
   }
@@ -90,7 +98,6 @@ class ReposicionesDetalles extends React.Component {
     medicinePurchaseOrders[index]["medicineId"] = id;
     medicinePurchaseOrders[index]["medicineName"] = name;
     modalShow[index] = false;
-
     this.setState({
       form: {
         ...this.state.form,

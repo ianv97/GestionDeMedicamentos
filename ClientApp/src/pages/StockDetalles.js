@@ -27,11 +27,19 @@ class StockDetalles extends React.Component {
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
     const data = await response.json();
+    let medicineStockOrders = [];
+    data.medicineStockOrders.forEach(medicineStockOrder => {
+      medicineStockOrders.push({
+        medicineId: medicineStockOrder.medicineId,
+        // medicineName: medicineStockOrder.medicine.name,
+        quantity: medicineStockOrder.quantity
+      });
+    });
     this.setState({
       form: {
         id: data.id,
         date: data.date,
-        medicineStockOrders: data.medicineStockOrders
+        medicineStockOrders
       }
     });
   }
