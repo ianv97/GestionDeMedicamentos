@@ -1,5 +1,5 @@
 import React from "react";
-import "../login.css";
+import "../components/Login/login.css";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import NavigationPanel from "../components/Login/NavigationPanel";
 import Modal from "../components/Login/Modal";

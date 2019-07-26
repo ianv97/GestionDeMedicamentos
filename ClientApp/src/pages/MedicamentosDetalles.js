@@ -1,6 +1,5 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import Breadcrumbs from "../components/Breadcrumbs";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -85,8 +84,6 @@ class MedicamentosDetalles extends React.Component {
   render() {
     return (
       <div>
-        <Breadcrumbs currentUrl={this.state.currentUrl} id={this.props.match.params.id} />
-
         <Grid container direction="column">
           <Grid container direction="row" justify="center" className="mt-5">
             <Grid item>
