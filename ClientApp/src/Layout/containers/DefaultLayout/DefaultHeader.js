@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 // import { Link, NavLink } from "react-router-dom";
 import {
-  Badge,
+  // Badge,
   UncontrolledDropdown,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Nav,
-  NavItem
+  Nav
+  // NavItem
 } from "reactstrap";
 import PropTypes from "prop-types";
 
-import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from "@coreui/react";
+// import { AppAsideToggler } from "@coreui/react";
+import { AppNavbarBrand, AppSidebarToggler } from "@coreui/react";
 import logoh from "../../img/logoh.png";
 import logo from "../../img/logo.png";
 
@@ -73,7 +74,7 @@ class DefaultHeader extends Component {
           </NavItem> */}
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
-              <img src={"img/user.png"} className="img-avatar mb-2" />
+              <img src={"img/user.png"} className="img-avatar mb-2" alt="" />
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem header tag="div" className="text-center">
