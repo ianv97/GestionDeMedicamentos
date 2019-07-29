@@ -44,7 +44,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<Prescription> FindAsync(int id)
         {
-            return await _context.Prescriptions.Include(p => p.MedicinePrescriptions).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Prescriptions.Include(p => p.MedicinePrescriptions).ThenInclude(mp => mp.Medicine).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<EntityEntry> CreateAsync(Prescription prescription)

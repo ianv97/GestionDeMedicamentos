@@ -2,9 +2,10 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import RelationshipModal from "../components/RelationshipModal";
 import Fab from "@material-ui/core/Fab";
+import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
+import RelationshipModal from "../components/RelationshipModal";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
@@ -30,7 +31,7 @@ class ReposicionesDetalles extends React.Component {
     data.medicinePurchaseOrders.forEach(medicinePurchaseOrder => {
       medicinePurchaseOrders.push({
         medicineId: medicinePurchaseOrder.medicineId,
-        // medicineName: medicinePurchaseOrder.medicine.name,
+        medicineName: medicinePurchaseOrder.medicine.name,
         quantity: medicinePurchaseOrder.quantity
       });
     });
@@ -77,7 +78,7 @@ class ReposicionesDetalles extends React.Component {
     });
   };
 
-  addNewRow = () => {
+  addRow = () => {
     let { medicinePurchaseOrders } = this.state.form;
     let { modalShow } = this.state;
     medicinePurchaseOrders.push({ medicineId: 0, medicineName: "", quantity: 0 });
@@ -89,6 +90,26 @@ class ReposicionesDetalles extends React.Component {
       },
       modalShow
     });
+  };
+
+  deleteRow = index => {
+    let { medicinePurchaseOrders } = this.state.form;
+    if (medicinePurchaseOrders.length > 1) {
+      medicinePurchaseOrders.splice(index, 1);
+      this.setState({
+        form: {
+          ...this.state.form,
+          medicinePurchaseOrders
+        }
+      });
+    } else {
+      window.container.error("Debe existir al menos un elemento", "Error", {
+        showAnimation: "animated rubberBand",
+        hideAnimation: "animated flipOutX",
+        timeOut: 5000,
+        extendedTimeOut: 2000
+      });
+    }
   };
 
   selectRelation = (index, id, name) => {
@@ -178,7 +199,7 @@ class ReposicionesDetalles extends React.Component {
                     }}
                   />
                   <Button
-                    disabled={this.props.mode === "read" || this.props.mode === "delete"}
+                    disabled={this.state.mode === "read" || this.state.mode === "delete"}
                     className="mt-1 px-0"
                     size="large"
                     variant="contained"
@@ -218,12 +239,24 @@ class ReposicionesDetalles extends React.Component {
                     }}
                   />
                 </Grid>
+                {(this.state.mode === "create" || this.state.mode === "update") && (
+                  <Grid item className="mt-4">
+                    <Fab
+                      size="small"
+                      className="bg-danger"
+                      disabled={this.state.mode === "read" || this.state.mode === "delete"}
+                      onClick={() => this.deleteRow(index)}
+                    >
+                      <Icon className="fas fa-minus-circle" />
+                    </Fab>
+                  </Grid>
+                )}
               </Grid>
             ))}
-            {this.state.mode === "create" && (
+            {(this.state.mode === "create" || this.state.mode === "update") && (
               <Grid container direction="row" justify="center" spacing={5}>
                 <Grid item>
-                  <Fab onClick={this.addNewRow} color="primary" size="medium">
+                  <Fab onClick={this.addRow} color="primary" size="medium">
                     <AddIcon />
                   </Fab>
                 </Grid>

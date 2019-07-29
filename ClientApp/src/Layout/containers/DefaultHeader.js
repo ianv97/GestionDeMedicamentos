@@ -13,8 +13,8 @@ import PropTypes from "prop-types";
 
 // import { AppAsideToggler } from "@coreui/react";
 import { AppNavbarBrand, AppSidebarToggler } from "@coreui/react";
-import logoh from "../../img/logoh.png";
-import logo from "../../img/logo.png";
+import logoh from "../img/logoh.png";
+import logo from "../img/logo.png";
 
 const propTypes = {
   children: PropTypes.node

@@ -42,6 +42,7 @@ export default async function getData() {
         }
         data.forEach(entity => {
           tempDisplayData = [];
+          // eslint-disable-next-line
           this.state.titles.forEach(value => tempDisplayData.push([eval("entity." + value[1])]));
           displayData.push(tempDisplayData);
         });

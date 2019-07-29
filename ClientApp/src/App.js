@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import "./Layout/App.scss";
+import "./layout/scss/style.scss";
 import { ToastContainer } from "react-toastr";
 import { ToastMessageAnimated } from "react-toastr";
 import "toastr/build/toastr.css";
@@ -8,7 +8,7 @@ import "animate.css/animate.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Login = React.lazy(() => import("./pages/Login"));
-const DefaultLayout = React.lazy(() => import("./Layout/containers/DefaultLayout"));
+const DefaultLayout = React.lazy(() => import("./layout/containers/DefaultLayout.js"));
 const loading = () => (
   <div className="animated fadeIn pt-3 text-center">
     <CircularProgress />

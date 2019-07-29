@@ -45,7 +45,7 @@ namespace GestiónDeMedicamentos.Persistence
 
         public async Task<StockOrder> FindAsync(int id)
         {
-            return await _context.StockOrders.Include(so => so.MedicineStockOrders).FirstOrDefaultAsync(so => so.Id == id);
+            return await _context.StockOrders.Include(so => so.MedicineStockOrders).ThenInclude(mso => mso.Medicine).FirstOrDefaultAsync(so => so.Id == id);
         }
 
 

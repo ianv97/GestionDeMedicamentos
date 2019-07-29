@@ -2,9 +2,10 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import RelationshipModal from "../components/RelationshipModal";
 import Fab from "@material-ui/core/Fab";
+import Icon from "@material-ui/core/Icon";
 import AddIcon from "@material-ui/icons/Add";
+import RelationshipModal from "../components/RelationshipModal";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
@@ -30,7 +31,7 @@ class StockDetalles extends React.Component {
     data.medicineStockOrders.forEach(medicineStockOrder => {
       medicineStockOrders.push({
         medicineId: medicineStockOrder.medicineId,
-        // medicineName: medicineStockOrder.medicine.name,
+        medicineName: medicineStockOrder.medicine.name,
         quantity: medicineStockOrder.quantity
       });
     });
@@ -63,7 +64,7 @@ class StockDetalles extends React.Component {
     });
   };
 
-  addNewRow = () => {
+  addRow = () => {
     let { medicineStockOrders } = this.state.form;
     let { modalShow } = this.state;
     medicineStockOrders.push({ medicineId: 0, medicineName: "", quantity: 0 });
@@ -77,13 +78,32 @@ class StockDetalles extends React.Component {
     });
   };
 
+  deleteRow = index => {
+    let { medicineStockOrders } = this.state.form;
+    if (medicineStockOrders.length > 1) {
+      medicineStockOrders.splice(index, 1);
+      this.setState({
+        form: {
+          ...this.state.form,
+          medicineStockOrders
+        }
+      });
+    } else {
+      window.container.error("Debe existir al menos un elemento", "Error", {
+        showAnimation: "animated rubberBand",
+        hideAnimation: "animated flipOutX",
+        timeOut: 5000,
+        extendedTimeOut: 2000
+      });
+    }
+  };
+
   selectRelation = (index, id, name) => {
     let { medicineStockOrders } = this.state.form;
     let { modalShow } = this.state;
     medicineStockOrders[index]["medicineId"] = id;
     medicineStockOrders[index]["medicineName"] = name;
     modalShow[index] = false;
-
     this.setState({
       form: {
         ...this.state.form,
@@ -164,7 +184,7 @@ class StockDetalles extends React.Component {
                     }}
                   />
                   <Button
-                    disabled={this.props.mode === "read" || this.props.mode === "delete"}
+                    disabled={this.state.mode === "read" || this.state.mode === "delete"}
                     className="mt-1 px-0"
                     size="large"
                     variant="contained"
@@ -204,12 +224,24 @@ class StockDetalles extends React.Component {
                     }}
                   />
                 </Grid>
+                {(this.state.mode === "create" || this.state.mode === "update") && (
+                  <Grid item className="mt-4">
+                    <Fab
+                      size="small"
+                      className="bg-danger"
+                      disabled={this.state.mode === "read" || this.state.mode === "delete"}
+                      onClick={() => this.deleteRow(index)}
+                    >
+                      <Icon className="fas fa-minus-circle" />
+                    </Fab>
+                  </Grid>
+                )}
               </Grid>
             ))}
-            {this.state.mode === "create" && (
+            {(this.state.mode === "create" || this.state.mode === "update") && (
               <Grid container direction="row" justify="center" spacing={5}>
                 <Grid item>
-                  <Fab onClick={this.addNewRow} color="primary" size="medium">
+                  <Fab onClick={this.addRow} color="primary" size="medium">
                     <AddIcon />
                   </Fab>
                 </Grid>
