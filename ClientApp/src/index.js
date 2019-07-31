@@ -2,6 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
+import Context from "./Context";
 
 window.ApiUrl = "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(
+  <Context.Provider>
+    <App />
+  </Context.Provider>,
+  document.getElementById("app")
+);

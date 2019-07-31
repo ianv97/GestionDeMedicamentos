@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import { MdArrowForward } from "react-icons/lib/md";
 // import { FaGooglePlus, FaTwitter, FaFacebook } from "react-icons/lib/fa";
 
 const SubmitButton = props => {
-  let socialNets = null;
+  let socialNets;
 
   if (props.type === "signIn") {
     socialNets = (

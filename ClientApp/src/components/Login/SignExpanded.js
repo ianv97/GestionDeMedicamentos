@@ -44,6 +44,7 @@ class SignExpanded extends Component {
             >
               {({ opacity, y }) => (
                 <form
+                  onSubmit={this.props.onSubmit}
                   className="login logForm"
                   style={{
                     WebkitTransform: `translate3d(0, ${y}px, 0)`,
