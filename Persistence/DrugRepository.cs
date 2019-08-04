@@ -1,13 +1,12 @@
-﻿using GestionDeMedicamentos.Controllers;
-using GestiónDeMedicamentos.Database;
-using GestiónDeMedicamentos.Domain;
-using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Models;
+using GestionDeMedicamentos.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Persistence
+namespace GestionDeMedicamentos.Persistence
 {
     public class DrugRepository : BaseRepository, IDrugRepository
     {

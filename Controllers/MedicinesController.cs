@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GestiónDeMedicamentos.Models;
-using GestiónDeMedicamentos.Domain;
-using GestionDeMedicamentos.Controllers;
+using GestionDeMedicamentos.Models;
+using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Services;
 
-namespace GestiónDeMedicamentos.Controllers
+namespace GestionDeMedicamentos.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize] //Se puede colocar en métdos específicos en lugar de toda la clase
     [Route("api/medicamentos")]
     [ApiController]
     public class MedicinesController : ControllerBase

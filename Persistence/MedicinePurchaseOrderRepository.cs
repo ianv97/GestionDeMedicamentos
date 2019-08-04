@@ -1,14 +1,12 @@
-﻿using GestiónDeMedicamentos.Database;
-using GestiónDeMedicamentos.Domain;
-using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Persistence
+namespace GestionDeMedicamentos.Persistence
 {
     public class MedicinePurchaseOrderRepository : BaseRepository, IMedicinePurchaseOrderRepository
     {

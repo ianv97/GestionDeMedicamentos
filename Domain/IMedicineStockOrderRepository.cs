@@ -1,10 +1,10 @@
-﻿using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Domain
+namespace GestionDeMedicamentos.Domain
 {
     public interface IMedicineStockOrderRepository
     {

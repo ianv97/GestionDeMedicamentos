@@ -1,10 +1,6 @@
-﻿using GestiónDeMedicamentos.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Persistence
+namespace GestionDeMedicamentos.Persistence
 {
     public abstract class BaseRepository
     {

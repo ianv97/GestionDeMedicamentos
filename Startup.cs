@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GestiónDeMedicamentos.Database;
-using GestiónDeMedicamentos.Domain;
-using GestiónDeMedicamentos.Persistence;
+using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Persistence;
+using GestionDeMedicamentos.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +37,8 @@ namespace GestiónDeMedicamentos
                 options.UseNpgsql(Configuration.GetConnectionString("PostgreDb"));
             });
 
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDrugRepository, DrugRepository>();
             services.AddScoped<IMedicineRepository, MedicineRepository>();
             services.AddScoped<IMedicinePrescriptionRepository, MedicinePrescriptionRepository>();
@@ -68,6 +65,28 @@ namespace GestiónDeMedicamentos
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+            });
+            string issuer = Configuration["AuthSettings:Issuer"];
+            string audience = Configuration["AuthSettings:Audience"];
+            string signinKey = Configuration["AuthSettings:SigninKey"];
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.Audience = audience;
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(signinKey))
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +108,7 @@ namespace GestiónDeMedicamentos
             //app.UseCookiePolicy();
 
             app.UseCors("AllowOrigin"); //Debe estar antes de UseMvc
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

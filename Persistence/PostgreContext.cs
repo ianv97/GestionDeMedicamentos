@@ -1,14 +1,11 @@
-﻿using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Database
+namespace GestionDeMedicamentos.Persistence
 {
     public class PostgreContext : DbContext
     {
+        public DbSet<User> Users { get; set; }
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<MedicinePrescription> MedicinePrescriptions { get; set; }
@@ -21,6 +18,12 @@ namespace GestiónDeMedicamentos.Database
         public PostgreContext(DbContextOptions<PostgreContext> options) : base(options)
         {
 
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
         }
 
     }

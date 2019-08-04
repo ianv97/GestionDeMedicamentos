@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Models
+namespace GestionDeMedicamentos.Models
 {
     public class StockOrder
     {

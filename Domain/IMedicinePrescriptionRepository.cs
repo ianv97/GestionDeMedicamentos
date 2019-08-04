@@ -1,10 +1,9 @@
-﻿using GestiónDeMedicamentos.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using GestionDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Domain
+namespace GestionDeMedicamentos.Domain
 {
     public interface IMedicinePrescriptionRepository
     {

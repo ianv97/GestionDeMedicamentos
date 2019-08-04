@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GestiónDeMedicamentos.Models;
-using GestiónDeMedicamentos.Domain;
-using GestionDeMedicamentos.Controllers;
+using GestionDeMedicamentos.Models;
+using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Services;
 
-namespace GestiónDeMedicamentos.Controllers
+namespace GestionDeMedicamentos.Controllers
 {
     [Route("api/drogas")]
     [ApiController]

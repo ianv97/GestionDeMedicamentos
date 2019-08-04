@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using GestiónDeMedicamentos.Models;
-using GestiónDeMedicamentos.Domain;
+using GestionDeMedicamentos.Models;
+using GestionDeMedicamentos.Domain;
 using System;
-using GestionDeMedicamentos.Controllers;
+using GestionDeMedicamentos.Services;
 
-namespace GestiónDeMedicamentos.Controllers
+namespace GestionDeMedicamentos.Controllers
 {
     [Route("api/stock")]
     [ApiController]

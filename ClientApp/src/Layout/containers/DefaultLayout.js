@@ -20,6 +20,7 @@ import {
 import navigation from "../_nav";
 // routes config
 import routes from "../routes";
+import Context from "../../Context";
 
 // const DefaultAside = React.lazy(() => import("./DefaultAside"));
 // const DefaultFooter = React.lazy(() => import("./DefaultFooter"));
@@ -35,6 +36,7 @@ class DefaultLayout extends Component {
   signOut(e) {
     e.preventDefault();
     this.props.history.push("/login");
+    this.context.setAuth(false);
   }
 
   render() {
@@ -42,7 +44,7 @@ class DefaultLayout extends Component {
       <div className="app">
         <AppHeader fixed>
           <Suspense fallback={this.loading()}>
-            <DefaultHeader onLogout={e => this.signOut(e)} />
+            <DefaultHeader signOut={e => this.signOut(e)} />
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -91,5 +93,6 @@ class DefaultLayout extends Component {
     );
   }
 }
+DefaultLayout.contextType = Context.Context;
 
 export default DefaultLayout;

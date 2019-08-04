@@ -1,9 +1,9 @@
-﻿using GestionDeMedicamentos.Controllers;
-using GestiónDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Models;
+using GestionDeMedicamentos.Services;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Threading.Tasks;
 
-namespace GestiónDeMedicamentos.Domain
+namespace GestionDeMedicamentos.Domain
 {
     public interface IStockOrderRepository
     {

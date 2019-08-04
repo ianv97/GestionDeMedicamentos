@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace GestionDeMedicamentos.Controllers
+namespace GestionDeMedicamentos.Services
 {
     public class PaginatedList<T> : List<T>
     {

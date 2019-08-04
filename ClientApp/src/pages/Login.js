@@ -3,7 +3,6 @@ import "../components/Login/login.css";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import NavigationPanel from "../components/Login/NavigationPanel";
 import Modal from "../components/Login/Modal";
-import Context from "../Context";
 
 class Login extends React.Component {
   constructor(props) {
@@ -17,25 +16,15 @@ class Login extends React.Component {
     this.setState({ mounted: true });
   }
 
-  handleSubmit = (e, setAuth) => {
-    e.preventDefault();
-    this.setState({ mounted: false });
-    setAuth(true);
-  };
-
   render() {
     const { mounted } = this.state;
     let child;
+
     if (mounted) {
       child = (
         <div className="login App_test">
           <NavigationPanel />
-          <Context.Consumer>
-            {({ setAuth }) => {
-              return <Modal onSubmit={e => this.handleSubmit(e, setAuth)} />;
-            }}
-          </Context.Consumer>
-          ;
+          <Modal />
         </div>
       );
     }

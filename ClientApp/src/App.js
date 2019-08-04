@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./layout/scss/style.scss";
+import GlobalStyle from "./globalStyles";
 import { ToastContainer } from "react-toastr";
 import { ToastMessageAnimated } from "react-toastr";
 import "toastr/build/toastr.css";
@@ -20,6 +21,7 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <GlobalStyle />
         <ToastContainer
           toastMessageFactory={React.createFactory(ToastMessageAnimated)}
           className="toast-top-right"

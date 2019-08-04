@@ -10,18 +10,18 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GestiónDeMedicamentos.Migrations
 {
     [DbContext(typeof(PostgreContext))]
-    [Migration("20190519162142_Medicine-Presentations")]
-    partial class MedicinePresentations
+    [Migration("20190804004927_users")]
+    partial class users
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.Drug", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.Drug", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -33,12 +33,12 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("Drugs");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.Medicine", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.Medicine", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("DrugId");
+                    b.Property<int>("DrugId");
 
                     b.Property<string>("Laboratory");
 
@@ -48,7 +48,7 @@ namespace GestiónDeMedicamentos.Migrations
 
                     b.Property<decimal>("Proportion");
 
-                    b.Property<int>("Stock");
+                    b.Property<long>("Stock");
 
                     b.HasKey("Id");
 
@@ -57,18 +57,22 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("Medicines");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.MedicinePrescription", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.MedicinePrescription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("MedicineId");
+                    b.Property<int?>("DrugId");
 
-                    b.Property<int?>("PrescriptionId");
+                    b.Property<int>("MedicineId");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("PrescriptionId");
+
+                    b.Property<long>("Quantity");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DrugId");
 
                     b.HasIndex("MedicineId");
 
@@ -77,18 +81,16 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("MedicinePrescriptions");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.MedicinePurchaseOrder", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.MedicinePurchaseOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("ExpirationDate");
+                    b.Property<int>("MedicineId");
 
-                    b.Property<int?>("MedicineId");
+                    b.Property<int>("PurchaseOrderId");
 
-                    b.Property<int?>("PurchaseOrderId");
-
-                    b.Property<int>("Quantity");
+                    b.Property<long>("Quantity");
 
                     b.HasKey("Id");
 
@@ -99,16 +101,16 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("MedicinePurchaseOrders");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.MedicineStockOrder", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.MedicineStockOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("MedicineId");
+                    b.Property<int>("MedicineId");
 
                     b.Property<int>("Quantity");
 
-                    b.Property<int?>("StockOrderId");
+                    b.Property<int>("StockOrderId");
 
                     b.HasKey("Id");
 
@@ -119,7 +121,7 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("MedicineStockOrders");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.Prescription", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.Prescription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -131,7 +133,7 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("Prescriptions");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.PurchaseOrder", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.PurchaseOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -143,7 +145,7 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("PurchaseOrders");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.StockOrder", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.StockOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -155,44 +157,74 @@ namespace GestiónDeMedicamentos.Migrations
                     b.ToTable("StockOrders");
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.Medicine", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.User", b =>
                 {
-                    b.HasOne("GestiónDeMedicamentos.Models.Drug", "Drug")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("GestionDeMedicamentos.Models.Medicine", b =>
+                {
+                    b.HasOne("GestionDeMedicamentos.Models.Drug", "Drug")
                         .WithMany()
+                        .HasForeignKey("DrugId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("GestionDeMedicamentos.Models.MedicinePrescription", b =>
+                {
+                    b.HasOne("GestionDeMedicamentos.Models.Medicine")
+                        .WithMany("MedicinePrescriptions")
                         .HasForeignKey("DrugId");
-                });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.MedicinePrescription", b =>
-                {
-                    b.HasOne("GestiónDeMedicamentos.Models.Medicine", "Medicine")
+                    b.HasOne("GestionDeMedicamentos.Models.Medicine", "Medicine")
+                        .WithMany()
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GestionDeMedicamentos.Models.Prescription", "Prescription")
                         .WithMany("MedicinePrescriptions")
-                        .HasForeignKey("MedicineId");
-
-                    b.HasOne("GestiónDeMedicamentos.Models.Prescription", "Prescription")
-                        .WithMany("MedicinePrescriptions")
-                        .HasForeignKey("PrescriptionId");
+                        .HasForeignKey("PrescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.MedicinePurchaseOrder", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.MedicinePurchaseOrder", b =>
                 {
-                    b.HasOne("GestiónDeMedicamentos.Models.Medicine", "Medicine")
+                    b.HasOne("GestionDeMedicamentos.Models.Medicine", "Medicine")
                         .WithMany("MedicinePurchaseOrders")
-                        .HasForeignKey("MedicineId");
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("GestiónDeMedicamentos.Models.PurchaseOrder", "PurchaseOrder")
+                    b.HasOne("GestionDeMedicamentos.Models.PurchaseOrder", "PurchaseOrder")
                         .WithMany("MedicinePurchaseOrders")
-                        .HasForeignKey("PurchaseOrderId");
+                        .HasForeignKey("PurchaseOrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("GestiónDeMedicamentos.Models.MedicineStockOrder", b =>
+            modelBuilder.Entity("GestionDeMedicamentos.Models.MedicineStockOrder", b =>
                 {
-                    b.HasOne("GestiónDeMedicamentos.Models.Medicine", "Medicine")
+                    b.HasOne("GestionDeMedicamentos.Models.Medicine", "Medicine")
                         .WithMany("MedicineStockOrders")
-                        .HasForeignKey("MedicineId");
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("GestiónDeMedicamentos.Models.StockOrder", "StockOrder")
+                    b.HasOne("GestionDeMedicamentos.Models.StockOrder", "StockOrder")
                         .WithMany("MedicineStockOrders")
-                        .HasForeignKey("StockOrderId");
+                        .HasForeignKey("StockOrderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
