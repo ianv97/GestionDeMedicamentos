@@ -7,6 +7,7 @@ export default async function handleSubmit(event) {
       mode: "cors",
       body: JSON.stringify(this.state.form),
       headers: {
+        Authorization: "BEARER " + window.token,
         "Content-Type": "application/json"
       }
     });
@@ -16,6 +17,7 @@ export default async function handleSubmit(event) {
       mode: "cors",
       body: JSON.stringify(this.state.form),
       headers: {
+        Authorization: "BEARER " + window.token,
         "Content-Type": "application/json"
       }
     });
@@ -24,6 +26,7 @@ export default async function handleSubmit(event) {
       method: "DELETE",
       mode: "cors",
       headers: {
+        Authorization: "BEARER " + window.token,
         "Content-Type": "application/json"
       }
     });

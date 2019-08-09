@@ -27,6 +27,8 @@ import Context from "../../Context";
 const DefaultHeader = React.lazy(() => import("./DefaultHeader"));
 
 class DefaultLayout extends Component {
+  static contextType = Context.Context;
+
   loading = () => (
     <div className="animated fadeIn pt-3 text-center">
       <CircularProgress />
@@ -93,6 +95,5 @@ class DefaultLayout extends Component {
     );
   }
 }
-DefaultLayout.contextType = Context.Context;
 
 export default DefaultLayout;

@@ -37,36 +37,44 @@ class SignExpanded extends Component {
     });
   };
 
-  handleSubmit = async (e, setAuth) => {
+  handleSubmit = async (e, setAuth, setToken) => {
     e.preventDefault();
 
-    const response = await fetch(window.ApiUrl + this.state.currentUrl, {
-      method: "POST",
-      mode: "cors",
-      body: JSON.stringify(this.state.form),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(response => {
-      if (response.ok) {
-        const data = response.json();
-        window.container.success("Bienvenido", "Sesión iniciada", {
-          showAnimation: "animated rubberBand",
-          hideAnimation: "animated flipOutX",
-          timeOut: 7000,
-          extendedTimeOut: 2000
+    try {
+      await fetch(window.ApiUrl + this.state.currentUrl, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(this.state.form),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw Error;
+          }
+        })
+        .then(data => {
+          window.container.success("Bienvenido " + data.user.name, "Sesión iniciada", {
+            showAnimation: "animated rubberBand",
+            hideAnimation: "animated flipOutX",
+            timeOut: 7000,
+            extendedTimeOut: 2000
+          });
+          this.setState({ mounted: false });
+          setAuth(true);
+          window.token = data.token;
         });
-        this.setState({ mounted: false });
-        setAuth(true);
-      } else {
-        window.container.error("Usuario y/o contraseña incorrectos", "Error", {
-          showAnimation: "animated rubberBand",
-          hideAnimation: "animated flipOutX",
-          timeOut: 7000,
-          extendedTimeOut: 2000
-        });
-      }
-    });
+    } catch (error) {
+      window.container.error("Usuario y/o contraseña incorrectos", "Error", {
+        showAnimation: "animated rubberBand",
+        hideAnimation: "animated flipOutX",
+        timeOut: 7000,
+        extendedTimeOut: 2000
+      });
+    }
   };
 
   render() {
@@ -92,9 +100,9 @@ class SignExpanded extends Component {
             >
               {({ opacity, y }) => (
                 <Context.Consumer>
-                  {({ setAuth }) => (
+                  {({ setAuth, setToken }) => (
                     <form
-                      onSubmit={e => this.handleSubmit(e, setAuth)}
+                      onSubmit={e => this.handleSubmit(e, setAuth, setToken)}
                       className="login logForm"
                       style={{
                         WebkitTransform: `translate3d(0, ${y}px, 0)`,

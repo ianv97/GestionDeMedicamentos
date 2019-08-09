@@ -7,6 +7,7 @@ using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     [Route("api/drogas")]
     [ApiController]
     public class DrugsController : ControllerBase

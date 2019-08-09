@@ -7,6 +7,7 @@ using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     [Route("api/stock")]
     [ApiController]
     public class StockOrdersController : ControllerBase

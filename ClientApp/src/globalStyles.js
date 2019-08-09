@@ -1,13 +1,10 @@
 import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
-  html {
-    font-family: "Roboto Condensed", sans-serif;
-  }
   body {
     background-position: center;
     background-size: cover;
     color: #3e363f;
-    font-family: "Roboto Condensed", sans-serif;
+    font-family: "Roboto", sans-serif;
     height: 100vh;
   }
   .App {

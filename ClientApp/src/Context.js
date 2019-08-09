@@ -3,12 +3,13 @@ const Context = createContext();
 
 const Provider = ({ children }) => {
   const [isAuth, setAuth] = useState(false);
+  const [token, setToken] = useState("");
+
   const value = {
     isAuth,
-    setAuth
-    // activateAuth: () => {
-    //   setAuth(true);
-    // }
+    setAuth,
+    token,
+    setToken
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };

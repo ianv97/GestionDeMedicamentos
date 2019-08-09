@@ -6,6 +6,7 @@ using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     [Route("api/partidas")]
     [ApiController]
     public class PrescriptionsController : ControllerBase

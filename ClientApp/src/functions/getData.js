@@ -1,5 +1,6 @@
 export default async function getData() {
   this.setState({ error: null });
+
   try {
     let apiUrl;
     let displayData = [];
@@ -23,17 +24,20 @@ export default async function getData() {
     }
 
     await fetch(apiUrl, {
+      headers: {
+        Authorization: "BEARER " + window.token
+      },
       signal: this.abortController.signal
     })
       .then(response => {
-        if (!response.ok) {
-          throw Error(response.status + " " + response.statusText);
-        } else {
+        if (response.ok) {
           this.setState({
             page: response.headers.get("page"),
             totalRecords: parseInt(response.headers.get("totalRecords"))
           });
           return response.json();
+        } else {
+          throw Error(response.status + " " + response.statusText);
         }
       })
       .then(data => {

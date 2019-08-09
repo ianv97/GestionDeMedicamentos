@@ -11,7 +11,11 @@ class DrogasDetalles extends React.Component {
   handleSubmit = handleSubmit.bind(this);
 
   async getData() {
-    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id);
+    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
+      headers: {
+        Authorization: "BEARER " + window.token
+      }
+    });
     const data = await response.json();
     this.setState({
       form: {

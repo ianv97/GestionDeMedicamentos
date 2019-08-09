@@ -6,6 +6,7 @@ using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     [Route("api/reposiciones")]
     [ApiController]
     public class PurchaseOrdersController : ControllerBase
