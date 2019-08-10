@@ -9,6 +9,7 @@ import RelationshipModal from "../components/RelationshipModal";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
+import getCookie from "../functions/getCookie";
 
 class StockDetalles extends React.Component {
   state = {
@@ -27,7 +28,7 @@ class StockDetalles extends React.Component {
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
       headers: {
-        Authorization: "BEARER " + window.token
+        Authorization: "BEARER " + getCookie("token")
       }
     });
     const data = await response.json();

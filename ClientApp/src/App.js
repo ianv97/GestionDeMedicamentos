@@ -35,7 +35,7 @@ class App extends React.Component {
             <Switch>
               <Context.Consumer>
                 {({ isAuth }) =>
-                  isAuth ? (
+                  isAuth() ? (
                     <Route path="/" name="Inicio" render={props => <DefaultLayout {...props} />} />
                   ) : (
                     <Route path="/" name="Login" render={props => <Login {...props} />} />

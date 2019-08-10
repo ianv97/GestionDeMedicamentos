@@ -1,15 +1,18 @@
-import React, { createContext, useState } from "react";
+import React, { createContext } from "react";
+import getCookie from "./functions/getCookie";
 const Context = createContext();
 
 const Provider = ({ children }) => {
-  const [isAuth, setAuth] = useState(false);
-  const [token, setToken] = useState("");
+  const isAuth = () => {
+    if (getCookie("token") !== "") {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const value = {
-    isAuth,
-    setAuth,
-    token,
-    setToken
+    isAuth
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };

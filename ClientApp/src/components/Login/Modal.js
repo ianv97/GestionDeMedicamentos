@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Sign from "./Sign";
 import SignExpanded from "./SignExpanded";
 import SignCollapsed from "./SignCollapsed";
+import { withRouter } from "react-router-dom";
 
 class Modal extends Component {
   constructor(props) {
@@ -70,4 +71,4 @@ Modal.propTypes = {
   onSubmit: PropTypes.func
 };
 
-export default Modal;
+export default withRouter(Modal);

@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { Motion, spring } from "react-motion";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
-import Context from "../../Context";
+import { withRouter } from "react-router-dom";
+import login from "../../functions/login";
 
 class SignExpanded extends Component {
   constructor(props) {
@@ -11,7 +12,6 @@ class SignExpanded extends Component {
     this.state = {
       flexState: false,
       animIsFinished: false,
-      currentUrl: "Auth",
       form: {
         username: "",
         password: "",
@@ -19,6 +19,7 @@ class SignExpanded extends Component {
       }
     };
   }
+  handleSubmit = login.bind(this);
 
   componentDidMount() {
     this.setState({ flexState: !this.state.flexState });
@@ -35,46 +36,6 @@ class SignExpanded extends Component {
         [e.target.name]: e.target.value
       }
     });
-  };
-
-  handleSubmit = async (e, setAuth, setToken) => {
-    e.preventDefault();
-
-    try {
-      await fetch(window.ApiUrl + this.state.currentUrl, {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(this.state.form),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw Error;
-          }
-        })
-        .then(data => {
-          window.container.success("Bienvenido " + data.user.name, "Sesión iniciada", {
-            showAnimation: "animated rubberBand",
-            hideAnimation: "animated flipOutX",
-            timeOut: 7000,
-            extendedTimeOut: 2000
-          });
-          this.setState({ mounted: false });
-          setAuth(true);
-          window.token = data.token;
-        });
-    } catch (error) {
-      window.container.error("Usuario y/o contraseña incorrectos", "Error", {
-        showAnimation: "animated rubberBand",
-        hideAnimation: "animated flipOutX",
-        timeOut: 7000,
-        extendedTimeOut: 2000
-      });
-    }
   };
 
   render() {
@@ -99,49 +60,45 @@ class SignExpanded extends Component {
               }}
             >
               {({ opacity, y }) => (
-                <Context.Consumer>
-                  {({ setAuth, setToken }) => (
-                    <form
-                      onSubmit={e => this.handleSubmit(e, setAuth, setToken)}
-                      className="login logForm"
-                      style={{
-                        WebkitTransform: `translate3d(0, ${y}px, 0)`,
-                        transform: `translate3d(0, ${y}px, 0)`,
-                        opacity: `${opacity}`
-                      }}
-                    >
-                      <h2>{this.props.type === "signIn" ? "INGRESAR" : "REGISTRARSE"}</h2>
-                      <Input
-                        type="text"
-                        placeholder="Usuario"
-                        name="username"
-                        value={this.state.form.username}
-                        onChange={this.handleChange}
-                      />
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Contraseña"
-                        name="password"
-                        value={this.state.form.password}
-                        onChange={this.handleChange}
-                      />
-                      <a href="url" className="login forgotPass">
-                        {this.props.type === "signIn" ? "¿Olvidó su contraseña?" : ""}
-                      </a>
-                      {this.props.type !== "signIn" && (
-                        <Input
-                          type="text"
-                          placeholder="Nombre"
-                          name="name"
-                          value={this.state.form.name}
-                          onChange={this.handleChange}
-                        />
-                      )}
-                      <SubmitButton type={this.props.type} />
-                    </form>
+                <form
+                  onSubmit={event => this.handleSubmit(event)}
+                  className="login logForm"
+                  style={{
+                    WebkitTransform: `translate3d(0, ${y}px, 0)`,
+                    transform: `translate3d(0, ${y}px, 0)`,
+                    opacity: `${opacity}`
+                  }}
+                >
+                  <h2>{this.props.type === "signIn" ? "INGRESAR" : "REGISTRARSE"}</h2>
+                  <Input
+                    type="text"
+                    placeholder="Usuario"
+                    name="username"
+                    value={this.state.form.username}
+                    onChange={this.handleChange}
+                  />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Contraseña"
+                    name="password"
+                    value={this.state.form.password}
+                    onChange={this.handleChange}
+                  />
+                  <a href="url" className="login forgotPass">
+                    {this.props.type === "signIn" ? "¿Olvidó su contraseña?" : ""}
+                  </a>
+                  {this.props.type !== "signIn" && (
+                    <Input
+                      type="text"
+                      placeholder="Nombre"
+                      name="name"
+                      value={this.state.form.name}
+                      onChange={this.handleChange}
+                    />
                   )}
-                </Context.Consumer>
+                  <SubmitButton type={this.props.type} />
+                </form>
               )}
             </Motion>
           </div>
@@ -155,4 +112,4 @@ SignExpanded.propTypes = {
   type: PropTypes.string
 };
 
-export default SignExpanded;
+export default withRouter(SignExpanded);

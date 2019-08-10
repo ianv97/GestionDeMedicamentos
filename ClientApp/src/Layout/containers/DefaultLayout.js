@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import * as router from "react-router-dom";
 import { Container } from "reactstrap";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import signOut from "../../functions/signOut";
 
 import {
   // AppAside,
@@ -28,18 +29,13 @@ const DefaultHeader = React.lazy(() => import("./DefaultHeader"));
 
 class DefaultLayout extends Component {
   static contextType = Context.Context;
+  signOut = signOut.bind(this);
 
   loading = () => (
     <div className="animated fadeIn pt-3 text-center">
       <CircularProgress />
     </div>
   );
-
-  signOut(e) {
-    e.preventDefault();
-    this.props.history.push("/login");
-    this.context.setAuth(false);
-  }
 
   render() {
     return (

@@ -1,3 +1,5 @@
+import getCookie from "./getCookie";
+
 export default async function getData() {
   this.setState({ error: null });
 
@@ -22,10 +24,9 @@ export default async function getData() {
         apiUrl += this.state.searchString;
       }
     }
-
     await fetch(apiUrl, {
       headers: {
-        Authorization: "BEARER " + window.token
+        Authorization: "BEARER " + getCookie("token")
       },
       signal: this.abortController.signal
     })
