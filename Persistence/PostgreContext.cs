@@ -5,6 +5,7 @@ namespace GestionDeMedicamentos.Persistence
 {
     public class PostgreContext : DbContext
     {
+        public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Medicine> Medicines { get; set; }

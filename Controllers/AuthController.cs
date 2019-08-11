@@ -1,4 +1,5 @@
-﻿using GestionDeMedicamentos.Domain;
+﻿using System.Threading.Tasks;
+using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Models;
 using GestionDeMedicamentos.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,10 @@ namespace GestionDeMedicamentos.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] UserData data)
+        public async Task<IActionResult> Login([FromBody] UserData data)
         {
-            User user = _userRepository.Login(data.username, data.password);
-            if ( user != null)
+            User user = await _userRepository.Login(data.username, data.password);
+            if (user != null)
             {
                 System.TimeSpan expire = System.TimeSpan.FromHours(3);
                 string token = _authService.GenerateToken(data.username, data.password, expire);
@@ -43,7 +44,7 @@ namespace GestionDeMedicamentos.Controllers
             {
                 return StatusCode(401);
             }
-            
+
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using GestionDeMedicamentos.Domain;
+﻿using System;
+using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Models;
 using GestionDeMedicamentos.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace GestionDeMedicamentos.Persistence
 {
@@ -41,10 +43,15 @@ namespace GestionDeMedicamentos.Persistence
             return await PaginatedList<User>.CreateAsync(users, pageNumber ?? 1, pageSize ?? 0);
         }
 
-        public User Login(string username, string password)
+        public async Task<User> Login(string username, string password)
         {
-            User user = _context.Users.Where(u => u.Username.Equals(username)).FirstOrDefault();
-            if (user != null && user.Password == password)
+            User user = await this.FindByUsername(username);
+            if (user != null && user.Password.Equals(Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: password,
+                    salt: user.Salt,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8))))
             {
                 return user;
             }
@@ -54,6 +61,11 @@ namespace GestionDeMedicamentos.Persistence
         public async Task<User> FindAsync(int id)
         {
             return await _context.Users.FindAsync(id);
+        }
+
+        public async Task<User> FindByUsername(string username)
+        {
+            return await _context.Users.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync();
         }
 
         public EntityState Update(User user)
