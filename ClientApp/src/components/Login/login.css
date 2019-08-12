@@ -192,7 +192,7 @@ body {
 }
 .login .logForm h2 {
   margin-top: 50px;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 .login .Input {
   display: flex;
@@ -277,6 +277,7 @@ body {
   cursor: pointer;
 }
 .login .submitSignUp {
+  margin-top: 0px;
   background: rgba(43, 46, 56, 0.8);
   cursor: pointer;
 }

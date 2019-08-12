@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import Context from "./Context";
 
 window.token = "";
-window.ApiUrl = "http://localhost:55604/api/";
+window.ApiUrl = "http://localhost:55602/api/";
 //"http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
 ReactDOM.render(
   <Context.Provider>

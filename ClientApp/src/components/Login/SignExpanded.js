@@ -5,6 +5,7 @@ import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { withRouter } from "react-router-dom";
 import login from "../../functions/login";
+import signUp from "../../functions/signUp";
 
 class SignExpanded extends Component {
   constructor(props) {
@@ -12,14 +13,18 @@ class SignExpanded extends Component {
     this.state = {
       flexState: false,
       animIsFinished: false,
+      warning: "",
       form: {
         username: "",
         password: "",
-        name: ""
+        passwordV: "",
+        name: "",
+        roleId: "1"
       }
     };
   }
-  handleSubmit = login.bind(this);
+  login = login.bind(this);
+  signUp = signUp.bind(this);
 
   componentDidMount() {
     this.setState({ flexState: !this.state.flexState });
@@ -36,6 +41,20 @@ class SignExpanded extends Component {
         [e.target.name]: e.target.value
       }
     });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    if (this.props.type === "signIn") {
+      this.login();
+    } else {
+      if (this.state.form.password === this.state.form.passwordV) {
+        this.setState({ warning: "" });
+        this.signUp();
+      } else {
+        this.setState({ warning: "Las contraseñas no coinciden" });
+      }
+    }
   };
 
   render() {
@@ -85,17 +104,29 @@ class SignExpanded extends Component {
                     value={this.state.form.password}
                     onChange={this.handleChange}
                   />
+                  {this.props.type !== "signIn" && (
+                    <Input
+                      type="password"
+                      placeholder="Repetir contraseña"
+                      name="passwordV"
+                      value={this.state.form.passwordV}
+                      onChange={this.handleChange}
+                    />
+                  )}
                   <a href="url" className="login forgotPass">
                     {this.props.type === "signIn" ? "¿Olvidó su contraseña?" : ""}
                   </a>
                   {this.props.type !== "signIn" && (
-                    <Input
-                      type="text"
-                      placeholder="Nombre"
-                      name="name"
-                      value={this.state.form.name}
-                      onChange={this.handleChange}
-                    />
+                    <>
+                      <Input
+                        type="text"
+                        placeholder="Nombre"
+                        name="name"
+                        value={this.state.form.name}
+                        onChange={this.handleChange}
+                      />
+                      <label style={{ fontSize: "15px", color: "red" }}>{this.state.warning}</label>
+                    </>
                   )}
                   <SubmitButton type={this.props.type} />
                 </form>

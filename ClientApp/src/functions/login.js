@@ -1,6 +1,4 @@
-export default async function login(event) {
-  event.preventDefault();
-
+export default async function login() {
   try {
     await fetch(window.ApiUrl + "Auth", {
       method: "POST",
@@ -29,7 +27,6 @@ export default async function login(event) {
         this.props.history.push("/inicio");
       });
   } catch (error) {
-    console.log(error);
     window.container.error("Usuario y/o contraseña incorrectos", "Error", {
       showAnimation: "animated rubberBand",
       hideAnimation: "animated flipOutX",

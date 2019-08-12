@@ -2,13 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 // import { MdVisibility } from "react-icons/lib/md";
 
-function showHidePassword() {
-  console.log("asdas");
-  let input = document.getElementById("password");
-  if (input.type === "password") {
-    input.type = "text";
-  } else {
-    input.type = "password";
+function showHidePassword(e) {
+  let input = e.target.parentElement.parentElement.previousElementSibling.closest("input");
+  if (input !== undefined && input !== null) {
+    if (input.type === "password") {
+      input.type = "text";
+    } else {
+      input.type = "password";
+    }
   }
 }
 
@@ -17,7 +18,7 @@ const Input = props => {
 
   if (props.type === "password") {
     iconVisibility = (
-      <span onClick={showHidePassword}>
+      <span id="asd" onClick={showHidePassword}>
         <i className="login iconVisibility fas fa-eye" />
       </span>
     );

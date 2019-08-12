@@ -24,6 +24,11 @@ namespace GestionDeMedicamentos.Controllers
     {
         private readonly IUserRepository _userRepository;
 
+        public UserController(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
@@ -45,7 +50,7 @@ namespace GestionDeMedicamentos.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
-            user = this.encryptPassword(user, user.Password);
+            user = encryptPassword(user, user.Password);
             await _userRepository.CreateAsync(user);
             await _userRepository.SaveChangesAsync();
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
