@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 // import { Link, NavLink } from "react-router-dom";
 import {
   // Badge,
@@ -15,6 +16,7 @@ import PropTypes from "prop-types";
 import { AppNavbarBrand, AppSidebarToggler } from "@coreui/react";
 import logoh from "../img/logoh.png";
 import logo from "../img/logo.png";
+import getCookie from "../../functions/getCookie";
 
 const propTypes = {
   children: PropTypes.node
@@ -111,7 +113,7 @@ class DefaultHeader extends Component {
               <DropdownItem>
                 <i className="fa fa-shield" /> Lock Account
               </DropdownItem> */}
-              <DropdownItem onClick={() => this.props.history.push("/cambiar_contraseña")}>
+              <DropdownItem onClick={() => this.props.history.push("/cambiar-contraseña/" + getCookie("id"))}>
                 <i className="fa fa-lock" /> Cambiar contraseña
               </DropdownItem>
               <DropdownItem onClick={e => this.props.signOut(e)}>
@@ -130,4 +132,4 @@ class DefaultHeader extends Component {
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
 
-export default DefaultHeader;
+export default withRouter(DefaultHeader);

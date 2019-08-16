@@ -23,7 +23,20 @@ export default async function login() {
           extendedTimeOut: 2000
         });
         this.setState({ mounted: false });
-        document.cookie = "token=" + data.token + "; expireAt=" + data.expireAt + "; path=/;";
+          document.cookie =
+              "token=" +
+              data.token;
+          document.cookie =
+              "expireAt=" +
+              data.expireAt;
+          document.cookie =
+              "id=" +
+              data.user.id;
+          document.cookie =
+              "username=" +
+              data.user.username;
+          document.cookie = 
+          "path=/;";
         this.props.history.push("/inicio");
       });
   } catch (error) {

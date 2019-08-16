@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./layout/scss/style.scss";
-import GlobalStyle from "./globalStyles";
+import GlobalStyle from "./styles/GlobalStyles";
 import { ToastContainer } from "react-toastr";
 import { ToastMessageAnimated } from "react-toastr";
 import "toastr/build/toastr.css";

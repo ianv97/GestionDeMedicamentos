@@ -4,12 +4,14 @@ import TextField from "@material-ui/core/TextField";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
+import handleChange from "../functions/handleChange";
 import getCookie from "../functions/getCookie";
 
 class DrogasDetalles extends React.Component {
   state = { currentUrl: "drogas", mode: "read", form: { id: 0, name: "" } };
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
+  handleChange = handleChange.bind(this);
 
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
@@ -36,15 +38,6 @@ class DrogasDetalles extends React.Component {
   componentDidUpdate() {
     this.props.history.listen(location => this.changeMode());
   }
-
-  handleChange = e => {
-    this.setState({
-      form: {
-        ...this.state.form,
-        [e.target.name]: e.target.value
-      }
-    });
-  };
 
   render() {
     return (

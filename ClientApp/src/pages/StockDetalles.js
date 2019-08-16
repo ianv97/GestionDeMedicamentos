@@ -9,6 +9,7 @@ import RelationshipModal from "../components/RelationshipModal";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
+import handleChange from "../functions/handleChange";
 import getCookie from "../functions/getCookie";
 
 class StockDetalles extends React.Component {
@@ -22,8 +23,10 @@ class StockDetalles extends React.Component {
     },
     modalShow: [false]
   };
+
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
+  handleChange = handleChange.bind(this);
 
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
@@ -59,15 +62,6 @@ class StockDetalles extends React.Component {
   componentDidUpdate() {
     this.props.history.listen(location => this.changeMode());
   }
-
-  handleChange = e => {
-    this.setState({
-      form: {
-        ...this.state.form,
-        [e.target.name]: e.target.value
-      }
-    });
-  };
 
   addRow = () => {
     let { medicineStockOrders } = this.state.form;

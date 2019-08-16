@@ -7,6 +7,7 @@ import RelationshipModal from "../components/RelationshipModal";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
+import handleChange from "../functions/handleChange";
 import getCookie from "../functions/getCookie";
 
 class PartidasDetalles extends React.Component {
@@ -23,6 +24,7 @@ class PartidasDetalles extends React.Component {
   };
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
+  handleChange = handleChange.bind(this);
 
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
@@ -72,15 +74,6 @@ class PartidasDetalles extends React.Component {
   componentDidUpdate() {
     this.props.history.listen(location => this.changeMode());
   }
-
-  handleChange = e => {
-    this.setState({
-      form: {
-        ...this.state.form,
-        [e.target.name]: e.target.value
-      }
-    });
-  };
 
   selectRelation = (index, id, name) => {
     let { medicinePrescriptions } = this.state.form;

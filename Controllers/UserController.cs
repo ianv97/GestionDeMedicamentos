@@ -56,6 +56,7 @@ namespace GestionDeMedicamentos.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
+        [Microsoft.AspNetCore.Authorization.Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangePassword([FromRoute] int id, [FromBody] ChangeUserPassword userData)
         {

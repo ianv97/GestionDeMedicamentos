@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import ButtonsRow from "../components/ButtonsRow";
 import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
+import handleChange from "../functions/handleChange";
 import RelationshipModal from "../components/RelationshipModal";
 import getCookie from "../functions/getCookie";
 
@@ -33,6 +34,7 @@ class MedicamentosDetalles extends React.Component {
 
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
+  handleChange = handleChange.bind(this);
 
   async getData() {
     const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
@@ -62,15 +64,6 @@ class MedicamentosDetalles extends React.Component {
         ...this.state.form,
         drugId: id,
         drugName: name
-      }
-    });
-  };
-
-  handleChange = e => {
-    this.setState({
-      form: {
-        ...this.state.form,
-        [e.target.name]: e.target.value
       }
     });
   };
