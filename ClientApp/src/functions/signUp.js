@@ -19,8 +19,7 @@ export default async function signUp() {
             extendedTimeOut: 2000
           }
         );
-        this.setState({ mounted: false });
-        // this.props.type = "signIn";
+        this.setState({ loading: false, mounted: false });
       } else {
         throw Error;
       }
@@ -32,5 +31,6 @@ export default async function signUp() {
       timeOut: 7000,
       extendedTimeOut: 2000
     });
+    this.setState({ loading: false });
   }
 }

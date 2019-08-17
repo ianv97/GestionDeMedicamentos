@@ -14,6 +14,7 @@ class PartidasDetalles extends React.Component {
   state = {
     currentUrl: "partidas",
     mode: "read",
+    loading: false,
     medicines: [],
     form: {
       id: 0,
@@ -216,6 +217,7 @@ class PartidasDetalles extends React.Component {
               mode={this.state.mode}
               history={this.props.history}
               edit={false}
+              loading={this.state.loading}
             />
           </form>
         </Grid>

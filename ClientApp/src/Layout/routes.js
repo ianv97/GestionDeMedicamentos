@@ -12,6 +12,7 @@ const PartidasDetalles = React.lazy(() => import("../pages/PartidasDetalles.js")
 const Stock = React.lazy(() => import("../pages/Stock.js"));
 const StockDetalles = React.lazy(() => import("../pages/StockDetalles.js"));
 const ChangePassword = React.lazy(() => import("../pages/ChangePassword.js"));
+const UserProfile = React.lazy(() => import("../pages/UserProfile.js"));
 
 const routes = [
   { path: "/inicio", exact: true, name: "Inicio", component: Inicio },
@@ -25,7 +26,8 @@ const routes = [
   { path: "/partidas/:id", name: "Detalles", component: PartidasDetalles },
   { path: "/stock", exact: true, name: "Stock", component: Stock },
   { path: "/stock/:id", name: "Detalles", component: StockDetalles },
-  { path: "/cambiar-contraseña/:id", name: "Cambiar contraseña", component: ChangePassword }
+  { path: "/auth/:id", name: "Cambiar contraseña", component: ChangePassword },
+  { path: "/user/:id", name: "Perfil de usuario", component: UserProfile }
 ];
 
 export default routes;

@@ -1,13 +1,16 @@
 import React from "react";
-import handleChange from "../functions/handleChange";
+import Grid from "@material-ui/core/Grid";
 import handleSubmit from "../functions/handleSubmit";
 import { Div, Form, Input, Span, Button } from "../styles/ChangePasswordStyles.js";
 import getCookie from "../functions/getCookie.js";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class ChangePassword extends React.Component {
   state = {
     mode: "update",
-    currentUrl: "user",
+    currentUrl: "auth",
+    warning: "",
+    loading: false,
     form: {
       username: getCookie("username"),
       oldPassword: "",
@@ -15,14 +18,38 @@ class ChangePassword extends React.Component {
       newPasswordV: ""
     }
   };
-  handleChange = handleChange.bind(this);
   handleSubmit = handleSubmit.bind(this);
+
+  handleChange = e => {
+    this.setState(
+      {
+        form: {
+          ...this.state.form,
+          [e.target.name]: e.target.value
+        }
+      },
+      () => {
+        if (
+          this.state.form.newPasswordV !== "" &&
+          this.state.form.newPassword !== this.state.form.newPasswordV
+        ) {
+          this.setState({ warning: "Las contraseñas no coinciden" });
+        } else {
+          this.setState({ warning: "" });
+        }
+      }
+    );
+  };
 
   render() {
     return (
+      <Grid container direction="column" justify="center" style={{ height: 80 + "vh" }}>
         <Div className="container-login100">
           <Div className="wrap-login100">
-            <Form className="login100-form validate-form" onSubmit={this.handleSubmit} >
+            <Form
+              className="login100-form validate-form"
+              onSubmit={e => this.handleSubmit(e, this.state.currentUrl + "/" + this.props.match.params.id)}
+            >
               <Span className="login100-form-title">Cambio de Contraseña</Span>
               <Div className="wrap-input100 validate-input mb-0">
                 <Input
@@ -74,15 +101,16 @@ class ChangePassword extends React.Component {
                 />
                 <Span className="focus-input100" />
               </Div>
-
+              <label style={{ fontSize: "15px", color: "red" }}>{this.state.warning}</label>
               <Div className="container-login100-form-btn">
-                <Button type="submit" className="login100-form-btn">
-                  Cambiar contraseña
+                <Button type="submit" className="login100-form-btn" disabled={this.state.warning !== ""}>
+                  {this.state.loading ? <CircularProgress /> : "Cambiar contraseña"}
                 </Button>
               </Div>
             </Form>
           </Div>
         </Div>
+      </Grid>
     );
   }
 }

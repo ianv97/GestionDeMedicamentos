@@ -1,7 +1,8 @@
 import getCookie from "./getCookie";
 
-export default async function handleSubmit(event) {
+export default async function handleSubmit(event, nextUrl = this.state.currentUrl) {
   event.preventDefault();
+  this.setState({ loading: true });
   var response;
   if (this.state.mode === "create") {
     response = await fetch(window.ApiUrl + this.state.currentUrl, {
@@ -48,5 +49,6 @@ export default async function handleSubmit(event) {
       extendedTimeOut: 2000
     });
   }
-  this.props.history.push("/" + this.state.currentUrl);
+  this.setState({ loading: false });
+  this.props.history.push("/" + nextUrl);
 }

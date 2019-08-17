@@ -14,6 +14,7 @@ class SignExpanded extends Component {
       flexState: false,
       animIsFinished: false,
       warning: "",
+      loading: false,
       form: {
         username: "",
         password: "",
@@ -45,6 +46,7 @@ class SignExpanded extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    this.setState({ loading: true });
     if (this.props.type === "signIn") {
       this.login();
     } else {
@@ -53,6 +55,7 @@ class SignExpanded extends Component {
         this.signUp();
       } else {
         this.setState({ warning: "Las contraseñas no coinciden" });
+        this.setState({ loading: false });
       }
     }
   };
@@ -80,7 +83,7 @@ class SignExpanded extends Component {
             >
               {({ opacity, y }) => (
                 <form
-                  onSubmit={event => this.handleSubmit(event)}
+                  onSubmit={this.handleSubmit}
                   className="login logForm"
                   style={{
                     WebkitTransform: `translate3d(0, ${y}px, 0)`,
@@ -117,7 +120,7 @@ class SignExpanded extends Component {
                     {this.props.type === "signIn" ? "¿Olvidó su contraseña?" : ""}
                   </a>
                   {this.props.type !== "signIn" && (
-                    <>
+                    <div>
                       <Input
                         type="text"
                         placeholder="Nombre"
@@ -126,9 +129,9 @@ class SignExpanded extends Component {
                         onChange={this.handleChange}
                       />
                       <label style={{ fontSize: "15px", color: "red" }}>{this.state.warning}</label>
-                    </>
+                    </div>
                   )}
-                  <SubmitButton type={this.props.type} />
+                  <SubmitButton type={this.props.type} loading={this.state.loading} />
                 </form>
               )}
             </Motion>

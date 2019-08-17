@@ -18,6 +18,7 @@ class MedicamentosDetalles extends React.Component {
   state = {
     currentUrl: "medicamentos",
     mode: "read",
+    loading: false,
     form: {
       id: 0,
       name: "",
@@ -226,6 +227,7 @@ class MedicamentosDetalles extends React.Component {
               currentUrl="Medicamentos"
               location={this.props.location}
               history={this.props.history}
+              loading={this.state.loading}
             />
           </form>
         </Grid>

@@ -113,7 +113,10 @@ class DefaultHeader extends Component {
               <DropdownItem>
                 <i className="fa fa-shield" /> Lock Account
               </DropdownItem> */}
-              <DropdownItem onClick={() => this.props.history.push("/cambiar-contraseña/" + getCookie("id"))}>
+              <DropdownItem onClick={() => this.props.history.push("/user/" + getCookie("id"))}>
+                <i className="fa fa-id-card" /> Perfil
+              </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push("/auth/" + getCookie("id"))}>
                 <i className="fa fa-lock" /> Cambiar contraseña
               </DropdownItem>
               <DropdownItem onClick={e => this.props.signOut(e)}>

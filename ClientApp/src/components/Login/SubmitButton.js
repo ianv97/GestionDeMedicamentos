@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import CircularProgress from "@material-ui/core/CircularProgress";
 // import { FaGooglePlus, FaTwitter, FaFacebook } from "react-icons/lib/fa";
 
 const SubmitButton = props => {
@@ -20,7 +21,13 @@ const SubmitButton = props => {
     <div className={"submitButton"}>
       {socialNets}
       <button className={props.type === "signIn" ? "submitSignIn" : "submitSignUp"}>
-        <i className="login fas fa-arrow-right" />
+        {props.loading ? (
+          <CircularProgress color="secondary" />
+        ) : (
+          <div>
+            <i className="login fas fa-arrow-right" />
+          </div>
+        )}
       </button>
     </div>
   );

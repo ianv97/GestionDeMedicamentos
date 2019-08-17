@@ -60,7 +60,7 @@ namespace GestionDeMedicamentos.Persistence
 
         public async Task<User> FindAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User> FindByUsername(string username)

@@ -43,6 +43,11 @@ export const Button = styled.button`
     color: #ffffff;
     background: #000000;
   }
+  &.login100-form-btn:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: auto;
+  }
 `;
 
 export const Div = styled.div`
@@ -66,10 +71,10 @@ export const Div = styled.div`
       padding: 0px;
     }
     //background-color: transparent;
-     //background: -webkit-linear-gradient(-135deg, #f05837, #000000);
-     //background: -o-linear-gradient(-135deg, #f05837, #000000);
-     //background: -moz-linear-gradient(-135deg, #f05837, #000000);
-     //background: linear-gradient(-135deg, #f05837, #000000);
+    //background: -webkit-linear-gradient(-135deg, #f05837, #000000);
+    //background: -o-linear-gradient(-135deg, #f05837, #000000);
+    //background: -moz-linear-gradient(-135deg, #f05837, #000000);
+    //background: linear-gradient(-135deg, #f05837, #000000);
   }
 
   &.wrap-login100 {

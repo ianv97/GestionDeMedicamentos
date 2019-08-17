@@ -4,6 +4,9 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using GestionDeMedicamentos.Models;
 
 namespace GestionDeMedicamentos.Services
 {
@@ -37,6 +40,27 @@ namespace GestionDeMedicamentos.Services
                 expires: expire,
                 signingCredentials: signinCredentials);
             return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
+        public User encryptPassword(User user, string password)
+        {
+            //Crea la salt
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            user.Salt = salt;
+
+            //Encripta la contraseña y la salt guardándolas en el campo Password
+            user.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA1,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+
+            return user;
         }
     }
 }

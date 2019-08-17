@@ -1,20 +1,17 @@
 using System;
 using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Models;
+using GestionDeMedicamentos.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestionDeMedicamentos.Controllers
 {
-    public class ChangeUserPassword
+    public class ChangeUserProfile
     {
         public string username { get; set; }
-        public string oldPassword { get; set; }
-        public string newPassword { get; set; }
-        public string newPasswordV { get; set; }
+        public string name { get; set; }
     }
 
 
@@ -23,10 +20,12 @@ namespace GestionDeMedicamentos.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IAuthService _authService;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IAuthService authService)
         {
             _userRepository = userRepository;
+            _authService = authService;
         }
 
         [HttpGet("{id:int}")]
@@ -50,7 +49,7 @@ namespace GestionDeMedicamentos.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
-            user = encryptPassword(user, user.Password);
+            user = _authService.encryptPassword(user, user.Password);
             await _userRepository.CreateAsync(user);
             await _userRepository.SaveChangesAsync();
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
@@ -58,66 +57,37 @@ namespace GestionDeMedicamentos.Controllers
 
         [Microsoft.AspNetCore.Authorization.Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> ChangePassword([FromRoute] int id, [FromBody] ChangeUserPassword userData)
+        public async Task<IActionResult> ChangeProfile([FromRoute] int id, [FromBody] ChangeUserProfile userData)
         {
-            if (userData.newPassword == userData.newPasswordV)
+            User user = await _userRepository.FindAsync(id);
+            if (user != null)
             {
-                User user = await _userRepository.Login(userData.username, userData.oldPassword);
-                if (user != null)
+                user.Name = userData.name;
+                user.Username = userData.username;
+                _userRepository.Update(user);
+                try
                 {
-                    if (id != user.Id)
-                    {
-                        return BadRequest();
-                    }
-                    _userRepository.Update(this.encryptPassword(user, userData.newPassword));
-                    try
-                    {
-                        await _userRepository.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!_userRepository.UserExists(user.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return NoContent();
+                    await _userRepository.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    return Unauthorized();
+                    if (!_userRepository.UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return NoContent();
             }
             else
             {
-                return BadRequest();
+                return NotFound();
             }
         }
 
-        public User encryptPassword(User user, string password)
-        {
-            //Crea la salt
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-            user.Salt = salt;
-
-            //Encripta la contraseña y la salt guardándolas en el campo Password
-            user.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA1,
-            iterationCount: 10000,
-            numBytesRequested: 256 / 8));
-
-            return user;
-        }
     }
 
 }

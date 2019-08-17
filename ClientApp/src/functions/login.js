@@ -22,21 +22,10 @@ export default async function login() {
           timeOut: 7000,
           extendedTimeOut: 2000
         });
-        this.setState({ mounted: false });
-          document.cookie =
-              "token=" +
-              data.token;
-          document.cookie =
-              "expireAt=" +
-              data.expireAt;
-          document.cookie =
-              "id=" +
-              data.user.id;
-          document.cookie =
-              "username=" +
-              data.user.username;
-          document.cookie = 
-          "path=/;";
+        this.setState({ loading: false, mounted: false });
+        document.cookie = "token=" + data.token + "; expires=" + data.expireAt + "; path=/;";
+        document.cookie = "id=" + data.user.id + "; expires=" + data.expireAt + "; path=/;";
+        document.cookie = "username=" + data.user.username + "; expires=" + data.expireAt + "; path=/;";
         this.props.history.push("/inicio");
       });
   } catch (error) {
@@ -46,5 +35,6 @@ export default async function login() {
       timeOut: 7000,
       extendedTimeOut: 2000
     });
+    this.setState({ loading: false });
   }
 }

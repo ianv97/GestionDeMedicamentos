@@ -16,6 +16,7 @@ class ReposicionesDetalles extends React.Component {
   state = {
     currentUrl: "reposiciones",
     mode: "read",
+    loading: false,
     form: {
       id: 0,
       date: "",
@@ -265,6 +266,7 @@ class ReposicionesDetalles extends React.Component {
               mode={this.state.mode}
               history={this.props.history}
               edit={false}
+              loading={this.state.loading}
             />
           </form>
         </Grid>
