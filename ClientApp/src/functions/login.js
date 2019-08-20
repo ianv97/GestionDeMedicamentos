@@ -23,9 +23,11 @@ export default async function login() {
           extendedTimeOut: 2000
         });
         this.setState({ loading: false, mounted: false });
-        document.cookie = "token=" + data.token + "; expires=" + data.expireAt + "; path=/;";
-        document.cookie = "id=" + data.user.id + "; expires=" + data.expireAt + "; path=/;";
-        document.cookie = "username=" + data.user.username + "; expires=" + data.expireAt + "; path=/;";
+        console.log(data.expireAt);
+        document.cookie = "token=" + data.token + "; expires=" + new Date(data.expireAt).toUTCString() + ";";
+        document.cookie = "id=" + data.user.id + "; expires=" + new Date(data.expireAt).toUTCString() + ";";
+        document.cookie =
+          "username=" + data.user.username + "; expires=" + new Date(data.expireAt).toUTCString() + ";";
         this.props.history.push("/inicio");
       });
   } catch (error) {

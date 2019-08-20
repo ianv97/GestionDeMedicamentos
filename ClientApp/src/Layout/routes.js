@@ -26,7 +26,7 @@ const routes = [
   { path: "/partidas/:id", name: "Detalles", component: PartidasDetalles },
   { path: "/stock", exact: true, name: "Stock", component: Stock },
   { path: "/stock/:id", name: "Detalles", component: StockDetalles },
-  { path: "/auth/:id", name: "Cambiar contraseña", component: ChangePassword },
+  { path: "/change-password/:id", name: "Cambiar contraseña", component: ChangePassword },
   { path: "/user/:id", name: "Perfil de usuario", component: UserProfile }
 ];
 

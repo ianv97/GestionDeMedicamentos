@@ -8,7 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 class ChangePassword extends React.Component {
   state = {
     mode: "update",
-    currentUrl: "auth",
+    currentUrl: "change-password",
     warning: "",
     loading: false,
     form: {

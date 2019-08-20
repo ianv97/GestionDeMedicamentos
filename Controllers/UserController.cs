@@ -1,4 +1,3 @@
-using System;
 using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Models;
 using GestionDeMedicamentos.Services;
@@ -8,14 +7,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionDeMedicamentos.Controllers
 {
+    public class ChangeUserPassword
+    {
+        public string username { get; set; }
+        public string oldPassword { get; set; }
+        public string newPassword { get; set; }
+        public string newPasswordV { get; set; }
+    }
     public class ChangeUserProfile
     {
         public string username { get; set; }
         public string name { get; set; }
     }
 
-
-    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -28,7 +32,8 @@ namespace GestionDeMedicamentos.Controllers
             _authService = authService;
         }
 
-        [HttpGet("{id:int}")]
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -47,6 +52,7 @@ namespace GestionDeMedicamentos.Controllers
         }
 
         [HttpPost]
+        [Route("api/[controller]")]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
             user = _authService.encryptPassword(user, user.Password);
@@ -56,8 +62,9 @@ namespace GestionDeMedicamentos.Controllers
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ChangeProfile([FromRoute] int id, [FromBody] ChangeUserProfile userData)
+        [HttpPut]
+        [Route("api/[controller]/{id}")]
+        public async Task<IActionResult> ChangeProfileData([FromRoute] int id, [FromBody] ChangeUserProfile userData)
         {
             User user = await _userRepository.FindAsync(id);
             if (user != null)
@@ -85,6 +92,49 @@ namespace GestionDeMedicamentos.Controllers
             else
             {
                 return NotFound();
+            }
+        }
+
+        [Microsoft.AspNetCore.Authorization.Authorize]
+        [HttpPut]
+        [Route("api/change-password/{id}")]
+        public async Task<IActionResult> ChangePassword([FromRoute] int id, [FromBody] ChangeUserPassword userData)
+        {
+            if (userData.newPassword == userData.newPasswordV)
+            {
+                User user = await _userRepository.Login(userData.username, userData.oldPassword);
+                if (user != null)
+                {
+                    if (id != user.Id)
+                    {
+                        return BadRequest();
+                    }
+                    _userRepository.Update(_authService.encryptPassword(user, userData.newPassword));
+                    try
+                    {
+                        await _userRepository.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!_userRepository.UserExists(user.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return NoContent();
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 

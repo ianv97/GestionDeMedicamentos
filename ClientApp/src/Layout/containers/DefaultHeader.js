@@ -17,6 +17,7 @@ import { AppNavbarBrand, AppSidebarToggler } from "@coreui/react";
 import logoh from "../img/logoh.png";
 import logo from "../img/logo.png";
 import getCookie from "../../functions/getCookie";
+import Context from "../../Context";
 
 const propTypes = {
   children: PropTypes.node
@@ -25,6 +26,24 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
+  componentDidMount() {
+    this.getData();
+  }
+
+  async getData() {
+    if (!this.context.img) {
+      const response = await fetch(window.ApiUrl + "UserImage/" + getCookie("id"), {
+        headers: {
+          Authorization: "BEARER " + getCookie("token")
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        this.context.setImg("data:image/jpeg;base64," + data.img);
+      }
+    }
+  }
+
   render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
@@ -76,7 +95,15 @@ class DefaultHeader extends Component {
           </NavItem> */}
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
-              <img src={"img/user.png"} className="img-avatar mb-2" alt="" />
+              <Context.Consumer>
+                {({ img }) =>
+                  img ? (
+                    <img src={img} className="img-avatar mb-2" alt="" />
+                  ) : (
+                    <img src={"/img/user.png"} className="img-avatar mb-2" alt="" />
+                  )
+                }
+              </Context.Consumer>
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem header tag="div" className="text-center">
@@ -131,6 +158,7 @@ class DefaultHeader extends Component {
     );
   }
 }
+DefaultHeader.contextType = Context.Context;
 
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;

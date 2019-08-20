@@ -10,7 +10,6 @@ namespace GestionDeMedicamentos.Models
         public string Password { get; set; }
         public byte[] Salt { get; set; }
         public string Name { get; set; }
-        public byte[] Img { get; set; }
         public int RoleId { get; set; }
         [ForeignKey("RoleId")]
         public Role Role { get; set; }

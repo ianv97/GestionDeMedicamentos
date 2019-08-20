@@ -38,6 +38,7 @@ namespace GestiónDeMedicamentos
             });
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserImageRepository, UserImageRepository>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDrugRepository, DrugRepository>();
             services.AddScoped<IMedicineRepository, MedicineRepository>();
@@ -49,7 +50,8 @@ namespace GestiónDeMedicamentos
             services.AddScoped<IStockOrderRepository, StockOrderRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddMvc().AddJsonOptions(op => {
+            services.AddMvc().AddJsonOptions(op =>
+            {
                 op.SerializerSettings.Converters.Add(new StringEnumConverter());
                 op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });

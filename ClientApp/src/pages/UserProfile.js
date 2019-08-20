@@ -6,6 +6,7 @@ import changeMode from "../functions/changeMode";
 import handleSubmit from "../functions/handleSubmit";
 import handleChange from "../functions/handleChange";
 import getCookie from "../functions/getCookie";
+import Avatar from "../components/Avatar";
 
 class UserProfile extends React.Component {
   state = {
@@ -24,20 +25,37 @@ class UserProfile extends React.Component {
   handleChange = handleChange.bind(this);
 
   async getData() {
-    const response = await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
-      headers: {
-        Authorization: "BEARER " + getCookie("token")
-      }
-    });
-    const data = await response.json();
-    this.setState({
-      form: {
-        id: data.id,
-        username: data.username,
-        name: data.name,
-        role: data.role.name
-      }
-    });
+    try {
+      await fetch(window.ApiUrl + this.state.currentUrl + "/" + this.props.match.params.id, {
+        headers: {
+          Authorization: "BEARER " + getCookie("token")
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw Error(response.status + " " + response.statusText);
+          }
+        })
+        .then(data => {
+          this.setState({
+            form: {
+              id: data.id,
+              username: data.username,
+              name: data.name,
+              role: data.role.name
+            }
+          });
+        });
+    } catch (error) {
+      window.container.error(error.message, "Error", {
+        showAnimation: "animated rubberBand",
+        hideAnimation: "animated flipOutX",
+        timeOut: 7000,
+        extendedTimeOut: 2000
+      });
+    }
   }
 
   componentDidMount() {
@@ -60,6 +78,7 @@ class UserProfile extends React.Component {
               <h1>Perfil</h1>
             </Grid>
           </Grid>
+          <Avatar />
           <form
             onSubmit={e => this.handleSubmit(e, this.state.currentUrl + "/" + this.props.match.params.id)}
           >

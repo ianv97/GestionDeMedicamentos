@@ -7,6 +7,7 @@ namespace GestionDeMedicamentos.Persistence
     {
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserImage> UserImages { get; set; }
         public DbSet<Drug> Drugs { get; set; }
         public DbSet<Medicine> Medicines { get; set; }
         public DbSet<MedicinePrescription> MedicinePrescriptions { get; set; }
