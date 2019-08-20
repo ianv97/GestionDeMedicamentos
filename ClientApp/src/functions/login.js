@@ -1,4 +1,4 @@
-export default async function login() {
+export default async function login(sessionRecord) {
   try {
     await fetch(window.ApiUrl + "Auth", {
       method: "POST",
@@ -23,11 +23,16 @@ export default async function login() {
           extendedTimeOut: 2000
         });
         this.setState({ loading: false, mounted: false });
-        console.log(data.expireAt);
-        document.cookie = "token=" + data.token + "; expires=" + new Date(data.expireAt).toUTCString() + ";";
-        document.cookie = "id=" + data.user.id + "; expires=" + new Date(data.expireAt).toUTCString() + ";";
-        document.cookie =
-          "username=" + data.user.username + "; expires=" + new Date(data.expireAt).toUTCString() + ";";
+        if (sessionRecord) {
+          const expires = new Date(data.expireAt).toUTCString();
+          document.cookie = `token=${data.token}; expires=${expires};`;
+          document.cookie = `id=${data.user.id}; expires=${expires};`;
+          document.cookie = `username=${data.user.username}; expires=${expires};`;
+        } else {
+          document.cookie = `token=${data.token};`;
+          document.cookie = `id=${data.user.id};`;
+          document.cookie = `username=${data.user.username};`;
+        }
         this.props.history.push("/inicio");
       });
   } catch (error) {

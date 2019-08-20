@@ -31,17 +31,19 @@ class DefaultHeader extends Component {
   }
 
   async getData() {
-    if (!this.context.img) {
-      const response = await fetch(window.ApiUrl + "UserImage/" + getCookie("id"), {
-        headers: {
-          Authorization: "BEARER " + getCookie("token")
+    try {
+      if (!this.context.img) {
+        const response = await fetch(window.ApiUrl + "UserImage/" + getCookie("id"), {
+          headers: {
+            Authorization: "BEARER " + getCookie("token")
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          this.context.setImg("data:image/jpeg;base64," + data.img);
         }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        this.context.setImg("data:image/jpeg;base64," + data.img);
       }
-    }
+    } catch (error) {}
   }
 
   render() {
@@ -143,7 +145,7 @@ class DefaultHeader extends Component {
               <DropdownItem onClick={() => this.props.history.push("/user/" + getCookie("id"))}>
                 <i className="fa fa-id-card" /> Perfil
               </DropdownItem>
-              <DropdownItem onClick={() => this.props.history.push("/auth/" + getCookie("id"))}>
+              <DropdownItem onClick={() => this.props.history.push("/change-password/" + getCookie("id"))}>
                 <i className="fa fa-lock" /> Cambiar contraseña
               </DropdownItem>
               <DropdownItem onClick={e => this.props.signOut(e)}>

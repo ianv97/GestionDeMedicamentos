@@ -7,8 +7,11 @@ import styled from "styled-components";
 import img from "../components/Login/login_background.jpg";
 
 const Div = styled.div`
-  background-image: url(${img});
-  background-size: 100%;
+  background: url(${img}) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   width: 100vw;
   height: 100vh;
 `;

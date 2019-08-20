@@ -6,7 +6,8 @@ const NavigationPanel = props => {
   return (
     <div className="login NavigationPanel">
       {/* <MdArrowBack onClick={props.initialState} className="login back" /> */}
-      <div style={{ flex: 2 }} />
+      {/* <div style={{ flex: 2 }} /> */}
+      <img src="/favicon.png" style={{ width: "100%", marginTop: "210px" }} />
     </div>
   );
 };

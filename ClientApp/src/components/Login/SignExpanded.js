@@ -6,6 +6,7 @@ import SubmitButton from "./SubmitButton";
 import { withRouter } from "react-router-dom";
 import login from "../../functions/login";
 import signUp from "../../functions/signUp";
+import handleChange from "../../functions/handleChange";
 
 class SignExpanded extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class SignExpanded extends Component {
       animIsFinished: false,
       warning: "",
       loading: false,
+      sessionRecord: false,
       form: {
         username: "",
         password: "",
@@ -26,6 +28,13 @@ class SignExpanded extends Component {
   }
   login = login.bind(this);
   signUp = signUp.bind(this);
+  handleChange = handleChange.bind(this);
+
+  handleCheckboxChange = e => {
+    this.setState({
+      [e.target.name]: e.target.checked
+    });
+  };
 
   componentDidMount() {
     this.setState({ flexState: !this.state.flexState });
@@ -35,20 +44,11 @@ class SignExpanded extends Component {
     this.setState({ animIsFinished: true });
   };
 
-  handleChange = e => {
-    this.setState({
-      form: {
-        ...this.state.form,
-        [e.target.name]: e.target.value
-      }
-    });
-  };
-
   handleSubmit = e => {
     e.preventDefault();
     this.setState({ loading: true });
     if (this.props.type === "signIn") {
-      this.login();
+      this.login(this.state.sessionRecord);
     } else {
       if (this.state.form.password === this.state.form.passwordV) {
         this.setState({ warning: "" });
@@ -116,9 +116,11 @@ class SignExpanded extends Component {
                       onChange={this.handleChange}
                     />
                   )}
-                  <a href="url" className="login forgotPass">
-                    {this.props.type === "signIn" ? "¿Olvidó su contraseña?" : ""}
-                  </a>
+                  {this.props.type === "signIn" && (
+                    <a href="url" className="login forgotPass">
+                      ¿Olvidó su contraseña?
+                    </a>
+                  )}
                   {this.props.type !== "signIn" && (
                     <div>
                       <Input
@@ -128,10 +130,17 @@ class SignExpanded extends Component {
                         value={this.state.form.name}
                         onChange={this.handleChange}
                       />
-                      <label style={{ fontSize: "15px", color: "red" }}>{this.state.warning}</label>
+                      <label style={{ fontSize: "15px", color: "red", margin: "0px" }}>
+                        {this.state.warning}
+                      </label>
                     </div>
                   )}
-                  <SubmitButton type={this.props.type} loading={this.state.loading} />
+                  <SubmitButton
+                    type={this.props.type}
+                    loading={this.state.loading}
+                    sessionRecord={this.state.sessionRecord}
+                    handleChange={this.handleCheckboxChange}
+                  />
                 </form>
               )}
             </Motion>
