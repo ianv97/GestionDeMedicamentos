@@ -1,5 +1,4 @@
 ﻿using System;
-using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Models;
 using GestionDeMedicamentos.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,28 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace GestionDeMedicamentos.Persistence
 {
+    public interface IUserRepository
+    {
+        Task<PaginatedList<User>> ListAsync(string username, string name, string order, int? pageNumber, int? pageSize);
+
+        Task<User> Login(string username, string password);
+
+        Task<User> FindAsync(int id);
+
+        Task<User> FindByUsername(string username);
+
+        EntityState Update(User user);
+
+        Task<EntityEntry> CreateAsync(User user);
+
+        EntityEntry Delete(User user);
+
+        Task SaveChangesAsync();
+
+        bool UserExists(int id);
+    }
+
+
     public class UserRepository : BaseRepository, IUserRepository
     {
         public UserRepository(PostgreContext context) : base(context)
@@ -18,7 +39,7 @@ namespace GestionDeMedicamentos.Persistence
 
         public async Task<PaginatedList<User>> ListAsync(string username, string name, string order, int? pageNumber, int? pageSize)
         {
-            var users = _context.Users.Where(u => (username == null || u.Username.ToLower().StartsWith(username.ToLower())) && (name == null || u.Name.ToLower().StartsWith(name.ToLower())));
+            var users = _context.Users.Include(u => u.Role).Where(u => (username == null || u.Username.ToLower().StartsWith(username.ToLower())) && (name == null || u.Name.ToLower().StartsWith(name.ToLower())));
 
             bool descending = false;
             if (order != null)
@@ -65,7 +86,7 @@ namespace GestionDeMedicamentos.Persistence
 
         public async Task<User> FindByUsername(string username)
         {
-            return await _context.Users.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync();
+            return await _context.Users.Include(u => u.Role).Where(u => u.Username.Equals(username)).FirstOrDefaultAsync();
         }
 
         public EntityState Update(User user)

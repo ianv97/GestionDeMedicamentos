@@ -1,4 +1,5 @@
 import getCookie from "./getCookie";
+import signOut from "./signOut";
 
 export default async function handleSubmit(event, nextUrl = this.state.currentUrl) {
   event.preventDefault();
@@ -42,6 +43,9 @@ export default async function handleSubmit(event, nextUrl = this.state.currentUr
       extendedTimeOut: 2000
     });
   } else {
+    if (response.status === 401) {
+      signOut();
+    }
     window.container.error(response.status + " " + response.statusText, "Error", {
       showAnimation: "animated rubberBand",
       hideAnimation: "animated flipOutX",

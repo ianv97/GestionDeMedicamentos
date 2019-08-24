@@ -1,4 +1,3 @@
-using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,6 +6,26 @@ using System.Threading.Tasks;
 
 namespace GestionDeMedicamentos.Persistence
 {
+    public interface IUserImageRepository
+    {
+        Task<UserImage> FindAsync(int id);
+
+        Task<UserImage> FindByUserUsername(string username);
+
+        Task<UserImage> FindByUserId(int id);
+
+        Task<EntityEntry> CreateAsync(UserImage userImage);
+
+        EntityState Update(UserImage userImage);
+
+        EntityEntry Delete(UserImage userImage);
+
+        Task SaveChangesAsync();
+
+        bool UserImageExists(int id);
+    }
+
+
     public class UserImageRepository : BaseRepository, IUserImageRepository
     {
         public UserImageRepository(PostgreContext context) : base(context)

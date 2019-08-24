@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GestionDeMedicamentos.Models;
-using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Persistence;
 using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers

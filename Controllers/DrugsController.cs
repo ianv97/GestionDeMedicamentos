@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestionDeMedicamentos.Models;
-using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Persistence;
 using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers
@@ -18,13 +18,13 @@ namespace GestionDeMedicamentos.Controllers
         {
             _drugRepository = drugRepository;
         }
-      
 
-       // GET: api/drogas?name=Ibuprofeno
-       [HttpGet]
+
+        // GET: api/drogas?name=Ibuprofeno
+        [HttpGet]
         public async Task<IActionResult> GetDrugs(string name, string order, int? pageNumber, int? pageSize)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }

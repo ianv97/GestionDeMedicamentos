@@ -1,4 +1,5 @@
 import getCookie from "./getCookie";
+import signOut from "./signOut";
 
 export default async function getData() {
   this.setState({ error: null });
@@ -38,6 +39,9 @@ export default async function getData() {
           });
           return response.json();
         } else {
+          if (response.status === 401) {
+            signOut();
+          }
           throw Error(response.status + " " + response.statusText);
         }
       })

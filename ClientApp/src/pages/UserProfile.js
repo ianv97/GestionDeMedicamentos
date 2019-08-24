@@ -10,7 +10,7 @@ import Avatar from "../components/Avatar";
 
 class UserProfile extends React.Component {
   state = {
-    currentUrl: "user",
+    currentUrl: "users",
     mode: "read",
     loading: false,
     form: {

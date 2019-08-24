@@ -1,6 +1,6 @@
 export default async function signUp() {
   try {
-    await fetch(window.ApiUrl + "User", {
+    await fetch(window.ApiUrl + "Users", {
       method: "POST",
       mode: "cors",
       body: JSON.stringify(this.state.form),

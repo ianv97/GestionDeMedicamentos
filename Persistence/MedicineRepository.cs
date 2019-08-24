@@ -1,5 +1,4 @@
-﻿using GestionDeMedicamentos.Domain;
-using GestionDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Models;
 using GestionDeMedicamentos.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -8,6 +7,18 @@ using System.Threading.Tasks;
 
 namespace GestionDeMedicamentos.Persistence
 {
+    public interface IMedicineRepository
+    {
+        Task<PaginatedList<Medicine>> ListAsync(string name, string drug, string proportion, string presentation, string laboratory, string stock, string order, int? pageNumber, int? pageSize);
+        Task<Medicine> FindAsync(int id);
+        EntityState Update(Medicine medicine);
+        Task<EntityEntry> CreateAsync(Medicine medicine);
+        EntityEntry Delete(Medicine medicine);
+        Task SaveChangesAsync();
+        bool MedicineExists(int id);
+    }
+
+
     public class MedicineRepository : BaseRepository, IMedicineRepository
     {
         public MedicineRepository(PostgreContext context) : base(context)

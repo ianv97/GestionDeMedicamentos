@@ -1,4 +1,4 @@
-using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Persistence;
 using GestionDeMedicamentos.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -25,17 +25,12 @@ namespace GestionDeMedicamentos.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserImage([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (id.ToString() != User.Identity.Name) return Unauthorized();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userImage = await _userImageRepository.FindByUserId(id);
 
-            if (userImage == null)
-            {
-                return NotFound();
-            }
+            if (userImage == null) return NotFound();
 
             return Ok(userImage);
         }
@@ -43,49 +38,44 @@ namespace GestionDeMedicamentos.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeAvatar(IFormFile image, [FromRoute] int id)
         {
-            if (_userRepository.UserExists(id))
+            if (id.ToString() != User.Identity.Name) return Unauthorized();
+            if (!_userRepository.UserExists(id)) return NotFound();
+            bool newImage = false;
+            UserImage userImage = await _userImageRepository.FindByUserId(id);
+            if (userImage == null)
             {
-                bool newImage = false;
-                UserImage userImage = await _userImageRepository.FindByUserId(id);
-                if (userImage == null)
-                {
-                    userImage = new UserImage();
-                    userImage.UserId = id;
-                    newImage = true;
-                }
-                using (BinaryReader binaryReader = new BinaryReader(image.OpenReadStream()))
-                {
-                    userImage.Img = binaryReader.ReadBytes((int)image.Length);
-                }
-                try
-                {
-                    if (newImage)
-                    {
-                        await _userImageRepository.CreateAsync(userImage);
-                    }
-                    else
-                    {
-                        _userImageRepository.Update(userImage);
-                    }
-                    await _userRepository.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_userRepository.UserExists(userImage.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return NoContent();
+                userImage = new UserImage();
+                userImage.UserId = id;
+                newImage = true;
             }
-            else
+            using (BinaryReader binaryReader = new BinaryReader(image.OpenReadStream()))
             {
-                return NotFound();
+                userImage.Img = binaryReader.ReadBytes((int)image.Length);
             }
+            try
+            {
+                if (newImage)
+                {
+                    await _userImageRepository.CreateAsync(userImage);
+                }
+                else
+                {
+                    _userImageRepository.Update(userImage);
+                }
+                await _userRepository.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_userRepository.UserExists(userImage.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
         }
     }
 }

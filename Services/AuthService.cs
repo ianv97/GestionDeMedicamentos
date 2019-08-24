@@ -1,4 +1,4 @@
-﻿using GestionDeMedicamentos.Domain;
+﻿using GestionDeMedicamentos.Persistence;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,6 +10,12 @@ using GestionDeMedicamentos.Models;
 
 namespace GestionDeMedicamentos.Services
 {
+    public interface IAuthService
+    {
+        string GenerateToken(User user, TimeSpan validDate);
+        User encryptPassword(User user, string password);
+    }
+
     public class AuthService : IAuthService
     {
         private readonly IConfiguration Configuration;
@@ -19,18 +25,18 @@ namespace GestionDeMedicamentos.Services
             Configuration = configuration;
         }
 
-        public string GenerateToken(string username, string password, TimeSpan validDate)
+        public string GenerateToken(User user, TimeSpan validDate)
         {
             DateTime date = DateTime.UtcNow;
             var expire = date.Add(validDate);
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Aud, Configuration["AuthSettings:Audience"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(date).ToUniversalTime().ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-                new Claim("roles", "Administrador"),
-                new Claim("roles", "Usuario")
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.Name),
             };
             var signinCredentials = new SigningCredentials(new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(Configuration["AuthSettings:SigninKey"])), SecurityAlgorithms.HmacSha256Signature);
             var jwt = new JwtSecurityToken(

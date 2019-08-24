@@ -1,6 +1,6 @@
 export default async function login(sessionRecord) {
   try {
-    await fetch(window.ApiUrl + "Auth", {
+    await fetch(window.ApiUrl + "auth", {
       method: "POST",
       mode: "cors",
       body: JSON.stringify(this.state.form),

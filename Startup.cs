@@ -1,4 +1,3 @@
-using GestionDeMedicamentos.Domain;
 using GestionDeMedicamentos.Persistence;
 using GestionDeMedicamentos.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

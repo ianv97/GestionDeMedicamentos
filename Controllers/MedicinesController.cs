@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestionDeMedicamentos.Models;
-using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Persistence;
 using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers

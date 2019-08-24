@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GestionDeMedicamentos.Models;
-using GestionDeMedicamentos.Domain;
+using GestionDeMedicamentos.Persistence;
 using GestionDeMedicamentos.Services;
 
 namespace GestionDeMedicamentos.Controllers
@@ -77,7 +77,7 @@ namespace GestionDeMedicamentos.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                
+
             }
 
             await _prescriptionRepository.SaveChangesAsync();

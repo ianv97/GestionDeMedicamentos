@@ -1,5 +1,4 @@
-﻿using GestionDeMedicamentos.Domain;
-using GestionDeMedicamentos.Models;
+﻿using GestionDeMedicamentos.Models;
 using GestionDeMedicamentos.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -8,6 +7,17 @@ using System.Threading.Tasks;
 
 namespace GestionDeMedicamentos.Persistence
 {
+    public interface IPrescriptionRepository
+    {
+        Task<PaginatedList<Prescription>> ListAsync(string date, string order, int? pageNumber, int? pageSize);
+        Task<Prescription> FindAsync(int id);
+        Task<EntityEntry> CreateAsync(Prescription prescription);
+        EntityEntry Delete(Prescription prescription);
+        Task SaveChangesAsync();
+        bool PrescriptionExists(int id);
+    }
+
+
     public class PrescriptionRepository : BaseRepository, IPrescriptionRepository
     {
         public PrescriptionRepository(PostgreContext context) : base(context)

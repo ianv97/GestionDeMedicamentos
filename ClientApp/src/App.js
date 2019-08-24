@@ -7,7 +7,8 @@ import { ToastMessageAnimated } from "react-toastr";
 import "toastr/build/toastr.css";
 import "animate.css/animate.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import getCookie from "./functions/getCookie";
+// import getCookie from "./functions/getCookie";
+import Context from "./Context";
 
 const Login = React.lazy(() => import("./pages/Login"));
 const DefaultLayout = React.lazy(() => import("./layout/containers/DefaultLayout.js"));
@@ -18,17 +19,17 @@ const loading = () => (
 );
 
 class App extends React.Component {
-  state = { isAuth: getCookie("token") ? true : false };
+  // state = { isAuth: getCookie("token") ? true : false };
 
-  isAuth() {
-    if (getCookie("token")) {
-      this.setState({ isAuth: true });
-    } else {
-      this.setState({ isAuth: false });
-    }
-  }
+  // isAuth() {
+  //   if (getCookie("token")) {
+  //     this.setState({ isAuth: true });
+  //   } else {
+  //     this.setState({ isAuth: false });
+  //   }
+  // }
 
-  intervalo = setInterval(this.isAuth.bind(this), 2000);
+  // intervalo = setInterval(this.isAuth.bind(this), 2000);
 
   render() {
     return (
@@ -45,11 +46,15 @@ class App extends React.Component {
         <BrowserRouter>
           <React.Suspense fallback={loading()}>
             <Switch>
-              {this.state.isAuth ? (
-                <Route path="/" name="Inicio" render={props => <DefaultLayout {...props} />} />
-              ) : (
-                <Route path="/" name="Login" render={props => <Login {...props} />} />
-              )}
+              <Context.Consumer>
+                {({ isAuth }) =>
+                  isAuth() ? (
+                    <Route path="/" name="Inicio" render={props => <DefaultLayout {...props} />} />
+                  ) : (
+                    <Route path="/" name="Login" render={props => <Login {...props} />} />
+                  )
+                }
+              </Context.Consumer>
             </Switch>
           </React.Suspense>
         </BrowserRouter>
