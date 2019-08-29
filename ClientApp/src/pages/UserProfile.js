@@ -15,10 +15,11 @@ class UserProfile extends React.Component {
     loading: false,
     form: {
       id: "",
-      username: "",
       name: "",
-      role: ""
-    }
+      username: "",
+      roleId: "1"
+    },
+    roleName: ""
   };
   changeMode = changeMode.bind(this);
   handleSubmit = handleSubmit.bind(this);
@@ -44,8 +45,9 @@ class UserProfile extends React.Component {
               id: data.id,
               username: data.username,
               name: data.name,
-              role: data.role.name
-            }
+              roleId: data.roleId
+            },
+            roleName: data.role.name
           });
         });
     } catch (error) {
@@ -79,9 +81,7 @@ class UserProfile extends React.Component {
             </Grid>
           </Grid>
           <Avatar />
-          <form
-            onSubmit={e => this.handleSubmit(e, this.state.currentUrl + "/" + this.props.match.params.id)}
-          >
+          <form onSubmit={e => this.handleSubmit(e, "user/" + this.props.match.params.id)}>
             {this.state.mode !== "create" && (
               <Grid container direction="row" justify="center" className="mt-3">
                 <Grid item>
@@ -96,22 +96,6 @@ class UserProfile extends React.Component {
                 </Grid>
               </Grid>
             )}
-            <Grid container direction="row" justify="center">
-              <Grid item>
-                <TextField
-                  required
-                  label="Usuario"
-                  margin="normal"
-                  variant="outlined"
-                  name="username"
-                  onChange={this.handleChange}
-                  value={this.state.form.username}
-                  InputProps={{
-                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
-                  }}
-                />
-              </Grid>
-            </Grid>
             <Grid container direction="row" justify="center">
               <Grid item>
                 <TextField
@@ -131,11 +115,27 @@ class UserProfile extends React.Component {
             <Grid container direction="row" justify="center">
               <Grid item>
                 <TextField
+                  required
+                  label="Usuario"
+                  margin="normal"
+                  variant="outlined"
+                  name="username"
+                  onChange={this.handleChange}
+                  value={this.state.form.username}
+                  InputProps={{
+                    readOnly: this.state.mode === "read" || this.state.mode === "delete"
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container direction="row" justify="center">
+              <Grid item>
+                <TextField
                   label="Rol"
                   margin="normal"
                   variant="outlined"
-                  name="role"
-                  value={this.state.form.role}
+                  name="roleName"
+                  value={this.state.roleName}
                   InputProps={{ readOnly: true }}
                 />
               </Grid>

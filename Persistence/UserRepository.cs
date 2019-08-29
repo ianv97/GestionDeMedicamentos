@@ -11,7 +11,7 @@ namespace GestionDeMedicamentos.Persistence
 {
     public interface IUserRepository
     {
-        Task<PaginatedList<User>> ListAsync(string username, string name, string order, int? pageNumber, int? pageSize);
+        Task<PaginatedList<User>> ListAsync(string name, string username, string role, string order, int? pageNumber, int? pageSize);
 
         Task<User> Login(string username, string password);
 
@@ -37,9 +37,9 @@ namespace GestionDeMedicamentos.Persistence
         {
         }
 
-        public async Task<PaginatedList<User>> ListAsync(string username, string name, string order, int? pageNumber, int? pageSize)
+        public async Task<PaginatedList<User>> ListAsync(string name, string username, string role, string order, int? pageNumber, int? pageSize)
         {
-            var users = _context.Users.Include(u => u.Role).Where(u => (username == null || u.Username.ToLower().StartsWith(username.ToLower())) && (name == null || u.Name.ToLower().StartsWith(name.ToLower())));
+            var users = _context.Users.Include(u => u.Role).Where(u => (name == null || u.Name.ToLower().StartsWith(name.ToLower())) && (username == null || u.Username.ToLower().StartsWith(username.ToLower())) && (role == null || u.Role.Name.ToLower().StartsWith(role.ToLower())));
 
             bool descending = false;
             if (order != null)
@@ -96,6 +96,7 @@ namespace GestionDeMedicamentos.Persistence
 
         public async Task<EntityEntry> CreateAsync(User user)
         {
+            user.RoleId = _context.Roles.Where(r => r.Name == "Usuario").FirstOrDefault().Id;
             return await _context.Users.AddAsync(user);
         }
 

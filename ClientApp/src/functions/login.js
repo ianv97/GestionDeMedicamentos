@@ -28,10 +28,12 @@ export default async function login(sessionRecord) {
           document.cookie = `token=${data.token}; expires=${expires};`;
           document.cookie = `id=${data.user.id}; expires=${expires};`;
           document.cookie = `username=${data.user.username}; expires=${expires};`;
+          document.cookie = `role=${data.user.role.name}; expires=${expires};`;
         } else {
           document.cookie = `token=${data.token};`;
           document.cookie = `id=${data.user.id};`;
           document.cookie = `username=${data.user.username};`;
+          document.cookie = `role=${data.user.role.name};`;
         }
         this.props.history.push("/inicio");
       });

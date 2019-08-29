@@ -100,9 +100,9 @@ class DefaultHeader extends Component {
               <Context.Consumer>
                 {({ img }) =>
                   img ? (
-                    <img src={img} className="img-avatar mb-2" alt="" />
+                    <img src={img} className="img-avatar mb-2" alt="user-img" />
                   ) : (
-                    <img src={"/img/user.png"} className="img-avatar mb-2" alt="" />
+                    <img src={"/img/user.png"} className="img-avatar mb-2" alt="user-img" />
                   )
                 }
               </Context.Consumer>

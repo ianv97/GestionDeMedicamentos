@@ -13,9 +13,15 @@ const Stock = React.lazy(() => import("../pages/Stock.js"));
 const StockDetalles = React.lazy(() => import("../pages/StockDetalles.js"));
 const ChangePassword = React.lazy(() => import("../pages/ChangePassword.js"));
 const UserProfile = React.lazy(() => import("../pages/UserProfile.js"));
+const Roles = React.lazy(() => import("../pages/Roles.js"));
+const RolesDetails = React.lazy(() => import("../pages/RolesDetails.js"));
+const Users = React.lazy(() => import("../pages/Users.js"));
+const UsersDetails = React.lazy(() => import("../pages/UsersDetails.js"));
 
 const routes = [
   { path: "/inicio", exact: true, name: "Inicio", component: Inicio },
+  { path: "/change-password/:id", name: "Cambiar contraseña", component: ChangePassword },
+  { path: "/user/:id", name: "Perfil de usuario", component: UserProfile },
   { path: "/drogas", exact: true, name: "Drogas", component: Drogas },
   { path: "/drogas/:id", name: "Detalles", component: DrogasDetalles },
   { path: "/medicamentos", exact: true, name: "Medicamentos", component: Medicamentos },
@@ -26,8 +32,10 @@ const routes = [
   { path: "/partidas/:id", name: "Detalles", component: PartidasDetalles },
   { path: "/stock", exact: true, name: "Stock", component: Stock },
   { path: "/stock/:id", name: "Detalles", component: StockDetalles },
-  { path: "/change-password/:id", name: "Cambiar contraseña", component: ChangePassword },
-  { path: "/user/:id", name: "Perfil de usuario", component: UserProfile }
+  { path: "/roles", exact: true, name: "Roles", component: Roles },
+  { path: "/roles/:id", name: "Detalles", component: RolesDetails },
+  { path: "/users", exact: true, name: "Usuarios", component: Users },
+  { path: "/users/:id", name: "Detalles", component: UsersDetails }
 ];
 
 export default routes;

@@ -36,6 +36,7 @@ namespace GestiónDeMedicamentos
                 options.UseNpgsql(Configuration.GetConnectionString("PostgreDb"));
             });
 
+            services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserImageRepository, UserImageRepository>();
             services.AddScoped<IAuthService, AuthService>();

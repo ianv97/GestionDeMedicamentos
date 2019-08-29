@@ -9,10 +9,10 @@ import handleChangePage from "../functions/handleChangePage";
 import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
 import getData from "../functions/getData";
 
-class Drogas extends React.Component {
+class Users extends React.Component {
   state = {
-    currentUrl: "drogas",
-    titles: [["ID", "id"], ["Nombre", "name"]],
+    currentUrl: "users",
+    titles: [["ID", "id"], ["Nombre", "name"], ["Usuario", "username"], ["Rol", "role.name"]],
     loading: true,
     error: null,
     data: [],
@@ -22,7 +22,9 @@ class Drogas extends React.Component {
     order: "name",
     search: {
       id: "",
-      name: ""
+      name: "",
+      username: "",
+      role: ""
     },
     searchString: ""
   };
@@ -52,7 +54,7 @@ class Drogas extends React.Component {
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item>
-            <h1>Drogas</h1>
+            <h1>Usuarios</h1>
           </Grid>
           <Grid item>
             <Link to={"/" + this.state.currentUrl + "/añadir"}>
@@ -83,4 +85,4 @@ class Drogas extends React.Component {
   }
 }
 
-export default Drogas;
+export default Users;

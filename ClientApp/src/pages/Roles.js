@@ -9,9 +9,9 @@ import handleChangePage from "../functions/handleChangePage";
 import handleChangeRowsPerPage from "../functions/handleChangeRowsPerPage";
 import getData from "../functions/getData";
 
-class Drogas extends React.Component {
+class Roles extends React.Component {
   state = {
-    currentUrl: "drogas",
+    currentUrl: "roles",
     titles: [["ID", "id"], ["Nombre", "name"]],
     loading: true,
     error: null,
@@ -52,7 +52,7 @@ class Drogas extends React.Component {
       <React.Fragment>
         <Grid container spacing={2}>
           <Grid item>
-            <h1>Drogas</h1>
+            <h1>Roles</h1>
           </Grid>
           <Grid item>
             <Link to={"/" + this.state.currentUrl + "/añadir"}>
@@ -83,4 +83,4 @@ class Drogas extends React.Component {
   }
 }
 
-export default Drogas;
+export default Roles;

@@ -15,12 +15,7 @@ namespace GestionDeMedicamentos.Controllers
         public string newPassword { get; set; }
         public string newPasswordV { get; set; }
     }
-    public class ChangeUserProfile
-    {
-        public string username { get; set; }
-        public string name { get; set; }
-    }
-    public class UserData
+    public class UserLoginData
     {
         public string username { get; set; }
         public string password { get; set; }
@@ -39,20 +34,22 @@ namespace GestionDeMedicamentos.Controllers
         }
 
         [Authorize(Roles = "Administrador")]
+        [HttpGet]
         [Route("api/[controller]")]
-        public async Task<IActionResult> GetUsers(string username, string name, string order, int? pageNumber, int? pageSize)
+        public async Task<IActionResult> GetUsers(string name, string username, string role, string order, int? pageNumber, int? pageSize)
         {
-            PaginatedList<User> users = await _userRepository.ListAsync(username, name, order, pageNumber, pageSize);
+            PaginatedList<User> users = await _userRepository.ListAsync(name, username, role, order, pageNumber, pageSize);
             HttpContext.Response.Headers.Add("page", users.PageIndex.ToString());
             HttpContext.Response.Headers.Add("totalRecords", users.TotalRecords.ToString());
             return Ok(users);
         }
 
         [Authorize]
+        [HttpGet]
         [Route("api/[controller]/{id}")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
-            if (id.ToString() != User.Identity.Name) return Unauthorized();
+            if (id.ToString() != User.Identity.Name && !User.IsInRole("Administrador")) return Unauthorized();
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var user = await _userRepository.FindAsync(id);
             if (user == null) return NotFound();
@@ -61,7 +58,7 @@ namespace GestionDeMedicamentos.Controllers
 
         [HttpPost]
         [Route("api/auth")]
-        public async Task<IActionResult> Login([FromBody] UserData data)
+        public async Task<IActionResult> Login([FromBody] UserLoginData data)
         {
             User user = await _userRepository.Login(data.username, data.password);
             if (user == null) return BadRequest();
@@ -90,14 +87,22 @@ namespace GestionDeMedicamentos.Controllers
         [Authorize]
         [HttpPut]
         [Route("api/[controller]/{id}")]
-        public async Task<IActionResult> ChangeProfileData([FromRoute] int id, [FromBody] ChangeUserProfile userData)
+        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] User userData)
         {
-            if (id.ToString() != User.Identity.Name) return Unauthorized();
+            if (id.ToString() != User.Identity.Name && !User.IsInRole("Administrador")) return Unauthorized();
             User user = await _userRepository.FindAsync(id);
             if (user == null) return NotFound();
-            user.Name = userData.name;
-            user.Username = userData.username;
-            _userRepository.Update(user);
+            user.Name = userData.Name;
+            user.Username = userData.Username;
+            if (User.IsInRole("Administrador")) user.RoleId = userData.RoleId;
+            if (User.IsInRole("Administrador") && userData.Password != null)
+            {
+                _userRepository.Update(_authService.encryptPassword(user, userData.Password));
+            }
+            else
+            {
+                _userRepository.Update(user);
+            }
             try
             {
                 await _userRepository.SaveChangesAsync();
@@ -142,6 +147,19 @@ namespace GestionDeMedicamentos.Controllers
                     throw;
                 }
             }
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Administrador")]
+        [HttpDelete]
+        [Route("api/[controller]/{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var user = await _userRepository.FindAsync(id);
+            if (user == null) return NotFound();
+            _userRepository.Delete(user);
+            await _userRepository.SaveChangesAsync();
             return NoContent();
         }
 

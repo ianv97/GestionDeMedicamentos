@@ -21,8 +21,7 @@ class SignExpanded extends Component {
         username: "",
         password: "",
         passwordV: "",
-        name: "",
-        roleId: "1"
+        name: ""
       }
     };
   }

@@ -4,6 +4,7 @@ import * as router from "react-router-dom";
 import { Container } from "reactstrap";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import signOut from "../../functions/signOut";
+import getCookie from "../../functions/getCookie";
 
 import {
   // AppAside,
@@ -18,10 +19,14 @@ import {
   AppSidebarNav2 as AppSidebarNav
 } from "@coreui/react";
 // sidebar nav config
-import navigation from "../_nav";
+import adminnav from "../_adminnav";
+import usernav from "../_nav";
 // routes config
 import routes from "../routes";
 import Context from "../../Context";
+
+var navigation;
+getCookie("role") === "Administrador" ? (navigation = adminnav) : (navigation = usernav);
 
 // const DefaultAside = React.lazy(() => import("./DefaultAside"));
 // const DefaultFooter = React.lazy(() => import("./DefaultFooter"));

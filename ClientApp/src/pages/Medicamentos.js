@@ -51,7 +51,7 @@ class Medicamentos extends React.Component {
 
   componentDidUpdate() {
     this.props.history.listen(location => {
-      this.getData();
+      location.pathname === "/" + this.state.currentUrl && this.getData();
     });
   }
 
