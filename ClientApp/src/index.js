@@ -4,8 +4,8 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
 import Context from "./Context";
 
-window.ApiUrl = "http://localhost:55604/api/";
-// "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
+window.ApiUrl = "http://medicamentos.us-east-1.elasticbeanstalk.com/api/";
+// "http://localhost:55604/api/";
 
 ReactDOM.render(
   <Context.Provider>
